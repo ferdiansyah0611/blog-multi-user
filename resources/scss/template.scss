@@ -1,0 +1,122 @@
+#body{
+	padding-left: 300px;
+}
+#nav-mobile{
+	padding-right: 300px;
+}
+#body-nav{
+	top: 0;
+	position: fixed;
+	z-index: 9;
+}
+#body-page{
+	margin-top: 64px;
+}
+@media only screen and (max-width : 600px) {
+    #body-page{
+        margin-top: 56px;
+    }
+}
+@media only screen and (max-width : 992px) {
+	#body{
+		padding-left: 0;
+	}
+}
+body{
+	font-family: 'Roboto';
+    overflow-x: hidden;
+}
+/*TEMPLATING*/
+a.btn-floating.btn-large.waves-effect.waves-light.red.sidenav-trigger{
+    position: fixed;
+    z-index: 99999;
+    bottom: 3em;
+    right: 3em;
+}
+.dropdown-content.dropdown-category{
+	top: 64px !important;
+}
+input#search::placeholder {
+    color: white;
+}
+.input-field .iconsearch.prefix.active{
+    color:white
+}
+/*COLORING*/
+.bg-primary{
+	background-color: var(--bs-primary) !important;
+}
+/*TOOLS*/
+.w-100{
+	width: 100%;
+}
+.m-0{
+    margin: 0!important;
+}
+#modal-upload-file{
+    width: 30% !important;
+}
+#modal-add-article{
+    width: 90% !important;
+}
+#modal-show-status{
+    width: 80% !important;
+}
+.parallax-container {
+    height: 300px !important;
+}
+#toTop{
+    position: fixed;
+    bottom: 1em;
+    left: 1em;
+    z-index: 100;
+}
+#show-article img{
+    max-width: 100%;
+    height: calc(100% - 120px);
+}
+#show-article, #detail-article{
+    overflow: hidden;
+    line-break: anywhere;
+}
+#dropdown-notification{
+    left: calc(100% - 44.5%) !important;
+    top: 66px !important;
+    width: 300px !important;
+}
+.collection{
+    font-size: 13px;
+    border: none !important;
+}
+.dropdown-content li>a, .dropdown-content li>span{
+    padding: 1px !important;
+}
+
+#card-profile .profile-image{
+    width: 70px;
+    max-height: 70px;
+    position: absolute;
+    top: 164px;
+    z-index: 1;
+    left: 20px;
+    cursor: pointer;
+}
+.shadow-default{
+    box-shadow: 0px 0px 0px 3px #f3f3f3 !important;
+}
+
+.list-article button.favorite{
+    position: absolute;
+    right: 60px;
+    margin-top: -45px;
+}
+.list-article button.share{
+    position: absolute;
+    right: 10px;
+    margin-top: -45px;
+}
+.list-article button.avatar-user{
+    position: absolute;
+    left: 10px;
+    margin-top: -45px;
+}

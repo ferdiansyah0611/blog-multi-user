@@ -1,0 +1,44 @@
+{
+  "name": "starterkit-ci4-react",
+  "version": "1.0.0",
+  "description": "## What is CodeIgniter?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch --config webpack.config.js",
+    "production": "webpack --config webpack.production.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferdiansyah0611/starterkit-ci4-react.git"
+  },
+  "author": "ferdiansyah0611",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ferdiansyah0611/starterkit-ci4-react/issues"
+  },
+  "homepage": "https://github.com/ferdiansyah0611/starterkit-ci4-react#readme",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-react-jsx": "^7.12.7",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-react": "^7.12.7",
+    "axios": "^0.21.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "vanilla-lazyload": "^17.3.0",
+    "webpack-cli": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.7",
+    "@babel/preset-env": "^7.12.7",
+    "babel-loader": "^8.2.1",
+    "css-loader": "^5.0.1",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.6.0"
+  }
+}

@@ -60,9 +60,23 @@ class FileController extends ResourceController
 		$check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
 		if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
 			if($this->request->getFile('file_upload')){
-				$file = $this->request->getFile('file_upload');
-				$file->move(WRITEPATH.'uploads/'. $check->data->id);
-				return $this->respond(['message' => "Successfuly Upload File"], 200);
+				$validation =  \Config\Services::validation();
+		        $validation->setRules([
+		            'file_upload' => 'uploaded[file_upload]|max_size[file_upload,51200]'
+		        ]);
+		        if($validation->withRequest($this->request)->run() === true)
+		        {
+		            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+		            if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+						$file = $this->request->getFile('file_upload');
+						$file->move(WRITEPATH.'uploads/'. $check->data->id);
+						return $this->respond(['message' => "Successfuly Upload File"], 200);
+		            }else{
+		                return $this->respond(['message' => 'Access Denied'], 401);
+		            }
+		        }else{
+		            return $this->respond(['message' => $validation->listErrors()], 403);
+		        }
 			}
 		}else{
 			return $this->respond(['message' => 'Failed Upload File Because Access Denied'], 401);

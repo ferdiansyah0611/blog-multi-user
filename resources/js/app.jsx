@@ -11,6 +11,13 @@ import {
   HashRouter
 } from "react-router-dom";
 import axios from 'axios';
+/*packages*/
+window.Swal = require('sweetalert2')
+import 'dropzone/dist/min/dropzone.min.css'
+require('dropzone/dist/min/dropzone.min.js')
+/*materiliaze*/
+import css from 'materialize-css/dist/css/materialize.min.css'
+require('materialize-css/dist/js/materialize.min.js')
 /*scss*/
 import '../scss/template.scss';
 import '../scss/utilites.scss';
@@ -20,7 +27,6 @@ import errorStatusCode from './tools/errorStatusCode';
 import print from './tools/print';
 /*context*/
 import ContextDATA from './ContextDATA';
-import Reducer from './Reducer'
 /*component*/
 import LoginCMP from './component/Login.jsx';
 import RegisterCMP from './component/Register.jsx';
@@ -41,8 +47,8 @@ import MyFavoriteCMP from './component/MyFavorite.jsx';
 import PremiumCMP from './component/Premium.jsx';
 
 import SidenavCMP from './component/template/Sidenav.jsx';
+import NavbarCMP from './component/template/Navbar.jsx';
 import FooterCMP from './component/template/Footer.jsx';
-console.log(Reducer)
 /*---------------------------------------------------*/
 class App extends React.Component {
   constructor(props){
@@ -61,22 +67,25 @@ class App extends React.Component {
         born:''
       },
       notification: [],
+      getNotification: (token) => {
+      	axios.get(`${BaseUrl}api/user-notification?paginate=true`, {headers: {Authorization: token}}).then(result => {
+          this.setState({notification: result.data.data})
+          $(".dropdown-trigger").dropdown();
+        })
+      },
       setState: (data) => {
         this.setState({[data.name]: data.value})
       }
     }
   }
   componentDidMount(){
-    axios.get(BaseUrl + 'api/category', {headers: this.state.headers}).then(result => {
+    axios.get(BaseUrl + 'api/category').then(result => {
       this.setState({category: result.data})
     })
     var account = window.localStorage.getItem('account')
     if(account){
       axios.get(`${BaseUrl}api/valid?token=${JSON.parse(account).token}`, {headers: {Authorization: JSON.parse(account).token}}).then(result => {
-        axios.get(`${BaseUrl}api/user-notification?paginate=true`, {headers: {Authorization: JSON.parse(account).token}}).then(result => {
-          this.setState({notification: result.data.data})
-          $(".dropdown-trigger").dropdown();
-        })
+        this.state.getNotification(JSON.parse(account).token)
         this.setState({users: result.data.data})
         if(result.data.data.type == 5 && result.data.data.role == 'admin'){
           this.setState({
@@ -120,71 +129,7 @@ class App extends React.Component {
       	<SidenavCMP/>
       	<div id="body">
       		<div id="body-nav">
-			      <div className="navbar-fixed">
-			        <nav className="blue darken-2">
-			          <div className="nav-wrapper">
-			          	<div className="row">
-			          		<div className="col s12">
-					            <ul className="show-on-small">
-					              <li>
-					                <button className="sidenav-trigger btn-small blue darken-2 z-depth-0" data-target="slide-out"><i className="material-icons">menu</i></button>
-					              </li>
-					              <li>
-					                Go Blog
-					              </li>
-					            </ul>
-					            <div id="dropdown-notification" className="dropdown-content z-depth-3">
-					            {
-					              this.state.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
-					              <ul className="collection" style={{border:'none !important'}}>
-					              {
-					                this.state.notification.map((data, key) => {
-					                  return(
-					                    <React.Fragment key={key}>
-					                    {
-					                      data.type == 'subscribe' ?
-					                        <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-					                          <i className="material-icons circle red">subscriptions</i>
-					                          <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
-					                          <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-					                        </li>
-					                        :false
-					                    }
-					                    {
-					                      data.type == 'unsubscribe' ?
-					                        <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-					                          <i className="material-icons circle red">unsubscribe</i>
-					                          <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
-					                          <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-					                        </li>
-					                        :false
-					                    }
-					                    </React.Fragment>
-					                  )
-					                })
-					              }
-					              </ul>
-					            }
-					            </div>
-					            <ul id="nav-mobile" className="right hide-on-med-and-down">
-					              <li><Link to="/search">Search<i className="material-icons left t-0">search</i></Link></li>
-					              <li><Link to="/popular">Popular<i className="material-icons left">view_quilt</i></Link></li>
-					              <li><Link to="/latest">Latest<i className="material-icons left">sort_by_alpha</i></Link></li>
-					              {
-					                this.state.users.id ?
-					                <li>
-					                  <a className="dropdown-trigger btn-floating pulse light-blue lighten-1 pointer" data-target="dropdown-notification">
-					                  <i className="material-icons left">notifications_none</i>
-					                  </a>
-					                </li>
-					                : ''
-					              }
-					            </ul>
-			          		</div>
-			          	</div>
-			          </div>
-			        </nav>
-			      </div>
+			      <NavbarCMP/>
       		</div>
       		<div id="body-page">
 			    	<Switch>

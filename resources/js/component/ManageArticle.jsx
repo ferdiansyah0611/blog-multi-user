@@ -12,6 +12,7 @@ import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
 /*context*/
 import ContextDATA from '../ContextDATA';
+
 const Datatable = React.lazy(() => import('./tools/Datatables.jsx'));
 
 class ManageArticleCMP extends React.Component {
@@ -103,7 +104,7 @@ class ManageArticleCMP extends React.Component {
     }
     return(
       <React.Fragment>
-      <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/', str: 'Home'}, {url: '/management/article', str: 'Management Article'}]} />
+      <BreadCrumb data={[{url: '/management/article', str: 'Management Article'}]} />
       <div className="row">
         <div className="col s12">
           <div className="card-panel">
@@ -138,20 +139,11 @@ class ManageArticleCMP extends React.Component {
                 </div>
                 <div id="tabs-create" className="col s12">
                   <div className="row mt-10px">
-                    <div className="input-field col s6">
+                    <div className="input-field col s12 m6">
                       <input id="last_name" type="text" name="create_title" onChange={this.handle} className="validate"/>
                       <label htmlFor="last_name">Title</label>
                     </div>
-                    <div className="file-field input-field col s6">
-                      <div className="btn">
-                        <span>File</span>
-                        <input onChange={this.onFileChange} type="file"/>
-                      </div>
-                      <div className="file-path-wrapper">
-                        <input className="file-path validate" type="text" placeholder="Upload Image Files"/>
-                      </div>
-                    </div>
-                    <div className="col s6">
+                    <div className="col s12 m6">
                       <select name="create_category_id" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
                         <option value="Choose your option" disabled>Choose category article</option>
                         {
@@ -163,16 +155,25 @@ class ManageArticleCMP extends React.Component {
                         }
                       </select>
                     </div>
-                    <div className="col s6">
+                    <div className="input-field col s12">
+                      <label>Description</label>
+                      <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
+                    </div>
+                    <div className="col s12 m6">
                       <select name="create_status" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
                         <option value="Choose your option" disabled>Choose status article</option>
                         <option value="public">Public</option>
                         <option value="archive">Archives</option>
                       </select>
                     </div>
-                    <div className="input-field col s12">
-                    <label>Description</label>
-                      <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
+                    <div className="file-field input-field col s12 m6">
+                      <div className="btn">
+                        <span>File</span>
+                        <input onChange={this.onFileChange} type="file"/>
+                      </div>
+                      <div className="file-path-wrapper">
+                        <input className="file-path validate" type="text" placeholder="Upload Image Files"/>
+                      </div>
                     </div>
                     <div className="input-field col s12">
                       <textarea name="create_content" id="content-add"/>

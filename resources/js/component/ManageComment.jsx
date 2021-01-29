@@ -47,7 +47,7 @@ class ManageCommentCMP extends React.Component {
     }
     return(
       <React.Fragment>
-      <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/', str: 'Home'}, {url: '/management/comment', str: 'Management Comment'}]} />
+      <BreadCrumb data={[{url: '/management/comment', str: 'Management Comment'}]} />
       <div className="row">
         <div className="col s12">
           <div className="card-panel">

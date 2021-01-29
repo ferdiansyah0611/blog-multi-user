@@ -53,7 +53,7 @@ class MyFavoriteCMP extends React.Component {
     }
     return(
       <React.Fragment>
-      <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/', str: 'Home'}, {url: '/my-favorite', str: 'My Favorite'}]} />
+      <BreadCrumb data={[{url: '/my-favorite', str: 'My Favorite'}]} />
         <div className="row">
         {
           this.state.article.length == 0 ? <div className="col s12"><p className="center-align" style={{margin: 150}}>No Data Favorite</p></div>:

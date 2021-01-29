@@ -142,7 +142,7 @@ class ManageStorageCMP extends React.Component {
     }
     return(
       <React.Fragment>
-      <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/', str: 'Home'}, {url: '/management/storage', str: 'Management Storage'}]} />
+      <BreadCrumb data={[{url: '/management/storage', str: 'Management Storage'}]} />
       <div className="row">
         <div className="col s12">
           <div className="card-panel">
@@ -156,7 +156,7 @@ class ManageStorageCMP extends React.Component {
                   </form>
                 </div>
                 <div className="col s12">
-                  <table className="striped responsive-table highlight">
+                  <table className="responsive-table highlight">
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -197,9 +197,9 @@ class ManageStorageCMP extends React.Component {
           <div dangerouslySetInnerHTML={{ __html: this.state.preview }}/>
         </div>
         <div className="modal-footer">
-          <a className="waves-effect waves-green btn-small blue white-text" style={{cursor:'pointer'}} onClick={this.downloadFile}>Download</a>
-          <a className="waves-effect waves-green btn-small red white-text" style={{marginLeft:5,cursor:'pointer'}} onClick={this.copyLink}>Copy Link</a>
-          <a className="modal-close waves-effect waves-green btn-small red darken-2 white-text" style={{marginLeft:5,cursor:'pointer'}}>Close</a>
+          <a className="waves-effect waves-green btn-small blue white-text" style={{cursor:'pointer'}} onClick={this.downloadFile}><i className="material-icons">cloud_download</i></a>
+          <a className="waves-effect waves-green btn-small red white-text" style={{marginLeft:5,cursor:'pointer'}} onClick={this.copyLink}><i className="material-icons">content_copy</i></a>
+          <a className="modal-close waves-effect waves-green btn-small red darken-2 white-text" style={{marginLeft:5,cursor:'pointer'}}><i className="material-icons">close</i></a>
         </div>
       </div>
       </React.Fragment>

@@ -112,7 +112,7 @@ class PreffAccountCMP extends React.Component {
     }
     return(
       <React.Fragment>
-      <BreadCrumb data={[{url: '/', str: 'Home'}, {url: '/prefferences/account', str: 'Prefferences Account'}]} />
+      <BreadCrumb data={[{url: '/prefferences/account', str: 'Prefferences Account'}]} />
       <div className="card-panel">
         <form className="row" onSubmit={this.updateUser}>
           <ContextDATA.Consumer>

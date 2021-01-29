@@ -35,18 +35,6 @@ class ArticleModel extends Model
     }
     public function insert_data($data)
     {
-        /*$validation =  \Config\Services::validation();
-        $validation->setRules([
-            'user_id' => 'required',
-            'category_id' => 'required',
-            'title' => 'required|min_length[5]|max_length[100]',
-            'description' => 'required|max_length[255]',
-            'content' => 'required|min_length[5]',
-            'image' => 'required'
-        ]);
-        if($validation->run() === true)
-        {
-        }*/
         $this->db->table($this->table)->insert($data);
         return true;
     }

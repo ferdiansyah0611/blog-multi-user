@@ -25,6 +25,7 @@ class LoginCMP extends React.Component{
   }
   componentDidMount(){
     document.title = 'Login | Go Blog'
+    $('input').characterCounter();
   }
   actionLogin(e){
     this.setState({process: true})
@@ -45,9 +46,15 @@ class LoginCMP extends React.Component{
               {txt:'Account',icon:'account_box',url: '/prefferences/account'}
             ]})
           }
+          this.context.getNotification(result.data.token)
           this.context.setState({name: 'users', value: result.data.data})
           this.setState({redirect: '/'})
-        }, 4000)
+        }, 10000)
+      }
+    }).catch(e => {
+      this.setState({process: false})
+      if(e.response.status === 403 || e.response.status === 401){
+        M.toast({html: e.response.data.message, classes: 'red'})
       }
     })
   }
@@ -77,13 +84,15 @@ class LoginCMP extends React.Component{
                 <div className="row">
                   <div className="input-field col s12">
                     <i className="material-icons prefix">email</i>
-                    <input name="email" id="icon_prefix" type="email" className="validate" value={this.state.email} onChange={this.handle} />
+                    <input name="email" id="icon_prefix" type="email" className="validate" value={this.state.email} onChange={this.handle} data-length="50" />
                     <label htmlFor="icon_prefix">Email</label>
+                    <span className="helper-text" data-error="Invalid Email" data-success="OK">* Required</span>
                   </div>
                   <div className="input-field col s12">
                     <i className="material-icons prefix">vpn_key</i>
-                    <input name="password" id="icon_telephone" type="password" className="validate" value={this.state.password} onChange={this.handle} />
+                    <input name="password" id="icon_telephone" type="password" className="validate" value={this.state.password} onChange={this.handle} data-length="20" />
                     <label htmlFor="icon_telephone">Password</label>
+                    <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
                   </div>
                   <div className="col s12 center-align">
                     <button type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>

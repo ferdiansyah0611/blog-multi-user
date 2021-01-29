@@ -21,11 +21,12 @@ class ArticleSubscribe extends ResourceController
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
                 $data = [
-                    'data' => $this->model->select('app_article_subscribe.id as favorite_id, app_article.*, app_user.name, app_user.avatar')
-                        ->join('app_article', 'app_article_subscribe.article_id = app_article.id')
+                    'data' => $this->model->select('app_article_subscribe.id as favorite_id, app_article.*, app_user.name, app_user.avatar, app_user.bio')
+                        ->where(['app_article_subscribe.user_id' => $check->data->id])
+                        ->join('app_article', 'app_article_subscribe.user_subscribe_id = app_article.user_id')
                         ->join('app_user', 'app_article.user_id = app_user.id')
-                        ->where('app_article_subscribe.user_id', $check->data->id)->paginate(20),
-                    'pager' => $this->model->pager->links()
+                        ->orderBy('app_article_subscribe.user_subscribe_id', 'RANDOM')
+                        ->paginate(20)
                 ];
                 return $this->respond($data);
             }else{

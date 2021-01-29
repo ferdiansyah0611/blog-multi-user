@@ -7,6 +7,7 @@ const BreadCrumb = (props) => {
     <nav className="light-blue darken-4 z-depth-0">
       <div className="nav-wrapper">
         <div className="col s12 ml-10px">
+          <Link to="/" className="breadcrumb">/</Link>
         {
           props.data.map((data, key) => {
             return(<Link to={data.url} className="breadcrumb" key={key}>{data.str}</Link>)

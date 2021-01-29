@@ -12,6 +12,7 @@ import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
 import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
 import functionAction from './tools/FunctionAction';
+import Loader from './tools/Loader.jsx';
 /*context*/
 import ContextDATA from '../ContextDATA';
 
@@ -21,7 +22,6 @@ class ViewArticleCMP extends React.Component {
     this.state = {
       article: {},
       comment: [],
-      articleRelated: [],
       create_comment: '',
       isAuth: true,
       headers: {},
@@ -31,7 +31,9 @@ class ViewArticleCMP extends React.Component {
       statusSubscribe: 'Subscribe',
       category_report: '',
       description_report: '',
-      isReport: false
+      isReport: false,
+      finishedComment: false,
+      finishedArticle: false
     }
     this.addReport = this.addReport.bind(this)
     this.addSubscribe = this.addSubscribe.bind(this)
@@ -40,6 +42,7 @@ class ViewArticleCMP extends React.Component {
     this.handle = this.handle.bind(this)
   }
   componentDidMount(){
+    window.scrollTo(0,0)
     $('#modal-report').modal();
     this.fetchAPI()
     this.uploadView()
@@ -54,14 +57,22 @@ class ViewArticleCMP extends React.Component {
   }
   componentDidUpdate(prefProps){
     if(prefProps.match.params.id !== this.props.match.params.id){
+      this.setState({
+        comment: [],
+        article: [],
+        finishedComment:false,
+        finishedArticle:false,
+        nameIconFavorite: 'favorite_border',
+        statusFavorite: 'Favorite'
+      })
       this.componentDidMount()
     }
   }
   fetchAPI(){
     axios.get(`${BaseUrl}api/article/${this.props.match.params.id}`).then(result => {
-      this.setState({'article': result.data})
+      this.setState({'article': result.data,finishedArticle:true})
       $('#show-article img').materialbox();
-      document.title = result.data.title
+      document.title = result.data.title + ' | Go Blog'
       axios.get(`${BaseUrl}api/article-subscribe?user_subscribe_id=${result.data.user_id}`,{
         headers: this.state.headers
       }).then(result => {
@@ -96,17 +107,19 @@ class ViewArticleCMP extends React.Component {
   }
   fetchComment(){
     axios.get(`${BaseUrl}api/comment/${this.props.match.params.id}`).then(result => {
-      this.setState({'comment': result.data.data})
+      this.setState({'comment': result.data.data, finishedComment:true})
     })
   }
   fetchCheckFavorite(){
-    axios.get(`${BaseUrl}api/article-favorite?article_id=${this.props.match.params.id}`,{
-      headers: this.state.headers
-    }).then(result => {
-      if(result.data.id){
-        this.setState({nameIconFavorite: 'favorite', statusFavorite: 'Favorited'})
-      }
-    })
+    if(JSON.parse(window.localStorage.getItem('account'))){
+      axios.get(`${BaseUrl}api/article-favorite?article_id=${this.props.match.params.id}`,{
+        headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}
+      }).then(result => {
+        if(result.data.id){
+          this.setState({nameIconFavorite: 'favorite', statusFavorite: 'Favorited'})
+        }
+      })
+    }
   }
   async addSubscribe(){
     let subscribe = await functionAction.subscribeUser(this.state.statusSubscribe, this.state.article.user_id)
@@ -117,26 +130,18 @@ class ViewArticleCMP extends React.Component {
       this.setState({statusSubscribe: 'Subscribe'})
     }
   }
-  addFavorite(){
-    if(this.state.statusFavorite == 'Favorite'){
-      if(JSON.parse(window.localStorage.getItem('account'))){
-        axios.post(`${BaseUrl}api/article-favorite`, {
-          article_id: this.props.match.params.id
-        }, {headers: this.state.headers}).then(result => {
-          this.setState({nameIconFavorite: 'favorite', statusFavorite: 'Favorited'})
-          M.toast({html: 'Added to favorite'})
-        }).catch(e => this.setState({redirect: '/login?destination=/article/' + this.props.match.params.id}))
-      }
+  async addFavorite(){
+    let favorite = await functionAction.favoriteArticle(this.props.match.params.id)
+    if(favorite.response === 'error'){
+      M.toast({html: 'Error'})
     }
-    if(this.state.statusFavorite == 'Favorited'){
-      if(JSON.parse(window.localStorage.getItem('account'))){
-        axios.get(`${BaseUrl}api/article-favorite?article_id=${this.props.match.params.id}&unfavorite=true`,{
-          headers: this.state.headers
-        }).then(result => {
-          this.setState({nameIconFavorite: 'favorite_border', statusFavorite: 'Favorite'})
-          M.toast({html: 'Remove From Favorite'})
-        }).catch(e => this.setState({redirect: '/login?destination=/article/' + this.props.match.params.id}))
-      }
+    if(favorite.response === 'Added to favorite'){
+      M.toast({html: favorite.response})
+      this.setState({nameIconFavorite: 'favorite', statusFavorite: 'Favorited'})
+    }
+    if(favorite.response === 'Removed from favorite'){
+      M.toast({html: favorite.response})
+      this.setState({nameIconFavorite: 'favorite_border', statusFavorite: 'Favorite'})
     }
   }
   async uploadView(){
@@ -173,7 +178,7 @@ class ViewArticleCMP extends React.Component {
     }
     return(
       <React.Fragment>
-        <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/', str: 'Home'}, {url: '/', str: 'Article'}, {url: '/article/' + this.props.match.params.id, str: this.props.match.params.id}]} />
+        <BreadCrumb data={[{url: '/', str: 'Article'}, {url: '/article/' + this.props.match.params.id, str: this.props.match.params.id}]} />
         <div id="modal-report" className="modal">
           <div className="modal-content">
             <h4>Report the users</h4>
@@ -223,51 +228,78 @@ class ViewArticleCMP extends React.Component {
         <div className="row">
           <div className="col s12 m8">
             <div className="card-panel">
-              <div style={{marginTop:10}} className="row">
-                <div className="col s12 m3">
-                  <img src={BaseUrl + 'api/usrfile/' + this.state.article.user_id + '/' + this.state.article.image} alt="avatar" className="responsive-img"/>
-                </div>
-                <div className="col s12 m9" id="detail-article">
-                  <h5 className="m-0">{this.state.article.title}</h5>
-                  <div style={{marginTop:10}} className="divider"/>
-                  <small>{this.state.article.description}</small>
-                  <p><small>{this.state.article.created_at}</small></p>
-                </div>
-                <div className="col s12" id="show-article" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
-              </div>
-              <div className="divider"/>
-              <p>
-                <button className="btn waves-light waves-effect blue" data-target="modal-userview" className="btn modal-trigger"><i className="material-icons left">visibility</i>{this.state.listuserview.length}</button>
-                <button className="btn waves-light waves-effect red lighten-1" disabled={this.state.isAuth} onClick={this.addFavorite} style={{marginLeft: 10}} id="add-favorite"><i className="material-icons left">{this.state.nameIconFavorite}</i>{this.state.statusFavorite}</button>
-              </p>
-              <div className="divider"/>
-              <div style={{marginTop:10}} className="row">
-                <div className="col s3">
+            {
+              this.state.finishedArticle ?
+              <ContextDATA.Consumer>
                 {
-                  this.state.article.user_id ? <img src={BaseUrl + 'api/usrfile/' + this.state.article.user_id + '/' + this.state.article.avatar} alt="avatar responsive-img" className="circle" width="100%"/>:''
+                  result => (
+                  <React.Fragment>
+                    <div style={{marginTop:10}} className="row">
+                      <div className="col s12 m3">
+                        <img src={BaseUrl + 'api/usrfile/' + this.state.article.user_id + '/' + this.state.article.image} alt="avatar" className="responsive-img"/>
+                      </div>
+                      <div className="col s12 m9" id="detail-article">
+                        <h5 className="m-0">{this.state.article.title}</h5>
+                        <div style={{marginTop:10}} className="divider"/>
+                        <small>{this.state.article.description}</small>
+                        <p><small>{this.state.article.created_at}</small></p>
+                      </div>
+                      <div className="col s12" id="show-article" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
+                    </div>
+                    <div className="divider"/>
+                    <p>
+                      <button className="btn waves-light waves-effect blue" data-target="modal-userview" className="btn modal-trigger"><i className="material-icons left">visibility</i>{this.state.listuserview.length}</button>
+                      <button className="btn waves-light waves-effect red lighten-1"disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} onClick={this.addFavorite} style={{marginLeft: 10}} id="add-favorite"><i className="material-icons left">{this.state.nameIconFavorite}</i>{this.state.statusFavorite}</button>
+                    </p>
+                    <div className="divider"/>
+                    <div style={{marginTop:10}} className="row">
+                      <div className="col s3">
+                      {
+                        this.state.article.user_id ? <img src={BaseUrl + 'api/usrfile/' + this.state.article.user_id + '/' + this.state.article.avatar} alt="avatar responsive-img" className="circle" width="100%"/>:''
+                      }
+                      </div>
+                      <div className="col s9">
+                        <p><Link to={'/profile/' + this.state.article.user_id} className="title">{this.state.article.name}</Link></p>
+                        <div className="divider"/>
+                        <p className="black-text">
+                          {
+                            this.state.article.bio ? this.state.article.bio: 'Bio is not created by its users'
+                          }
+                        </p>
+                        <div className="divider"/>
+                        <button disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} className="btn waves-light waves-effect blue mt-10px" onClick={this.addSubscribe}>{this.state.statusSubscribe}</button>
+                        <button disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} className="btn waves-light waves-effect red modal-trigger mt-10px" data-target="modal-report">Report</button>
+                      </div>
+                    </div>
+                  </React.Fragment>
+                  )
                 }
-                </div>
-                <div className="col s9">
-                  <p>{this.state.article.name}</p>
-                      <button className="btn waves-light waves-effect blue" onClick={this.addSubscribe} disabled={this.state.isAuth}>{this.state.statusSubscribe}</button>
-                      <button className="btn waves-light waves-effect red modal-trigger" data-target="modal-report" disabled={this.state.isAuth}>Report</button>
-                </div>
-              </div>
+              </ContextDATA.Consumer>
+              :<Loader/>
+            }
             </div>
           </div>
           <div className="col s12 m4">
-            <ul className="collection" style={{maxHeight: 700,overflow: 'auto'}}>
-            {this.state.comment.length == 0 ? <p style={{paddingLeft: 10}}>No Data Comment</p>: ''}
+            <ul className="collection" style={{maxHeight: 700}}>
             {
-              this.state.comment.map((text,key) => {
-                return(
-                  <li key={key} className="collection-item avatar">
-                    <img src={`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`} alt="avatar" className="circle waves-light waves-light"/>
-                    <Link to={'/profile/' + text.user_id} className="title">{text.name}</Link>
-                    <p style={{lineBreak: 'anywhere'}}>{text.comment}<br/><small>{text.created_at}</small></p>
-                  </li>
-                )
-              })
+              this.state.finishedComment ?
+              <React.Fragment>
+                {
+                  this.state.comment.length == 0 ? <p style={{paddingLeft: 10}}>No Data Comment</p>: ''
+                }
+                {
+                  this.state.comment.map((text,key) => {
+                    return(
+                      <li key={key} className="collection-item avatar">
+                        <img src={`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`} alt="avatar" className="circle waves-light waves-light"/>
+                        <Link to={'/profile/' + text.user_id} className="title">{text.name}</Link>
+                        <p style={{lineBreak: 'anywhere'}}>{text.comment}<br/><small>{text.created_at}</small></p>
+                      </li>
+                    )
+                  })
+                }
+                </React.Fragment>
+              :<Loader/>
             }
             </ul>
             <div className="row">
@@ -277,6 +309,11 @@ class ViewArticleCMP extends React.Component {
               </div>
               <div className="col s12">
                 <button disabled={this.state.isAuth} className="btn waves-light waves-effect blue" onClick={this.addComment}>Submit<i className="material-icons right">send</i></button>
+              </div>
+              <div class="col s12">
+                <div class="grey lighten-2 center-align">
+                  <h5 style={{padding: 20}}>Ads Here</h5>
+                </div>
               </div>
             </div>
           </div>

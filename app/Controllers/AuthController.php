@@ -3,11 +3,7 @@
 use \Firebase\JWT\JWT;
 use App\Models\Auth_model;
 use CodeIgniter\RESTful\ResourceController;
-header("Access-Control-Allow-Origin: * ");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 class AuthController extends ResourceController
 {
     public function __construct()
@@ -38,108 +34,133 @@ EOD;
     }
     public function register()
     {
-        $id = rand(1000000, 10000000);
-        $name = $this->request->getPost('name');
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-        $born = $this->request->getPost('born');
-        $gender = $this->request->getPost('gender');
-        $location = $this->request->getPost('location');
-        $role = 'user';
-        $rekening = $this->request->getPost('rekening');
-        $type = '0';
-        $avatar = $this->request->getFile('avatar');
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
-        $data = json_decode(file_get_contents("php://input"));
-        $dataRegister = [
-            'id' => $id,
-            'name' => $name,
-            'email' => $email,
-            'password' => $password_hash,
-            'born' => $born,
-            'gender' => $gender,
-            'location' => $location,
-            'role' => $role,
-            'type' => $type,
-            'avatar' => $avatar->getName(),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        ];
-        $register = $this->auth->register($dataRegister);
-        if($register == true){
-            $avatar->move(WRITEPATH.'uploads/'. $id);
-            $output = [
-                'message' => 'Successfully Register'
+        $_POST['id'] = rand();
+        $validation =  \Config\Services::validation();
+        $validation->setRules([
+            'name' => 'required|min_length[3]|max_length[25]',
+            'email' => 'required|valid_email|is_unique[app_user.email,id,4]',
+            'password' => 'required|min_length[8]|max_length[25]',
+            'born' => 'required|min_length[3]|max_length[25]',
+            'gender' => 'required|min_length[4]|max_length[6]',
+            'location' => 'required|min_length[3]|max_length[50]',
+            'avatar' => 'uploaded[avatar]|max_size[avatar,2048]'
+        ]);
+        if($validation->withRequest($this->request)->run() === true)
+        {
+            $name = $this->request->getPost('name');
+            $email = $this->request->getPost('email');
+            $password = $this->request->getPost('password');
+            $born = $this->request->getPost('born');
+            $gender = $this->request->getPost('gender');
+            $location = $this->request->getPost('location');
+            $role = 'user';
+            $rekening = $this->request->getPost('rekening');
+            $type = '0';
+            $avatar = $this->request->getFile('avatar');
+            $password_hash = password_hash($password, PASSWORD_BCRYPT);
+            $dataRegister = [
+                'id' => $_POST['id'],
+                'name' => $name,
+                'email' => $email,
+                'password' => $password_hash,
+                'born' => $born,
+                'gender' => $gender,
+                'location' => $location,
+                'role' => $role,
+                'type' => $type,
+                'avatar' => $avatar->getName(),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ];
-            return $this->respond($output, 200);
-        } else {
-            $output = [
-                'message' => 'Register Failed'
-            ];
-            return $this->respond($output, 400);
+            $register = $this->auth->register($dataRegister);
+            if($register == true){
+                $avatar->move(WRITEPATH.'uploads/'. $id);
+                $output = [
+                    'message' => 'Successfully Register'
+                ];
+                return $this->respond($output, 200);
+            } else {
+                $output = [
+                    'message' => 'Register Failed'
+                ];
+                return $this->respond($output, 400);
+            }
+        }else{
+            return $this->respond(['message' => $validation->listErrors()], 403);
         }
     }
     public function login()
     {
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-        $data = $this->request->getJSON(true);
-        $cek_login = $this->auth->cek_login($data['email']);
-        if(password_verify($data['password'],$cek_login['password']))
+        $validation =  \Config\Services::validation();
+        $validation->setRules([
+            'email' => 'required|valid_email',
+            'password' => 'required|min_length[8]|max_length[25]',
+        ]);
+        if($validation->withRequest($this->request)->run() === true)
         {
-            $secret_key = $this->privateKey();
-            $issuer_claim = "THE_CLAIM";
-            $audience_claim = "THE_AUDIENCE";
-            $issuedat_claim = time();
-            $notbefore_claim = $issuedat_claim + 10;
-            $expire_claim = $issuedat_claim + 3600;
-            $token = array(
-                "iss" => $issuer_claim,
-                "aud" => $audience_claim,
-                "iat" => $issuedat_claim,
-                "nbf" => $notbefore_claim,
-                "exp" => $expire_claim,
-                "data" => array(
-                    'id' => $cek_login['id'],
-                    'name' => $cek_login['name'],
-                    'email' => $cek_login['email'],
-                    'password' => $cek_login['password'],
-                    'born' => $cek_login['born'],
-                    'gender' => $cek_login['gender'],
-                    'location' => $cek_login['location'],
-                    'role' => $cek_login['role'],
-                    'rekening' => $cek_login['rekening'],
-                    'type' => $cek_login['type'],
-                    'bio' => $cek_login['bio'],
-                    'avatar' => $cek_login['avatar'],
-                )
-            );
-            $token = JWT::encode($token, $secret_key);
-            $output = [
-                'status' => 200,
-                'message' => 'Successfully Login',
-                "token" => $token,
-                "data" => array(
-                    'id' => $cek_login['id'],
-                    'name' => $cek_login['name'],
-                    'email' => $cek_login['email'],
-                    'born' => $cek_login['born'],
-                    'gender' => $cek_login['gender'],
-                    'location' => $cek_login['location'],
-                    'role' => $cek_login['role'],
-                    'type' => $cek_login['type'],
-                    'avatar' => $cek_login['avatar'],
-                ),
-                "expireAt" => $expire_claim
-            ];
-            return $this->respond($output, 200);
-        } else {
-            $output = [
-                'status' => 401,
-                'message' => 'Login Failed',
-                "password" => $data['password']
-            ];
-            return $this->respond($output, 401);
+            $email = $this->request->getPost('email');
+            $password = $this->request->getPost('password');
+            $data = $this->request->getJSON(true);
+            $cek_login = $this->auth->cek_login($data['email']);
+            if(password_verify($data['password'],$cek_login['password']))
+            {
+                $secret_key = $this->privateKey();
+                $issuer_claim = "THE_CLAIM";
+                $audience_claim = "THE_AUDIENCE";
+                $issuedat_claim = time();
+                $notbefore_claim = $issuedat_claim + 10;
+                $expire_claim = $issuedat_claim + 3600;
+                $token = array(
+                    "iss" => $issuer_claim,
+                    "aud" => $audience_claim,
+                    "iat" => $issuedat_claim,
+                    "nbf" => $notbefore_claim,
+                    "exp" => $expire_claim,
+                    "data" => array(
+                        'id' => $cek_login['id'],
+                        'name' => $cek_login['name'],
+                        'email' => $cek_login['email'],
+                        'password' => $cek_login['password'],
+                        'born' => $cek_login['born'],
+                        'gender' => $cek_login['gender'],
+                        'location' => $cek_login['location'],
+                        'role' => $cek_login['role'],
+                        'rekening' => $cek_login['rekening'],
+                        'type' => $cek_login['type'],
+                        'bio' => $cek_login['bio'],
+                        'avatar' => $cek_login['avatar'],
+                    )
+                );
+                $token = JWT::encode($token, $secret_key);
+                $output = [
+                    'status' => 200,
+                    'message' => 'Successfully Login',
+                    "token" => $token,
+                    "data" => array(
+                        'id' => $cek_login['id'],
+                        'name' => $cek_login['name'],
+                        'email' => $cek_login['email'],
+                        'born' => $cek_login['born'],
+                        'gender' => $cek_login['gender'],
+                        'location' => $cek_login['location'],
+                        'role' => $cek_login['role'],
+                        'type' => $cek_login['type'],
+                        'avatar' => $cek_login['avatar'],
+                    ),
+                    "expireAt" => $expire_claim
+                ];
+                return $this->respond($output, 200);
+            } else {
+                $output = [
+                    'status' => 401,
+                    'message' => 'Email / Password Wrong',
+                    "password" => $data['password']
+                ];
+                return $this->respond($output, 401);
+            }
+
+        }else{
+            return $this->respond(['message' => $validation->listErrors()], 403);
         }
     }
     public function check($authHeader)

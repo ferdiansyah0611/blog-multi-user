@@ -50,7 +50,7 @@ class ShowProfileCMP extends React.Component {
       {
         this.state.found ?
         <React.Fragment>
-        <div className="parallax-container">
+        <div className="parallax-container default">
           <div className="parallax">
             <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=600&q=60"/>
           </div>
@@ -76,8 +76,22 @@ class ShowProfileCMP extends React.Component {
                 <div className="divider"/>
                 <div className="row mt-10px">
                   <div className="col s11">
-                    <button className="btn waves-light waves-effect blue">Subscribe</button>
-                    <button className="btn waves-light waves-effect red" style={{marginLeft: 10}}>Report</button>
+                  <ContextDATA.Consumer>
+                    {
+                      result => (
+                        result.users.id === this.state.users.id || !result.users.id ?
+                          <React.Fragment>
+                            <button disabled={true} className="btn waves-light waves-effect blue">Subscribe</button>
+                            <button disabled={true} className="btn waves-light waves-effect red" style={{marginLeft: 10}}>Report</button>
+                          </React.Fragment>
+                        :
+                        <React.Fragment>
+                          <button className="btn waves-light waves-effect blue">Subscribe</button>
+                          <button className="btn waves-light waves-effect red" style={{marginLeft: 10}}>Report</button>
+                        </React.Fragment>
+                      )
+                    }
+                  </ContextDATA.Consumer>
                   </div>
                 </div>
               </div>

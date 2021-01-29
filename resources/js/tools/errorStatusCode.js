@@ -14,7 +14,7 @@ const errorStatusCode = (e, closed) => {
                 $('.sidenav').sidenav('close');
             },
             willClose: () => {
-                closed
+                closed()
             }
         })
     }

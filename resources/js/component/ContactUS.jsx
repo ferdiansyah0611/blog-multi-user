@@ -46,7 +46,7 @@ class ContactUSCMP extends React.Component {
   }
   render(){
     return(
-      <div className="parallax-container">
+      <div className="parallax-container custom">
         <div className="parallax">
           <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=600&q=60"/>
         </div>

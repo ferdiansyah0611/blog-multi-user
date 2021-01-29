@@ -43,15 +43,25 @@ class CommentController extends ResourceController
     {
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-            $request = $this->request->getJSON();
-            $this->model->insert_data([
-                'user_id' => $check->data->id,
-                'article_id' => $request->article_id,
-                'comment' => $request->comment,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
+            $validation =  \Config\Services::validation();
+            $validation->setRules([
+                'article_id' => 'required|min_length[3]|max_length[50]',
+                'comment' => 'required|min_length[5]|max_length[5000]',
             ]);
-            return $this->respond(['message' => 'Successfuly add data']);
+            if($validation->withRequest($this->request)->run() === true)
+            {
+                $request = $this->request->getJSON();
+                $this->model->insert_data([
+                    'user_id' => $check->data->id,
+                    'article_id' => $request->article_id,
+                    'comment' => $request->comment,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                return $this->respond(['message' => 'Successfuly add data']);
+            }else{
+                return $this->respond(['message' => $validation->listErrors()], 403);
+            }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);
         }
@@ -61,14 +71,24 @@ class CommentController extends ResourceController
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
             if($check->data->role == 'admin'){
-                $request = $this->request->getJSON();
-                $this->model->update_data([
-                    'user_id' => $check->data->id,
-                    'article_id' => $request->article_id,
-                    'comment' => $request->comment,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ], $id);
-                return $this->respond(['message' => 'Successfuly update data']);
+                $validation =  \Config\Services::validation();
+                $validation->setRules([
+                    'article_id' => 'required|min_length[3]|max_length[50]',
+                    'comment' => 'required|min_length[5]|max_length[5000]',
+                ]);
+                if($validation->withRequest($this->request)->run() === true)
+                {
+                    $request = $this->request->getJSON();
+                    $this->model->update_data([
+                        'user_id' => $check->data->id,
+                        'article_id' => $request->article_id,
+                        'comment' => $request->comment,
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ], $id);
+                    return $this->respond(['message' => 'Successfuly update data']);
+                }else{
+                    return $this->respond(['message' => $validation->listErrors()], 403);
+                }
             }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);

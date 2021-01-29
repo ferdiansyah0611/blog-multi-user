@@ -1,7 +1,17 @@
 import React from 'react';
+import {
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import ColsArticleCMP from './tools/ColsArticleCMP.jsx';
 import BaseUrl from '../tools/Base';
 import BreadCrumb from './tools/BreadCrumb.jsx'
+
+import axios from 'axios';
+/*tools*/
+import errorStatusCode from '../tools/errorStatusCode';
+import print from '../tools/print';
 
 class SearchCMP extends React.Component{
   constructor(props){
@@ -92,7 +102,7 @@ class SearchCMP extends React.Component{
   render(){
     return(
       <React.Fragment>
-        <BreadCrumb data={[{url: '/', str: window.location.origin}, {url: '/search', str: 'Search'}]} />
+        <BreadCrumb data={[{url: '/search', str: 'Search'}]} />
         <div className="row">
           <div className="col s12">
             <div className="card-panel">

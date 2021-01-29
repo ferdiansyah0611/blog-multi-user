@@ -76,10 +76,10 @@ class ArticleFavoriteController extends ResourceController
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
-                return $this->respond(['message' => 'Successfuly add data']);
+                return $this->respond(['message' => 'Added to favorite']);
             }else{
                 $this->model->where(['article_id' => $this->request->getJSON()->article_id, 'user_id' => $check->data->id])->delete();
-                return $this->respond(['message' => 'Successfuly delete data']);
+                return $this->respond(['message' => 'Removed from favorite']);
             }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);

@@ -218,58 +218,56 @@ class Datatables extends React.Component {
             </select>
           </div>
         </div>
-        <React.Fragment>
-          <table className="striped responsive-table highlight">
-            <thead>
-              <tr>
-              {
-                this.props.heading.map((text, key) => {
-                  return(
-                    <th key={key} style={{cursor:'pointer'}}>{text}</th>
-                  )
-                })
-              }
-              <th style={{cursor:'pointer'}}>Action</th>
-              <th>Selection</th>
-              </tr>
-            </thead>
-            <tbody>
+        <table className="responsive-table highlight">
+          <thead>
+            <tr>
             {
-              this.state.data.map((text, key) => {
+              this.props.heading.map((text, key) => {
                 return(
-                  <tr key={key}>
-                  {
-                    this.props.td.map((datatd, keytd) => {
-                      return(
-                        <td className={'row-' + datatd} key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}</td>
-                      )
-                    })
-                  }
-                    <td>
-                        <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i class="material-icons">edit</i></button>
-                    </td>
-                    <td>
-                      <label>
-                      <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
-                      <span>Select</span>
-                      </label>
-                    </td>
-                  </tr>
+                  <th key={key} className="pointer">{text}</th>
                 )
               })
             }
-            </tbody>
-          </table>
+            <th className="pointer">Action</th>
+            <th>Selection</th>
+            </tr>
+          </thead>
+          <tbody>
           {
-            this.state.finished ? '': <Loader/>
+            this.state.data.map((text, key) => {
+              return(
+                <tr key={key}>
+                {
+                  this.props.td.map((datatd, keytd) => {
+                    return(
+                      <td className={'row-' + datatd} key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}</td>
+                    )
+                  })
+                }
+                  <td>
+                      <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i className="material-icons">edit</i></button>
+                  </td>
+                  <td>
+                    <label>
+                    <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
+                    <span>Select</span>
+                    </label>
+                  </td>
+                </tr>
+              )
+            })
           }
-          {
-            this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
-          }
-          {
-            this.props.paginate ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
-          }
-        </React.Fragment>
+          </tbody>
+        </table>
+        {
+          this.state.finished ? this.state.data.length == 0 ? <h6 className="center mt-10px">Empty Data</h6>: '': <Loader/>
+        }
+        {
+          this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
+        }
+        {
+          this.props.paginate && this.state.data.length >= 24 ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
+        }
         <div id="modal_edit" className="modal modal-fixed-footer">
           <div className="modal-content">
             <h4>Edit Data</h4>

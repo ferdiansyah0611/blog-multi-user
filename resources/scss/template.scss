@@ -16,6 +16,9 @@
     #body-page{
         margin-top: 56px;
     }
+    #modal-upload-file{
+        width: 70% !important;
+    }
 }
 @media only screen and (max-width : 992px) {
 	#body{
@@ -54,7 +57,7 @@ input#search::placeholder {
     margin: 0!important;
 }
 #modal-upload-file{
-    width: 30% !important;
+    width: 30%;
 }
 #modal-add-article{
     width: 90% !important;
@@ -62,8 +65,11 @@ input#search::placeholder {
 #modal-show-status{
     width: 80% !important;
 }
-.parallax-container {
+.parallax-container.default {
     height: 300px !important;
+}
+.parallax-container.custom {
+    height: 500px !important;
 }
 #toTop{
     position: fixed;
@@ -83,6 +89,13 @@ input#search::placeholder {
     left: calc(100% - 44.5%) !important;
     top: 66px !important;
     width: 300px !important;
+    height: 300px;
+}
+#dropdown-notification-mobile{
+    left: 15.5% !important;
+    top: 58px !important;
+    width: 300px !important;
+    height: 300px;
 }
 .collection{
     font-size: 13px;

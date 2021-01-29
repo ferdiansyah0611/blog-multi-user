@@ -18,7 +18,7 @@ class ColsArticleCMP extends React.Component {
       let favorite = await functionAction.favoriteArticle(this.props.data.id)
       favorite.response !== 'error' ? M.toast({html: favorite.response}): M.toast({html: 'Error'})
     }else{
-      M.toast({html: 'Sorry you must be logged in to do this. <a href="#/login" class="btn blue" style="margin-left:10px;">Login Here</a>'})
+      M.toast({html: 'Sorry you must be logged in to do this. <a href="#/login" class="btn blue" style="margin-left:10px;">Login</a>'})
     }
   }
   componentDidMount(){
@@ -49,7 +49,7 @@ class ColsArticleCMP extends React.Component {
             </button>
             <button className="btn btn-floating cyan waves-effect waves-light share activator"><i className="material-icons">share</i></button>
             <button className="btn btn-floating white waves-effect waves-light avatar-user"><img className="responsive-img" src={this.props.data.avatar} alt="avatar"/></button>
-            <p>{this.props.data.description}</p>
+            <p className="line-auto">{this.props.data.description}</p>
             <p className="row">
               <span className="left"><b>Publish</b></span>
               <span className="right fs-12px">{this.props.data.created_at}</span>

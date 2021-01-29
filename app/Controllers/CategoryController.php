@@ -25,15 +25,25 @@ class CategoryController extends ResourceController
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
             if($check->data->role == 'admin'){
-                $request = $this->request->getJSON();
-            	$this->model->insert_data([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'created_by' => 1,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                $validation =  \Config\Services::validation();
+                $validation->setRules([
+                    'name' => 'required|min_length[3]|max_length[50]|is_unique[app_category.name]',
+                    'description' => 'required|min_length[5]|max_length[255]',
                 ]);
-                return $this->respond(['message' => 'Successfuly add data']);
+                if($validation->withRequest($this->request)->run() === true)
+                {
+                    $request = $this->request->getJSON();
+                	$this->model->insert_data([
+                        'name' => $request->name,
+                        'description' => $request->description,
+                        'created_by' => 1,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]);
+                    return $this->respond(['message' => 'Successfuly add data']);
+                }else{
+                    return $this->respond(['message' => $validation->listErrors()], 403);
+                }
             }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);
@@ -44,14 +54,24 @@ class CategoryController extends ResourceController
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
             if($check->data->role == 'admin'){
-                $request = $this->request->getJSON();
-            	$this->model->update_data([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'created_by' => 1,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ], $id);
-                return $this->respond(['message' => 'Successfuly update data']);
+                $validation =  \Config\Services::validation();
+                $validation->setRules([
+                    'name' => 'required|min_length[3]|max_length[50]',
+                    'description' => 'required|min_length[5]|max_length[255]',
+                ]);
+                if($validation->withRequest($this->request)->run() === true)
+                {
+                    $request = $this->request->getJSON();
+                	$this->model->update_data([
+                        'name' => $request->name,
+                        'description' => $request->description,
+                        'created_by' => 1,
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ], $id);
+                    return $this->respond(['message' => 'Successfuly update data']);
+                }else{
+                    return $this->respond(['message' => $validation->listErrors()], 403);
+                }
             }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);

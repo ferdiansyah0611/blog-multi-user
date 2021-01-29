@@ -1,2 +1,2 @@
-const BaseUrl = 'http://app.blogphp8/';
+const BaseUrl = 'http://app.blog/';
 export default BaseUrl;

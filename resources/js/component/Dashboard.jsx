@@ -178,7 +178,7 @@ class DashboardCMP extends React.Component {
             </table>
         </div>
       </div>
-      <BreadCrumb data={[{url: '/', str: 'Home'}, {url: '/dashboard', str: 'Dashboard'}]} />
+      <BreadCrumb data={[{url: '/dashboard', str: 'Dashboard'}]} />
       <div className="row">
         <div className="col s12 m6 l3 waves-effect waves-dark">
           <div className="blue lighten-1 center white-text card-panel z-depth-0">

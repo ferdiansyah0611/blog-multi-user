@@ -10,7 +10,7 @@ class ArticleSubscribeModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['user_id', 'subscribe_id'];
+    protected $allowedFields = ['user_id', 'user_subscribe_id'];
 
     protected $useTimestamps = false;
     protected $createdField  = 'created_at';

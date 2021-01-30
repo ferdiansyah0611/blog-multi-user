@@ -86,14 +86,16 @@ input#search::placeholder {
     line-break: anywhere;
 }
 #dropdown-notification{
-    left: calc(100% - 44.5%) !important;
+    left: unset !important;
     top: 66px !important;
+    right: calc(0px + 300px);
     width: 300px !important;
     height: 300px;
 }
 #dropdown-notification-mobile{
-    left: 15.5% !important;
-    top: 58px !important;
+    left: unset !important;
+    top: 66px !important;
+    right: 0px;
     width: 300px !important;
     height: 300px;
 }

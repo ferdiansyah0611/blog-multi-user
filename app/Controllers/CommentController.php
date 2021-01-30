@@ -45,7 +45,7 @@ class CommentController extends ResourceController
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
             $validation =  \Config\Services::validation();
             $validation->setRules([
-                'article_id' => 'required|min_length[3]|max_length[50]',
+                'article_id' => 'required',
                 'comment' => 'required|min_length[5]|max_length[5000]',
             ]);
             if($validation->withRequest($this->request)->run() === true)
@@ -73,8 +73,8 @@ class CommentController extends ResourceController
             if($check->data->role == 'admin'){
                 $validation =  \Config\Services::validation();
                 $validation->setRules([
-                    'article_id' => 'required|min_length[3]|max_length[50]',
-                    'comment' => 'required|min_length[5]|max_length[5000]',
+                    'article_id' => 'required',
+                    'comment' => 'required|string|min_length[1]|max_length[5000]',
                 ]);
                 if($validation->withRequest($this->request)->run() === true)
                 {

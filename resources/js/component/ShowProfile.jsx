@@ -8,10 +8,13 @@ import BreadCrumb from './tools/BreadCrumb.jsx';
 import Datatables from './tools/Datatables.jsx';
 import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
 import Loader from './tools/Loader.jsx';
+import ReportUser from './tools/ReportUser.jsx';
+import Slider from './tools/Slider.jsx';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
+import functionAction from './tools/FunctionAction';
 /*context*/
 import ContextDATA from '../ContextDATA';
 
@@ -20,9 +23,11 @@ class ShowProfileCMP extends React.Component {
     super(props)
     this.state = {
       users: {},
+      statusSubscribe: 'Subscribe',
       finished: false,
       found: false
     }
+    this.addSubscribe = this.addSubscribe.bind(this)
   }
   componentDidMount(){
     this.fetchAPI()
@@ -33,6 +38,15 @@ class ShowProfileCMP extends React.Component {
       this.fetchAPI()
     }
   }
+  async addSubscribe(){
+    let subscribe = await functionAction.subscribeUser(this.state.statusSubscribe, this.state.article.user_id)
+    if(subscribe.statusSubscribe == 'Subscribed'){
+      this.setState({statusSubscribe: 'Subscribed'})
+    }
+    if(subscribe.statusSubscribe == 'Subscribe'){
+      this.setState({statusSubscribe: 'Subscribe'})
+    }
+  }
   async fetchAPI(paginate = 1){
     await axios.get(`${BaseUrl}api/user/${this.props.match.params.id}`).then(result => {
       document.title = result.data.name + ' | Go BLog'
@@ -41,7 +55,18 @@ class ShowProfileCMP extends React.Component {
         found: true,
         finished: true
       })
+      $('.tabs').tabs();
       $('.parallax').parallax();
+      var account = window.localStorage.getItem('account')
+      if(account){
+        axios.get(`${BaseUrl}api/article-subscribe?user_subscribe_id=${result.data.id}`,{
+          headers: {Authorization: JSON.parse(account).token}
+        }).then(results => {
+          if(results.data.id){
+            this.setState({statusSubscribe: 'Subscribed'})
+          }
+        })
+      }
     })
   }
   render() {
@@ -79,15 +104,13 @@ class ShowProfileCMP extends React.Component {
                   <ContextDATA.Consumer>
                     {
                       result => (
-                        result.users.id === this.state.users.id || !result.users.id ?
-                          <React.Fragment>
-                            <button disabled={true} className="btn waves-light waves-effect blue">Subscribe</button>
-                            <button disabled={true} className="btn waves-light waves-effect red" style={{marginLeft: 10}}>Report</button>
-                          </React.Fragment>
-                        :
                         <React.Fragment>
-                          <button className="btn waves-light waves-effect blue">Subscribe</button>
-                          <button className="btn waves-light waves-effect red" style={{marginLeft: 10}}>Report</button>
+                          <button
+                            disabled={result.users.id ? result.users.id !== this.state.users.id? false: true: true}
+                            className="btn waves-light waves-effect blue mt-10px"
+                            onClick={this.addSubscribe}
+                          >{this.state.statusSubscribe}</button>
+                          <ReportUser user_id={this.state.users.id} disabled={result.users.id ? result.users.id !== this.state.users.id? false: true: true}/>
                         </React.Fragment>
                       )
                     }
@@ -97,16 +120,58 @@ class ShowProfileCMP extends React.Component {
               </div>
             </div>
           </div>
-          <h5 style={{marginLeft:10}}>Post Blog</h5>
-          {
-            this.state.users.id ? <ArticleLoadCMP url={BaseUrl + 'api/article'} query={"users=" + this.state.users.id} id_next="next_article"/>:''
-          }
+          <div className="row">
+            <div className="col s12">
+              {
+                this.state.users.id ? <Slider url={`${BaseUrl}api/article`} query={"popular=true&user_id=" + this.state.users.id}  />:false
+              }
+              <ul className="tabs">
+                <li className="tab col s6"><a className="active" href="#blog-tabs">Blog</a></li>
+                <li className="tab col s6"><a href="#information-blog">Information</a></li>
+              </ul>
+            </div>
+            <div id="blog-tabs" className="col s12">
+              <h5 style={{marginLeft:10}}>Post Blog</h5>
+              {
+                this.state.users.id ? <ArticleLoadCMP url={BaseUrl + 'api/article'} query={"users=" + this.state.users.id} id_next="next_article"/>:''
+              }
+              {
+                this.state.finished ? '': <Loader/>
+              }
+            </div>
+            <div id="information-blog" className="col s12">
+              <ul className="collection">
+                <li className="collection-item avatar">
+                  <i className="material-icons circle red">badge</i>
+                  <span className="title">Name</span>
+                  <p>{this.state.users.name}</p>
+                </li>
+                <li className="collection-item avatar">
+                  <i className="material-icons circle red">account_circle</i>
+                  <span className="title">Gender</span>
+                  <p>{this.state.users.gender}</p>
+                </li>
+                <li className="collection-item avatar">
+                  <i className="material-icons circle red">calendar_today</i>
+                  <span className="title">Born</span>
+                  <p>{this.state.users.born}</p>
+                </li>
+                <li className="collection-item avatar">
+                  <i className="material-icons circle red">place</i>
+                  <span className="title">Location</span>
+                  <p>{this.state.users.location}</p>
+                </li>
+                <li className="collection-item avatar">
+                  <i className="material-icons circle red">description</i>
+                  <span className="title">Bio</span>
+                  <p>{this.state.users.bio == null ? 'Bio is not created by its users': this.state.users.bio}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
         </React.Fragment>
         :''
-      }
-      {
-        this.state.finished ? '': <Loader/>
       }
       </React.Fragment>
     )

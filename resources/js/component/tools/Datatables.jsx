@@ -110,8 +110,6 @@ class Datatables extends React.Component {
   }
   editing(event) {
     this.state.data.find((text, key) => {
-      if(this.props.type[key] == 'textareatinymce'){
-      }
       if(text.id == event.target.dataset.id) {
         var form = this.props.form.reduce(function(result, item, index, array) {
           result[item] = text[item];
@@ -121,8 +119,8 @@ class Datatables extends React.Component {
           return result
         }, {})
         this.setState(form)
+        $('#modal_edit').modal('open');
       }
-      $('#modal_edit').modal('open');
     })
   }
   updating(event) {
@@ -245,7 +243,7 @@ class Datatables extends React.Component {
                   })
                 }
                   <td>
-                      <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i className="material-icons">edit</i></button>
+                      <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i data-id={text.id} className="material-icons">edit</i></button>
                   </td>
                   <td>
                     <label>

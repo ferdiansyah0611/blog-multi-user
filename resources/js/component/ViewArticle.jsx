@@ -4,8 +4,9 @@ import {
   Redirect,
 } from "react-router-dom";
 import axios from 'axios';
-import BreadCrumb from './tools/BreadCrumb.jsx'
+import BreadCrumb from './tools/BreadCrumb.jsx';
 import Datatables from './tools/Datatables.jsx';
+import ReportUser from './tools/ReportUser.jsx';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -31,11 +32,9 @@ class ViewArticleCMP extends React.Component {
       statusSubscribe: 'Subscribe',
       category_report: '',
       description_report: '',
-      isReport: false,
       finishedComment: false,
       finishedArticle: false
     }
-    this.addReport = this.addReport.bind(this)
     this.addSubscribe = this.addSubscribe.bind(this)
     this.addComment = this.addComment.bind(this)
     this.addFavorite = this.addFavorite.bind(this)
@@ -80,29 +79,11 @@ class ViewArticleCMP extends React.Component {
           this.setState({statusSubscribe: 'Subscribed'})
         }
       })
-      axios.get(`${BaseUrl}api/user-report?user_report_id=${result.data.user_id}`,{
-        headers: this.state.headers
-      }).then(result => {
-        if(result.data.id || result.data.message == 'Access Denied'){
-          this.setState({isReport: true})
-        }
-      })
     })
     this.fetchComment()
     this.fetchCheckFavorite()
     axios.get(`${BaseUrl}api/article-viewer?page=1&article_id=${this.props.match.params.id}`).then(result => {
       this.setState({'listuserview': result.data.data})
-    })
-  }
-  addReport(){
-    axios.post(`${BaseUrl}api/user-report`, {
-      user_report_id: this.state.article.user_id,
-      category: this.state.category_report,
-      description: this.state.description_report,
-    }, {
-      headers: this.state.headers
-    }).then(result => {
-      M.toast({html: result.data.message})
     })
   }
   fetchComment(){
@@ -179,30 +160,6 @@ class ViewArticleCMP extends React.Component {
     return(
       <React.Fragment>
         <BreadCrumb data={[{url: '/', str: 'Article'}, {url: '/article/' + this.props.match.params.id, str: this.props.match.params.id}]} />
-        <div id="modal-report" className="modal">
-          <div className="modal-content">
-            <h4>Report the users</h4>
-            <div className="row">
-              <div className="input-field col s12">
-                <select className="browser-default" disabled={this.state.isReport} defaultValue="Choose your option" name="category_report" onChange={this.handle}>
-                  <option value="Choose your option" disabled={true}>Choose your option</option>
-                  <option value="Use Profanity">Use Profanity</option>
-                  <option value="Hacking">Hacking</option>
-                  <option value="Contains Negative">Contains Negative</option>
-                  <option value="Bullying">Bullying</option>
-                </select>
-                <label className="active">The Problem</label>
-              </div>
-              <div className="input-field col s12">
-                <textarea disabled={this.state.isReport} className="materialize-textarea" name="description_report" onChange={this.handle}></textarea>
-                <label className={this.state.isReport ? 'active': ''}>Description</label>
-              </div>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <button disabled={this.state.isReport} className="waves-effect waves-white blue btn" onClick={this.addReport}><i className="material-icons right">send</i>Submit</button>
-          </div>
-        </div>
         <div id="modal-userview" className="modal bottom-sheet">
           <div className="modal-content">
             <h4>Viewers Articles</h4>
@@ -267,8 +224,12 @@ class ViewArticleCMP extends React.Component {
                           }
                         </p>
                         <div className="divider"/>
-                        <button disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} className="btn waves-light waves-effect blue mt-10px" onClick={this.addSubscribe}>{this.state.statusSubscribe}</button>
-                        <button disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} className="btn waves-light waves-effect red modal-trigger mt-10px" data-target="modal-report">Report</button>
+                        <button
+                          disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true}
+                          className="btn waves-light waves-effect blue mt-10px"
+                          onClick={this.addSubscribe}
+                        >{this.state.statusSubscribe}</button>
+                        <ReportUser user_id={this.state.article.user_id} disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true}/>
                       </div>
                     </div>
                   </React.Fragment>
@@ -310,8 +271,8 @@ class ViewArticleCMP extends React.Component {
               <div className="col s12">
                 <button disabled={this.state.isAuth} className="btn waves-light waves-effect blue" onClick={this.addComment}>Submit<i className="material-icons right">send</i></button>
               </div>
-              <div class="col s12">
-                <div class="grey lighten-2 center-align">
+              <div className="col s12">
+                <div className="grey lighten-2 center-align">
                   <h5 style={{padding: 20}}>Ads Here</h5>
                 </div>
               </div>

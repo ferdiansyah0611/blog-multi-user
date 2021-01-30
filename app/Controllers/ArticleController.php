@@ -26,8 +26,13 @@ class ArticleController extends ResourceController
             }
         }
         if($this->request->getGet('popular')){
-            $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.views', 'DESC'], 8);
-            return $this->respond($data);
+            if($this->request->getGet('user_id')){
+                $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('user_id')], ['app_article.views', 'DESC'], 8);
+                return $this->respond($data);
+            } else {
+                $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.views', 'DESC'], 8);
+                return $this->respond($data);
+            }
         }
         if($this->request->getGet('latest')){
             $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], 2128538, 8);

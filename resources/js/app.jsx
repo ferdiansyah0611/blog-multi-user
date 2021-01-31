@@ -40,7 +40,8 @@ import ManageArticleCMP from './component/ManageArticle.jsx';
 import ManageCategoryCMP from './component/ManageCategory.jsx';
 import ManageCommentCMP from './component/ManageComment.jsx';
 import ManageStorageCMP from './component/ManageStorage.jsx';
-import PreffAccountCMP from './component/PreffAccount.jsx';
+import SetAccountCMP from './component/SetAccount.jsx';
+import SetViewCMP from './component/SetView.jsx';
 import ShowProfileCMP from './component/ShowProfile.jsx';
 import ContactUSCMP from './component/ContactUS.jsx';
 import MyFavoriteCMP from './component/MyFavorite.jsx';
@@ -66,6 +67,10 @@ class App extends React.Component {
         gender:'',
         born:''
       },
+      ui: {
+        navbar:'blue darken-2',
+        sidebar:''
+      },
       notification: [],
       getNotification: (token) => {
       	axios.get(`${BaseUrl}api/user-notification?paginate=true`, {headers: {Authorization: token}}).then(result => {
@@ -90,12 +95,18 @@ class App extends React.Component {
         if(result.data.data.type == 5 && result.data.data.role == 'admin'){
           this.setState({
             menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
-            menu_preferences: [{txt:'Account',icon:'account_box',url: '/prefferences/account'}]
+            menu_preferences: [
+              {txt:'Account',icon:'account_box',url: '/setting/account'},
+              {txt:'View',icon:'preview',url: '/setting/view'}
+            ]
           })
         }else{
           this.setState({
             menu_manage: ['Article', 'Storage'],
-            menu_preferences: [{txt:'Account',icon:'account_box',url: '/prefferences/account'}]
+            menu_preferences: [
+              {txt:'Account',icon:'account_box',url: '/setting/account'},
+              {txt:'View',icon:'preview',url: '/setting/view'}
+            ]
           })
         }
       }).catch(e => {
@@ -158,9 +169,8 @@ class App extends React.Component {
 			      	  <ManageCommentCMP/>
 			      	</Route>
 			      	<Route path="/management/storage" component={ManageStorageCMP}/>
-			      	<Route path="/prefferences/account">
-			      	  <PreffAccountCMP/>
-			      	</Route>
+			      	<Route path="/setting/account" component={SetAccountCMP}/>
+              <Route path="/setting/view" component={SetViewCMP}/>
 			    	</Switch>
 		        <FooterCMP/>
       		</div>

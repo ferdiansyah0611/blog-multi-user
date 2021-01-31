@@ -38,12 +38,14 @@ class LoginCMP extends React.Component{
           if(result.data.data.type == 5 && result.data.data.role == 'admin'){
             this.context.setState({name: 'menu_manage', value:  ['Article', 'Comment', 'Storage', 'Category']})
             this.context.setState({name: 'menu_preferences', value: [
-              {txt:'Account',icon:'account_box',url: '/prefferences/account'}
+              {txt:'Account',icon:'account_box',url: '/setting/account'},
+              {txt:'View',icon:'preview',url: '/setting/view'}
             ]})
           }else{
             this.context.setState({name: 'menu_manage', value:  ['Article', 'Storage']})
             this.context.setState({name: 'menu_preferences', value: [
-              {txt:'Account',icon:'account_box',url: '/prefferences/account'}
+              {txt:'Account',icon:'account_box',url: '/setting/account'},
+              {txt:'View',icon:'preview',url: '/setting/view'}
             ]})
           }
           this.context.getNotification(result.data.token)

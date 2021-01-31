@@ -131,9 +131,9 @@ class ManageArticleCMP extends React.Component {
                         search: BaseUrl + 'api/search/article'
                       }}
                       form={
-                        ['id', 'title', 'description', 'content', 'status', 'updated_at']
+                        ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
                       }
-                      type={[false,'text', 'textarea', 'textareatinymce', 'select|public,private', false]}
+                      type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
                     />
                   </Suspense>
                 </div>

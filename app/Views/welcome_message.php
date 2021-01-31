@@ -25,6 +25,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha256-t9UJPrESBeG2ojKTIcFLPGF7nHi2vEc7f5A2KpH/UBU=" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 		<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-GDAAzSWuVh-Fi1Zh"></script>
-		<script src="<?= base_url('js/') ?>/app.js" defer=""></script>
+		<script src="<?= getenv('CI_ENVIRONMENT') == 'development' ? base_url('js/app.js') : base_url('js/app.production.js') ?>" defer=""></script>
 	</body>
 </html>

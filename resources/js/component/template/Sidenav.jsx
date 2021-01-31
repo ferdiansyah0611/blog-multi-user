@@ -94,7 +94,9 @@ class SidenavCMP extends React.Component {
   time(){
     setInterval(() => {
       var date = new Date()
-      this.setState({time: date.getFullYear() + '/' + date.getMonth() + 1 + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()})
+      this.setState({
+      	time: date.getFullYear() + '/' + date.getMonth() + 1 + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+      })
     }, 1000)
   }
   handle(event) {
@@ -106,6 +108,9 @@ class SidenavCMP extends React.Component {
       uploadArticles[name] = value;              
       return { uploadArticles };
     })
+  }
+  componentDidUpdate() {
+    $('.fixed-action-btn').floatingActionButton();
   }
   componentDidMount() {
     var account = window.localStorage.getItem('account')
@@ -157,7 +162,9 @@ class SidenavCMP extends React.Component {
     }
     return(
       <React.Fragment>
-        <a id="toTop" className="btn-floating btn-large waves-effect waves-light red hide tooltipped" data-position="right" data-tooltip="Back To Top"><i className="material-icons">north</i></a>
+        <a id="toTop" className="btn-floating btn-large waves-effect waves-light red hide tooltipped" data-position="right" data-tooltip="Back To Top">
+        	<i className="material-icons">north</i>
+        </a>
         <div id="modal-upload-file" className="modal modal-fixed-footer">
           <div className="modal-content">
             <h4>Uploads File</h4>
@@ -174,7 +181,9 @@ class SidenavCMP extends React.Component {
             </div>
           </div>
           <div className="modal-footer">
-            <button className="btn-small blue darken-2 waves-effect waves-white" onClick={this.upload}><span className="material-icons right">cloud_upload</span></button>
+            <button className="btn-small blue darken-2 waves-effect waves-white" onClick={this.upload}>
+            	<span className="material-icons right">cloud_upload</span>
+            </button>
           </div>
         </div>
         <div id="modal-add-article" className="modal modal-fixed-footer">
@@ -234,25 +243,36 @@ class SidenavCMP extends React.Component {
             <button className="btn-small blue waves-effect waves-white" onClick={this.adding}><span className="material-icons right">cloud_upload</span></button>
           </div>
         </div>
-        <div className="fixed-action-btn">
-          <a className="btn-floating btn-large red">
-            <i className="large material-icons">mode_edit</i>
-          </a>
-          <ul>
-            <li><a className="btn-floating green tooltipped" data-position="left" data-tooltip="Post Article" onClick={this.openAddArticle}><i className="material-icons">post_add</i></a></li>
-            <li><a className="btn-floating blue tooltipped" data-position="left" data-tooltip="Upload File" onClick={this.openUploadFile}><i className="material-icons">attach_file</i></a></li>
-          </ul>
-        </div>
         <ContextDATA.Consumer>
         {
           result => (
+            <React.Fragment>
+            {
+              <div className="fixed-action-btn">
+                <a className="btn-floating btn-large red">
+                	<i className="large material-icons">mode_edit</i>
+                </a>
+                <ul>
+                	<li>
+                		<a className={result.users.id ? "btn-floating green": "btn-floating green disabled"} title="Post Article" onClick={this.openAddArticle}>
+                			<i className="material-icons">post_add</i>
+                		</a>
+                	</li>
+                	<li>
+                		<a className={result.users.id ? "btn-floating blue": "btn-floating green disabled"} title="Upload File" onClick={this.openUploadFile}>
+                			<i className="material-icons">attach_file</i>
+                		</a>
+                	</li>
+                </ul>
+              </div>
+            }
             <ul id="slide-out" className="sidenav sidenav-fixed">
               <li>
                 <div className="user-view">
                   <div className="background">
                     <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60"/>
                   </div>
-                  <span style={{position: 'fixed',right: 10,top: 10}}><span className="white-text email">{this.state.time}</span></span>
+                  
                   <Link to={'/profile/' + result.users.id}>
                     <img className="circle" src={result.users.avatar ? `${BaseUrl}api/usrfile/${result.users.id}/${result.users.avatar}`: 'https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fHBlb3BsZXxlbnwwfHwwfA%3D%3D&auto=format&fit=crop&w=100&q=60'}/>
                   </Link>
@@ -264,7 +284,11 @@ class SidenavCMP extends React.Component {
                   </Link>
                 </div>
               </li>
-              <li><Link className="waves-effect waves-dark" to="/"><i className="material-icons">home</i>Home</Link></li>
+              <li>
+                <Link className="waves-effect waves-dark" to="/">
+                  <i className="material-icons">home</i>Home
+                </Link>
+              </li>
               {
                 result.menu_manage.length >= 1 ?
                 <React.Fragment>
@@ -311,7 +335,13 @@ class SidenavCMP extends React.Component {
                   <li><Link className="waves-effect waves-dark" to="/register"><i className="material-icons">text_snippet</i>Register</Link></li>
                 </React.Fragment>
               }
+              <li><div className="divider"></div></li>
+              <li><a className="subheader">Time Server</a></li>
+              <li>
+                <Link to="/" className="black-text waves-effect waves-dark"><i className="material-icons">today</i>{this.state.time}</Link>
+              </li>
             </ul>
+            </React.Fragment>
           )
         }
         </ContextDATA.Consumer>

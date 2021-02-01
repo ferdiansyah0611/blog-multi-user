@@ -46,6 +46,7 @@ $routes->group('api', function($routes)
 	$routes->resource('user', ['controller' => 'UserController']);
 	$routes->resource('user-report', ['controller' => 'UserReportController']);
 	$routes->resource('user-notification', ['controller' => 'UserNotificationController']);
+	$routes->resource('user-ui', ['controller' => 'UserUiController']);
 	$routes->resource('comment', ['controller' => 'CommentController']);
 	$routes->resource('category', ['controller' => 'CategoryController']);
 	$routes->get('usrfile/(:num)/(:any)', 'FileController::index/$1/$2');
@@ -63,6 +64,7 @@ $routes->group('api', function($routes)
 	$routes->get('pay/check/(:num)', 'PaymentController::check/$1');
 	$routes->get('pay', 'PaymentController::pay');
 	$routes->post('pay', 'PaymentController::index');
+	$routes->post('user-ui/update/(:num)', 'UserUiController::update/$1');
 	$routes->post('users/update/(:num)', 'UserController::update/$1');
 });
 

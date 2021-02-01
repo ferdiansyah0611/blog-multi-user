@@ -98,11 +98,11 @@ class FileController extends ResourceController
 		$check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
 		if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
 			helper('filesystem');
-			$datafiles = get_filenames(WRITEPATH.'uploads/8624378');
+			$datafiles = get_filenames(WRITEPATH.'uploads/'.$check->data->id);
 			$count = 0;
 			$files = [];
 			foreach($datafiles as $data){
-				$file = new \CodeIgniter\Files\File(WRITEPATH.'uploads/8624378/'.$data);
+				$file = new \CodeIgniter\Files\File(WRITEPATH.'uploads/'.$check->data->id.'/'.$data);
 				$count = $count + $file->getSize('mb');
 			}
 			/*

@@ -27,6 +27,12 @@ class UserController extends ResourceController
             ];
             return $this->respond($data);
         }
+        if($this->request->getGet('random')){
+            $data = [
+                'data' => $this->model->orderBy('id', 'RANDOM')->paginate(8)
+            ];
+            return $this->respond($data);
+        }
         else{
             $data = [
                 'data' => $this->model->paginate(20),

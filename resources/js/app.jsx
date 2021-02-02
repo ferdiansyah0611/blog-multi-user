@@ -68,10 +68,24 @@ class App extends React.Component {
         born:''
       },
       ui: {
-        navbar:'blue darken-2',
-        sidebar:''
+        navbar: {
+          bg: 'blue darken-2',
+          txt: 'white-text'
+        },
+        sidebar: {
+          bg: '',
+          txt: '',
+          cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
+        },
+        footer: {
+          bg: 'light-blue',
+          status: true
+        }
       },
       notification: [],
+      getMount: () => {
+        this.componentDidMount()
+      },
       getNotification: (token) => {
       	axios.get(`${BaseUrl}api/user-notification?paginate=true`, {headers: {Authorization: token}}).then(result => {
           this.setState({notification: result.data.data})
@@ -92,18 +106,44 @@ class App extends React.Component {
       axios.get(`${BaseUrl}api/valid?token=${JSON.parse(account).token}`, {headers: {Authorization: JSON.parse(account).token}}).then(result => {
         this.state.getNotification(JSON.parse(account).token)
         this.setState({users: result.data.data})
+        let type = result.data.data.type
+        type == 1 || type == 2 || type == 3 || type == 4 || type == 5 ?
+          axios.get(BaseUrl + 'api/user-ui', {headers: {Authorization: JSON.parse(account).token}}).then(result => {
+            this.setState({
+              ui: {
+                id: result.data.id,
+                navbar: {
+                  bg: result.data['navbar-bg'],
+                  txt: result.data['navbar-txt']
+                },
+                sidebar: {
+                  bg: result.data['sidebar-bg'],
+                  txt: result.data['sidebar-txt'],
+                  cover: result.data['sidebar-cover'] !== 'null' ? BaseUrl + 'api/usrfile/' + result.data.user_id + '/' + result.data['sidebar-cover']: this.state.ui.sidebar.cover
+                },
+                footer: {
+                  bg: result.data['footer-bg'],
+                  status: result.data['footer-status'] == 'true' ? true: false
+                }
+              }
+            })
+          })
+        :''
         if(result.data.data.type == 5 && result.data.data.role == 'admin'){
           this.setState({
             menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
             menu_preferences: [
+            {txt:'Apps',icon:'app_settings_alt',url: '/setting/apps'},
               {txt:'Account',icon:'account_box',url: '/setting/account'},
               {txt:'View',icon:'preview',url: '/setting/view'}
             ]
           })
-        }else{
+        }
+        else{
           this.setState({
             menu_manage: ['Article', 'Storage'],
             menu_preferences: [
+            {txt:'Apps',icon:'app_settings_alt',url: '/setting/apps'},
               {txt:'Account',icon:'account_box',url: '/setting/account'},
               {txt:'View',icon:'preview',url: '/setting/view'}
             ]

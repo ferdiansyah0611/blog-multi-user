@@ -18,8 +18,6 @@ class SidenavCMP extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      menumanage: [],
-      menupreferen: [],
       users: {},
       redirect: '',
       file_upload: '',
@@ -255,24 +253,23 @@ class SidenavCMP extends React.Component {
                 <ul>
                 	<li>
                 		<a className={result.users.id ? "btn-floating green": "btn-floating green disabled"} title="Post Article" onClick={this.openAddArticle}>
-                			<i className="material-icons">post_add</i>
+                			<i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>post_add</i>
                 		</a>
                 	</li>
                 	<li>
                 		<a className={result.users.id ? "btn-floating blue": "btn-floating green disabled"} title="Upload File" onClick={this.openUploadFile}>
-                			<i className="material-icons">attach_file</i>
+                			<i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>attach_file</i>
                 		</a>
                 	</li>
                 </ul>
               </div>
             }
-            <ul id="slide-out" className="sidenav sidenav-fixed">
+            <ul id="slide-out" className={result.ui.sidebar.bg ? "sidenav sidenav-fixed " + result.ui.sidebar.bg: "sidenav sidenav-fixed"}>
               <li>
                 <div className="user-view">
                   <div className="background">
-                    <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60"/>
+                    <img src={result.ui.sidebar.cover}/>
                   </div>
-                  
                   <Link to={'/profile/' + result.users.id}>
                     <img className="circle" src={result.users.avatar ? `${BaseUrl}api/usrfile/${result.users.id}/${result.users.avatar}`: 'https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fHBlb3BsZXxlbnwwfHwwfA%3D%3D&auto=format&fit=crop&w=100&q=60'}/>
                   </Link>
@@ -285,21 +282,35 @@ class SidenavCMP extends React.Component {
                 </div>
               </li>
               <li>
-                <Link className="waves-effect waves-dark" to="/">
-                  <i className="material-icons">home</i>Home
+                <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/">
+                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>home</i>Home
                 </Link>
               </li>
               {
                 result.menu_manage.length >= 1 ?
                 <React.Fragment>
-                <li><Link className="waves-effect waves-dark" to="/dashboard"><i className="material-icons">insert_chart</i>Dashboard</Link></li>
-                <li><Link className="waves-effect waves-dark" to="/my-favorite"><i className="material-icons">favorite</i>My Favorite</Link></li>
-                <li><div className="divider"></div></li>
-                <li><a className="subheader">Management</a></li>
+                <li>
+                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/dashboard">
+                    <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>insert_chart</i>
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/my-favorite">
+                    <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>favorite</i>
+                    My Favorite
+                  </Link>
+                </li>
+                <li>
+                  <div className="divider"></div>
+                </li>
+                <li>
+                  <a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Management</a>
+                </li>
                 {
                   result.menu_manage.map((text, key) => {
                   return(
-                    <li key={key}><Link className="waves-effect waves-dark" to={'/management/' + text.toLowerCase()}><i className="material-icons">folder</i>{text}</Link></li>
+                    <li key={key}><Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={'/management/' + text.toLowerCase()}><i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>folder</i>{text}</Link></li>
                   )
                 })
                 }
@@ -310,16 +321,22 @@ class SidenavCMP extends React.Component {
                 result.menu_preferences.length >= 1 ?
                 <React.Fragment>
                 <li><div className="divider"></div></li>
-                <li><a className="subheader">Prefferences</a></li>
+                <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Setting</a></li>
                 {
                   result.menu_preferences.map((text, key) => {
                   return(
-                    <li key={key}><Link className="waves-effect waves-dark" to={text.url}><i className="material-icons">{text.icon}</i>{text.txt}</Link></li>
+                    <li key={key}><Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={text.url}><i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>{text.icon}</i>{text.txt}</Link></li>
                   )
                   })
                 }
                 {
-                  result.menu_manage.length >= 1 ? <li onClick={this.logout}><a style={{cursor: 'pointer'}}><i className="material-icons">arrow_back</i>Logout</a></li>: ''
+                  result.menu_manage.length >= 1 ?
+                    <li onClick={this.logout}>
+                      <a style={{cursor: 'pointer'}}>
+                        <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>arrow_back</i>
+                        <span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>Logout</span>
+                      </a>
+                    </li>: ''
                 }
                 </React.Fragment>
                 : ''
@@ -329,16 +346,30 @@ class SidenavCMP extends React.Component {
                 ''
                 :
                 <React.Fragment>
-                  <li><div className="divider"></div></li>
-                  <li><a className="subheader">Auth</a></li>
-                  <li><Link className="waves-effect waves-dark" to="/login"><i className="material-icons">login</i>Login</Link></li>
-                  <li><Link className="waves-effect waves-dark" to="/register"><i className="material-icons">text_snippet</i>Register</Link></li>
+                  <li>
+                    <div className="divider"></div>
+                  </li>
+                  <li>
+                    <a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Auth</a>
+                  </li>
+                  <li>
+                    <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/login">
+                    <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>login</i>
+                    Login</Link>
+                  </li>
+                  <li>
+                    <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/register">
+                    <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>text_snippet</i>
+                    Register</Link>
+                  </li>
                 </React.Fragment>
               }
               <li><div className="divider"></div></li>
-              <li><a className="subheader">Time Server</a></li>
+              <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Time Server</a></li>
               <li>
-                <Link to="/" className="black-text waves-effect waves-dark"><i className="material-icons">today</i>{this.state.time}</Link>
+                <Link to="/" className="black-text waves-effect waves-dark">
+                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>today</i><span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>{this.state.time}</span>
+                </Link>
               </li>
             </ul>
             </React.Fragment>

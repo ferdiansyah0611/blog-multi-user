@@ -12,6 +12,9 @@
 #body-page{
 	margin-top: 64px;
 }
+.sidenav-trigger:hover{
+    background-color: #00000000 !important;
+}
 @media only screen and (max-width : 600px) {
     #body-page{
         margin-top: 56px;
@@ -101,7 +104,6 @@ input#search::placeholder {
 }
 .collection{
     font-size: 13px;
-    border: none !important;
 }
 .dropdown-content li>a, .dropdown-content li>span{
     padding: 1px !important;

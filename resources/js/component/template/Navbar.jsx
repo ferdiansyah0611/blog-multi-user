@@ -12,13 +12,13 @@ const Navbar = props => {
 				result => (
 					<React.Fragment>
 						<div className="navbar-fixed">
-				    	<nav className="blue darken-2">
+				    	<nav className={result.ui.navbar.bg}>
 				    	  <div className="nav-wrapper">
 				    	  	<div className="row">
 				    	  		<div className="col s12">
 							        <ul className="show-on-small">
 							         	<li>
-							         		<button className="sidenav-trigger btn-small blue darken-2 z-depth-0" data-target="slide-out"><i className="material-icons">menu</i></button>
+							         		<button className="sidenav-trigger btn-small btn-flat white-text z-depth-0" data-target="slide-out"><i className="material-icons">menu</i></button>
 							         	</li>
 							          	<li>
 							          	  	<Link to="/">Go Blog</Link>
@@ -26,7 +26,7 @@ const Navbar = props => {
 							            {
 							            	result.users.id ?
 							          		<li className="right">
-								              <a className="dropdown-trigger btn-floating pulse light-blue lighten-1 pointer" data-target="dropdown-notification-mobile">
+								              <a className={result.ui.navbar.bg ? "dropdown-trigger btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "dropdown-trigger btn-floating pulse lighten-1 pointer"} data-target="dropdown-notification-mobile">
 								              	<i className="material-icons left">notifications_none</i>
 								              </a>
 								              <Link to="/search" className="btn-floating blue darken-2 z-depth-0 pointer">
@@ -78,7 +78,7 @@ const Navbar = props => {
 							          {
 							            result.users.id ?
 							            <li>
-							              	<a className="dropdown-trigger btn-floating pulse light-blue lighten-1 pointer" data-target="dropdown-notification">
+							              	<a className={result.ui.navbar.bg ? "dropdown-trigger btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "dropdown-trigger btn-floating pulse lighten-1 pointer"} data-target="dropdown-notification">
 							              		<i className="material-icons left">notifications_none</i>
 							              	</a>
 											<div id="dropdown-notification" className="dropdown-content z-depth-3">

@@ -10,6 +10,10 @@ import Loader from './Loader.jsx';
 import BaseUrl from '../../tools/Base';
 import errorStatusCode from '../../tools/errorStatusCode';
 
+const text_truncate = function(str, length, ending) {
+  return str.substring(0,length) + '...';
+}
+
 class Datatables extends React.Component {
   constructor(props) {
     super(props)
@@ -26,12 +30,16 @@ class Datatables extends React.Component {
       headers: {},
       finished: false
     }
+    this.rightClick = this.rightClick.bind(this)
     this.nextData = this.nextData.bind(this)
     this.searching = this.searching.bind(this)
     this.removing = this.removing.bind(this)
     this.editing = this.editing.bind(this)
     this.updating = this.updating.bind(this)
     this.handle = this.handle.bind(this)
+  }
+  rightClick(e){
+    e.preventDefault()
   }
   nextData(e){
     axios.get(`${this.props.url.default}?paginate=25&page=${this.state.paginate + 1}`, {headers: this.state.headers}).then(result => {
@@ -238,7 +246,7 @@ class Datatables extends React.Component {
                 {
                   this.props.td.map((datatd, keytd) => {
                     return(
-                      <td className={'row-' + datatd} key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}</td>
+                      <td className={'row-' + datatd} data-id={text.id} onContextMenu={this.rightClick} key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}</td>
                     )
                   })
                 }

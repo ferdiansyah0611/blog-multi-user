@@ -12,6 +12,9 @@
 #body-page{
 	margin-top: 64px;
 }
+#search-data{
+    width: calc(100% - 300px);
+}
 .sidenav-trigger:hover{
     background-color: #00000000 !important;
 }
@@ -27,6 +30,9 @@
 	#body{
 		padding-left: 0;
 	}
+    #search-data{
+        width: calc(100%);
+    }
 }
 body{
 	font-family: 'Roboto';

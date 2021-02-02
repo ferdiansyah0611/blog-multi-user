@@ -216,7 +216,7 @@ class ViewArticleCMP extends React.Component {
                       }
                       </div>
                       <div className="col s9">
-                        <p><Link to={'/profile/' + this.state.article.user_id} className="title">{this.state.article.name}</Link></p>
+                        <p><Link to={'/profile/' + this.state.article.user_id} className="title black-text">{this.state.article.name}</Link></p>
                         <div className="divider"/>
                         <p className="black-text">
                           {
@@ -253,7 +253,7 @@ class ViewArticleCMP extends React.Component {
                     return(
                       <li key={key} className="collection-item avatar">
                         <img src={`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`} alt="avatar" className="circle waves-light waves-light"/>
-                        <Link to={'/profile/' + text.user_id} className="title">{text.name}</Link>
+                        <Link to={'/profile/' + text.user_id} className="title black-text">{text.name}</Link>
                         <p style={{lineBreak: 'anywhere'}}>{text.comment}<br/><small>{text.created_at}</small></p>
                       </li>
                     )
@@ -271,11 +271,19 @@ class ViewArticleCMP extends React.Component {
               <div className="col s12">
                 <button disabled={this.state.isAuth} className="btn waves-light waves-effect blue" onClick={this.addComment}>Submit<i className="material-icons right">send</i></button>
               </div>
-              <div className="col s12">
-                <div className="grey lighten-2 center-align">
-                  <h5 style={{padding: 20}}>Ads Here</h5>
-                </div>
-              </div>
+              <ContextDATA.Consumer>
+                {
+                  result => (
+                    result.users.role == 0 ?
+                    <div className="col s12">
+                      <div className="grey lighten-2 center-align">
+                        <h5 style={{padding: 20}}>Ads Here</h5>
+                      </div>
+                    </div>
+                    : false
+                  )
+                }
+              </ContextDATA.Consumer>
             </div>
           </div>
           <div className="col s12">

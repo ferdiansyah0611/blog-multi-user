@@ -18,6 +18,7 @@ class LoginCMP extends React.Component{
     this.state = {
         email: '',
         password: '',
+        successLogin: false,
         redirect: ''
     }
     this.actionLogin = this.actionLogin.bind(this)
@@ -25,7 +26,25 @@ class LoginCMP extends React.Component{
   }
   componentDidMount(){
     document.title = 'Login | Go Blog'
-    $('input').characterCounter();
+    $('input.counter').characterCounter();
+    this.context.setState({
+      name: 'ui',
+      value: {
+        navbar: {
+          bg: 'blue darken-2',
+          txt: 'white-text'
+        },
+        sidebar: {
+          bg: '',
+          txt: '',
+          cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
+        },
+        footer: {
+          bg: 'light-blue',
+          status: false
+        }
+      }
+    })
   }
   actionLogin(e){
     this.setState({process: true})
@@ -33,23 +52,10 @@ class LoginCMP extends React.Component{
     axios.post(`${BaseUrl}api/login`, this.state).then(result => {
       if(result.data.status == 200){
         window.localStorage.setItem('account', JSON.stringify(result.data))
+        this.setState({successLogin: true})
         setTimeout(() => {
           M.toast({html: result.data.message})
-          if(result.data.data.type == 5 && result.data.data.role == 'admin'){
-            this.context.setState({name: 'menu_manage', value:  ['Article', 'Comment', 'Storage', 'Category']})
-            this.context.setState({name: 'menu_preferences', value: [
-              {txt:'Account',icon:'account_box',url: '/setting/account'},
-              {txt:'View',icon:'preview',url: '/setting/view'}
-            ]})
-          }else{
-            this.context.setState({name: 'menu_manage', value:  ['Article', 'Storage']})
-            this.context.setState({name: 'menu_preferences', value: [
-              {txt:'Account',icon:'account_box',url: '/setting/account'},
-              {txt:'View',icon:'preview',url: '/setting/view'}
-            ]})
-          }
-          this.context.getNotification(result.data.token)
-          this.context.setState({name: 'users', value: result.data.data})
+          this.context.getMount()
           this.setState({redirect: '/'})
         }, 10000)
       }
@@ -69,8 +75,8 @@ class LoginCMP extends React.Component{
     });
   }
   render() {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />
+    if (this.state.redirect || this.context.users.id) {
+      return this.state.redirect ? <Redirect to={this.state.redirect} />: <Redirect to="/" />
     }
     return(
       <React.Fragment>
@@ -81,28 +87,35 @@ class LoginCMP extends React.Component{
             {
               this.state.process ? <div className="progress"><div className="indeterminate"></div></div>:''
             }
-              <h6>Login Account</h6>
-              <form onSubmit={this.actionLogin}>
-                <div className="row">
-                  <div className="input-field col s12">
-                    <i className="material-icons prefix">email</i>
-                    <input name="email" id="icon_prefix" type="email" className="validate" value={this.state.email} onChange={this.handle} data-length="50" />
-                    <label htmlFor="icon_prefix">Email</label>
-                    <span className="helper-text" data-error="Invalid Email" data-success="OK">* Required</span>
-                  </div>
-                  <div className="input-field col s12">
-                    <i className="material-icons prefix">vpn_key</i>
-                    <input name="password" id="icon_telephone" type="password" className="validate" value={this.state.password} onChange={this.handle} data-length="20" />
-                    <label htmlFor="icon_telephone">Password</label>
-                    <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
-                  </div>
-                  <div className="col s12 center-align">
-                    <button type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>
-                    <h6>OR</h6>
-                    <Link to="/register" className="btn waves-effect waves-light w-100 blue lighten-1">Register</Link>
-                  </div>
-                </div>
-              </form>
+              
+              {
+                this.state.successLogin ? <p className="center-align mt-10px">Please Wait A Moment...</p>:
+                <React.Fragment>
+                  <h6>Login Account</h6>
+                  <form onSubmit={this.actionLogin}>
+                    <div className="row">
+                      <div className="input-field col s12">
+                        <i className="material-icons prefix">email</i>
+                        <input disabled={this.state.process ? true:false} name="email" id="icon_prefix" type="email" className="validate counter" value={this.state.email} onChange={this.handle} data-length="50" />
+                        <label htmlFor="icon_prefix" className={this.state.process  || this.state.email.length >= 1 ? 'active':''}>Email</label>
+                        <span className="helper-text" data-error="Invalid Email" data-success="OK">* Required</span>
+                      </div>
+                      <div className="input-field col s12">
+                        <i className="material-icons prefix">vpn_key</i>
+                        <input disabled={this.state.process ? true:false} name="password" id="icon_telephone" type="password" className="validate counter" value={this.state.password} onChange={this.handle} data-length="20" />
+                        <label htmlFor="icon_telephone" className={this.state.process || this.state.password.length >= 1 ? 'active':''}>Password</label>
+                        <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
+                      </div>
+                      <div className="col s12 left-align">
+                        <button disabled={this.state.process ? true:false} type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>
+                        <p style={{marginTop:25}}><Link to="/register">Reset Password</Link></p>
+                        <div className="divider"/>
+                        <p>Don't have a account ? <Link to="/register">Create Now</Link></p>
+                      </div>
+                    </div>
+                  </form>
+                </React.Fragment>
+              }
             </div>
           </div>
         </div>

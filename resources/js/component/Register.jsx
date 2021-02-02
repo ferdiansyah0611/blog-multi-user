@@ -12,6 +12,7 @@ import errorStatusCode from '../tools/errorStatusCode';
 import ContextDATA from '../ContextDATA';
 
 class RegisterCMP extends React.Component {
+  static contextType = ContextDATA;
   constructor(props){
     super(props)
     this.state = {
@@ -53,6 +54,24 @@ class RegisterCMP extends React.Component {
   componentDidMount(){
     document.title = 'Register | Go Blog'
     $('input.len').characterCounter();
+    this.context.setState({
+      name: 'ui',
+      value: {
+        navbar: {
+          bg: 'blue darken-2',
+          txt: 'white-text'
+        },
+        sidebar: {
+          bg: '',
+          txt: '',
+          cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
+        },
+        footer: {
+          bg: 'light-blue',
+          status: false
+        }
+      }
+    })
   }
   handle(event) {
     const target = event.target;
@@ -63,8 +82,8 @@ class RegisterCMP extends React.Component {
     });
   }
   render(){
-    if(this.state.redirect) {
-      return <Redirect to={this.state.redirect} />
+    if (this.state.redirect || this.context.users.id) {
+      return this.state.redirect ? <Redirect to={this.state.redirect} />: <Redirect to="/" />
     }
     return(
       <React.Fragment>
@@ -134,11 +153,13 @@ class RegisterCMP extends React.Component {
                       <input name="avatar" onChange={this.onFileChange} type="file"/>
                     </div>
                     <div className="file-path-wrapper">
-                      <input className="file-path validate" type="text"/>
+                      <input className="file-path validate" accept=".jpg,.png" type="text"/>
                     </div>
                   </div>
                   <div className="col s12">
                     <button type="submit" className="btn waves-effect waves-light w-100">Register</button>
+                    <div className="divider"/>
+                    <p style={{marginTop:25}}>Have a account ? <Link to="/login">Login Now</Link></p>
                   </div>
                 </div>
               </form>

@@ -18,10 +18,8 @@ class SidenavCMP extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      users: {},
       redirect: '',
       file_upload: '',
-      category: [],
       uploadArticles: {
         title: '',
         category_id: '',
@@ -45,7 +43,22 @@ class SidenavCMP extends React.Component {
     window.localStorage.removeItem('account')
     this.context.setState({name: 'menu_manage', value:  []})
     this.context.setState({name: 'menu_preferences', value: []})
-    this.context.setState({name: 'users', value: {}})
+    this.context.setState({name: 'users', value: {name: 'You are not signed'}})
+    this.context.setState({name: 'ui', value: {
+      navbar: {
+        bg: 'blue darken-2',
+        txt: 'white-text'
+      },
+      sidebar: {
+        bg: '',
+        txt: '',
+        cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
+      },
+      footer: {
+        bg: 'light-blue',
+        status: true
+      }
+    }})
     M.toast({html: 'Your account has logout'})
   }
   adding(event) {
@@ -299,6 +312,12 @@ class SidenavCMP extends React.Component {
                   <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/my-favorite">
                     <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>favorite</i>
                     My Favorite
+                  </Link>
+                </li>
+                <li>
+                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/my-subscribe">
+                    <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>subscriptions</i>
+                    My Subscribe
                   </Link>
                 </li>
                 <li>

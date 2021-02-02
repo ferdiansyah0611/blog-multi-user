@@ -56,7 +56,7 @@ class MyFavoriteCMP extends React.Component {
       <BreadCrumb data={[{url: '/my-favorite', str: 'My Favorite'}]} />
         <div className="row">
         {
-          this.state.article.length == 0 ? <div className="col s12"><p className="center-align" style={{margin: 150}}>No Data Favorite</p></div>:
+          this.state.article.length == 0 ? <div className="col s12 center-align"><p className="center-align" style={{marginTop: 150,marginBottom: 150}}>No Data Favorite</p></div>:
           this.state.article.map((article, key) => {
             return(
               <div className="col s12 m4 l4 list-article" key={key}>

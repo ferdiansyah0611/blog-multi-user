@@ -6,6 +6,8 @@ import {
 import ColsArticleCMP from './ColsArticleCMP.jsx';
 import Loader from './Loader.jsx';
 import BaseUrl from '../../tools/Base';
+import ContextDATA from '../../ContextDATA';
+
 class ArticleLoadCMP extends React.Component {
   constructor(props){
     super();
@@ -80,6 +82,19 @@ class ArticleLoadCMP extends React.Component {
           )
         })
       }
+      <ContextDATA.Consumer>
+        {
+          result => (
+            result.users.role == 0 ?
+            <div className="col s12">
+              <div className="grey lighten-2 center-align">
+                <h5 style={{padding: 20}}>Ads Here</h5>
+              </div>
+            </div>
+            : false
+          )
+        }
+      </ContextDATA.Consumer>
       </div>
       {
         this.state.finished ? '': <Loader/>

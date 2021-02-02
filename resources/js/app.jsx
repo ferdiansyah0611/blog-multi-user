@@ -56,6 +56,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       category: [],
+      search: '',
       locationAPI: [],
       menu_manage: [],
       menu_preferences: [],
@@ -187,7 +188,7 @@ class App extends React.Component {
 			      	<Route exact path="/" component={Home}/>
 			      	<Route path="/popular" component={PopularCMP}/>
 			      	<Route path="/latest" component={LatestCMP}/>
-			      	<Route path="/search" component={SearchCMP}/>
+              <Route path="/search/:search" component={SearchCMP}/>
 			      	<Route path="/premium" component={PremiumCMP}/>
 			      	<Route path="/article/:id" component={ViewArticleCMP}/>
 			      	<Route path="/contact-us" component={ContactUSCMP}/>

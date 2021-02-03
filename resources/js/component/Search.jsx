@@ -87,7 +87,7 @@ class SearchCMP extends React.Component{
           this.setState({paginate: this.state.paginate + 1})
           this.setState({
             'users': {
-              data: [...this.state.article.data, ...result.data.data],
+              data: [...this.state.users.data, ...result.data.data],
               total: result.data.total
             }
           })
@@ -102,68 +102,73 @@ class SearchCMP extends React.Component{
     return(
       <React.Fragment>
         <BreadCrumb data={[{url: '/search', str: 'Search'}]} />
-                  <h5 className="ml-10px">Article</h5>
-                  <div className="row">
+        <h5 className="ml-10px">Article</h5>
+        <div className="row">
+        {
+          this.state.article.data.map((text, key) => {
+            return(
+              <ColsArticleCMP key={key} data={{
+                id: text.id,
+                user_id: text.user_id,
+                title: text.title,
+                description: text.description,
+                author: text.name,
+                views: text.views,
+                gender: text.gender,
+                location: text.location,
+                image: `${BaseUrl}api/usrfile/${text.user_id}/${text.image}`,
+                avatar: `${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`,
+                created_at: text.created_at,
+              }}/>
+            )
+          })
+        }
+        </div>
+        {
+          this.state.article.data.length !== 0 ?
+          <React.Fragment>
+          <p className="ml-10px">Total Result: {this.state.article.total}</p>
+          <div className="center-align mb-10px">
+            <a id="next-article" className="waves-effect waves-light blue btn ml-5px" onClick={this.nextArticle}><i className="material-icons right">expand_more</i>Load More</a>
+          </div>
+          </React.Fragment>
+          :<p className="center-align m-100px">Article Does Not Exist</p>
+        }
+        <h5 className="ml-10px">User</h5>
+        <div className="row">
+          {
+            this.state.users.data.map((data, key) => {
+              return(
+              <div className="col s12 m4 l3" key={key}>
+                <div className="card hoverable">
+                  <div className="card-image">
                   {
-                    this.state.article.data.map((text, key) => {
-                      return(
-                        <ColsArticleCMP key={key} data={{
-                          id: text.id,
-                          user_id: text.user_id,
-                          title: text.title,
-                          description: text.description,
-                          author: text.name,
-                          views: text.views,
-                          image: `${BaseUrl}api/usrfile/${text.user_id}/${text.image}`
-                        }}/>
-                      )
-                    })
+                    data.avatar.length == 0 ? <img src={`${BaseUrl}api/usrfile/1/avatar.jpg`}/>: <img src={`${BaseUrl}api/usrfile/${data.id}/${data.avatar}`}/>
                   }
+                    <span className="card-title">{data.name}</span>
                   </div>
-                  {
-                    this.state.article.data.length !== 0 ?
-                    <React.Fragment>
-                    <p className="ml-10px">Total Result: {this.state.article.total}</p>
-                    <div className="center-align mb-10px">
-                      <a id="next-article" className="waves-effect waves-light blue btn ml-5px" onClick={this.nextArticle}><i className="material-icons right">expand_more</i>Load More</a>
-                    </div>
-                    </React.Fragment>
-                    :<p className="center-align m-100px">Article Does Not Exist</p>
-                  }
-                  <h6 className="ml-10px">User</h6>
-                  <div className="divider"/>
-                  <div className="row">
-                    {
-                      this.state.users.data.map((data, key) => {
-                        return(
-                        <div className="col s12 m4 l3" key={key}>
-                          <div className="card hoverable">
-                            <div className="card-image">
-                              <img src={`${BaseUrl}api/usrfile/${data.id}/${data.avatar}`}/>
-                              <span className="card-title">{data.name}</span>
-                            </div>
-                            <div className="card-content">
-                              <p>{data.bio}</p>
-                            </div>
-                            <div className="card-action">
-                              <Link to={"/profile/" + data.id} className="blue-text waves-effect waves-dark">View Profile</Link>
-                            </div>
-                          </div>
-                        </div>
-                        )
-                      })
-                    }
+                  <div className="card-content">
+                    <p>{data.bio}</p>
                   </div>
-                  {
-                    this.state.users.data.length !== 0 ?
-                    <React.Fragment>
-                    <p style={{marginLeft: 10}}>Total Result: {this.state.users.total}</p>
-                    <div className="center-align mb-10px">
-                      <a id="next-users" className="waves-effect waves-light blue btn" style={{marginLeft:5}} onClick={this.nextArticle}><i className="material-icons right">expand_more</i>Load More</a>
-                    </div>
-                    </React.Fragment>
-                    :<p className="center-align m-100px">Users Does Not Exist</p>
-                  }
+                  <div className="card-action">
+                    <Link to={"/profile/" + data.id} className="blue-text waves-effect waves-dark">View Profile</Link>
+                  </div>
+                </div>
+              </div>
+              )
+            })
+          }
+        </div>
+        {
+          this.state.users.data.length !== 0 ?
+          <React.Fragment>
+          <p style={{marginLeft: 10}}>Total Result: {this.state.users.total}</p>
+          <div className="center-align mb-10px">
+            <a id="next-users" className="waves-effect waves-light blue btn" style={{marginLeft:5}} onClick={this.nextArticle}><i className="material-icons right">expand_more</i>Load More</a>
+          </div>
+          </React.Fragment>
+          :<p className="center-align m-100px">Users Does Not Exist</p>
+        }
       </React.Fragment>
     )
   }

@@ -70,7 +70,7 @@ class Navbar extends React.Component{
 									              <a className={result.ui.navbar.bg ? "dropdown-trigger btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "dropdown-trigger btn-floating pulse lighten-1 pointer"} data-target="dropdown-notification-mobile">
 									              	<i className="material-icons left">notifications_none</i>
 									              </a>
-									              <a href="/search" className="btn-floating blue darken-2 z-depth-0 pointer" onClick={this.openSearch}>
+									              <a href="/search" className={result.ui.navbar.bg ? "btn-floating pulse darken-3 z-depth-0 pointer " + result.ui.navbar.bg: "btn-floating pulse blue darken-2 z-depth-0 pointer"} onClick={this.openSearch}>
 									              	<i className="material-icons left">search</i>
 									              </a>
 									              <div id="dropdown-notification-mobile" className="dropdown-content z-depth-3">
@@ -113,9 +113,9 @@ class Navbar extends React.Component{
 								          		}
 								        </ul>
 								        <ul id="nav-mobile" className={"right " + this.state.navmobile}>
-								          <li><a href="/search" onClick={this.openSearch}>Search<i className="material-icons left t-0">search</i></a></li>
 								          <li><Link to="/popular">Popular<i className="material-icons left">view_quilt</i></Link></li>
 								          <li><Link to="/latest">Latest<i className="material-icons left">sort_by_alpha</i></Link></li>
+								          
 								          {
 								            result.users.id ?
 								            <li>
@@ -158,6 +158,9 @@ class Navbar extends React.Component{
 								            </li>
 								            : false
 								          }
+								          <li><a href="/search" className={result.ui.navbar.bg ? "btn-floating pulse darken-3 z-depth-0 pointer " + result.ui.navbar.bg: "btn-floating pulse blue darken-2 z-depth-0 pointer"} onClick={this.openSearch}>
+									        <i className="material-icons left">search</i>
+									      </a></li>
 								        </ul>
 					    	  		</div>
 					    	  	</div>

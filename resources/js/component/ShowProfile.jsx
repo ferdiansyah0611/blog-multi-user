@@ -40,7 +40,7 @@ class ShowProfileCMP extends React.Component {
     }
   }
   async addSubscribe(){
-    let subscribe = await functionAction.subscribeUser(this.state.statusSubscribe, this.state.article.user_id)
+    let subscribe = await functionAction.subscribeUser(this.state.statusSubscribe, this.state.users.id)
     if(subscribe.statusSubscribe == 'Subscribed'){
       this.setState({statusSubscribe: 'Subscribed'})
     }

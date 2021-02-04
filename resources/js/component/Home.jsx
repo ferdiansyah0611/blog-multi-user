@@ -75,7 +75,7 @@ class Home extends React.Component{
                   result.users.id ?
                     <React.Fragment>
                       <h5 className="ml-10px">My Subscribe</h5>
-                        <ArticleLoadCMP url={BaseUrl + 'api/article-subscribe'} id_next="next_article_subscribe" query="paginate=true" headers={true}/>
+                        <ArticleLoadCMP url={BaseUrl + 'api/article-subscribe'} id_next="next_article_subscribe" query="pagination=true" headers={true}/>
                       </React.Fragment>
                   : false
                 }

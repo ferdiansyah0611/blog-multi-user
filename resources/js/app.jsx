@@ -11,6 +11,7 @@ import {
   HashRouter
 } from "react-router-dom";
 import axios from 'axios';
+import Config from './Config';
 /*packages*/
 window.Swal = require('sweetalert2')
 import 'dropzone/dist/min/dropzone.min.css'
@@ -45,11 +46,13 @@ import SetViewCMP from './component/SetView.jsx';
 import ShowProfileCMP from './component/ShowProfile.jsx';
 import ContactUSCMP from './component/ContactUS.jsx';
 import MyFavoriteCMP from './component/MyFavorite.jsx';
+import MySubscribeCMP from './component/MySubscribe.jsx';
 import PremiumCMP from './component/Premium.jsx';
 
 import SidenavCMP from './component/template/Sidenav.jsx';
 import NavbarCMP from './component/template/Navbar.jsx';
 import FooterCMP from './component/template/Footer.jsx';
+
 /*---------------------------------------------------*/
 class App extends React.Component {
   constructor(props){
@@ -69,19 +72,9 @@ class App extends React.Component {
         born:''
       },
       ui: {
-        navbar: {
-          bg: 'blue darken-2',
-          txt: 'white-text'
-        },
-        sidebar: {
-          bg: '',
-          txt: '',
-          cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
-        },
-        footer: {
-          bg: 'light-blue',
-          status: true
-        }
+        navbar: Config.navbar,
+        sidebar: Config.sidebar,
+        footer: Config.footer
       },
       notification: [],
       getMount: () => {
@@ -193,6 +186,7 @@ class App extends React.Component {
 			      	<Route path="/article/:id" component={ViewArticleCMP}/>
 			      	<Route path="/contact-us" component={ContactUSCMP}/>
 			      	<Route path="/my-favorite" component={MyFavoriteCMP}/>
+              <Route path="/my-subscribe" component={MySubscribeCMP} />
 			      	<Route path="/login" component={LoginCMP}/>
 			      	<Route path="/login?destination=:destination" component={LoginCMP}/>
 			      	<Route path="/register" component={RegisterCMP}/>

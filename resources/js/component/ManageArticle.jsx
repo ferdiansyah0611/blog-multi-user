@@ -86,6 +86,7 @@ class ManageArticleCMP extends React.Component {
         menu: {
           favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
         },
+        contextmenu: 'undo redo paste copy',
         menubar: 'favs file edit view insert format tools table help',
         setup: function (editor) {
           editor.on('init', function (e) {
@@ -107,8 +108,6 @@ class ManageArticleCMP extends React.Component {
       <BreadCrumb data={[{url: '/management/article', str: 'Management Article'}]} />
       <div className="row">
         <div className="col s12">
-          <div className="card-panel">
-            <div className="card-content">
               <ul id="tabs-swipe-demo" className="tabs">
                 <li className="tab col s6"><a className="active" href="#tabs-data">Data</a></li>
                 <li className="tab col s6"><a href="#tabs-create">Create</a></li>
@@ -117,6 +116,7 @@ class ManageArticleCMP extends React.Component {
                 <div id="tabs-data" className="col s12">
                   <Suspense fallback={<div>Loading...</div>}>
                     <Datatable 
+                      hasArticle={true}
                       paginate={true}
                       heading={
                         ['#', 'Title', 'Created']
@@ -175,8 +175,9 @@ class ManageArticleCMP extends React.Component {
                         <input className="file-path validate" type="text" placeholder="Upload Image Files"/>
                       </div>
                     </div>
-                    <div className="input-field col s12">
-                      <textarea name="create_content" id="content-add"/>
+                    <div className="col s12">
+                      <div className='demo-dfree' id="content-add">
+                      </div>
                     </div>
                     <div className="col s12">
                       <button className="btn waves-effect waves-light blue" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>
@@ -184,8 +185,6 @@ class ManageArticleCMP extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
         </div>
       </div>
       </React.Fragment>

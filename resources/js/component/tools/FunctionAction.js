@@ -25,7 +25,7 @@ let Action = {
                     }
                 }).then(result => {
                     M.toast({
-                        html: 'Added to Subscribe'
+                        html: result.data.message
                     })
                     return {
                         statusSubscribe: 'Subscribed'

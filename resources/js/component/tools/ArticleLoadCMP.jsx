@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   Link,
 } from "react-router-dom";
+import Config from '../../Config';
 import ColsArticleCMP from './ColsArticleCMP.jsx';
 import Loader from './Loader.jsx';
 import BaseUrl from '../../tools/Base';
@@ -76,7 +77,7 @@ class ArticleLoadCMP extends React.Component {
               gender: text.gender,
               location: text.location,
               image: `${BaseUrl}api/usrfile/${text.user_id}/${text.image}`,
-              avatar: `${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`,
+              avatar: text.avatar.length == 0 ? Config.users.avatarDefault:`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`,
               created_at: text.created_at,
             }}/>
           )
@@ -97,7 +98,7 @@ class ArticleLoadCMP extends React.Component {
       </ContextDATA.Consumer>
       </div>
       {
-        this.state.finished ? '': <Loader/>
+        this.state.finished ? this.state.article.length == 0 ? <p className="center-align">No Data</p>:'': <Loader/>
       }
       {
         this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''

@@ -4,6 +4,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import axios from 'axios';
+import Config from '../Config';
 import BreadCrumb from './tools/BreadCrumb.jsx';
 import Datatables from './tools/Datatables.jsx';
 import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
@@ -84,7 +85,7 @@ class ShowProfileCMP extends React.Component {
                 <div className="row">
                   <div className="col s12">
                     <div className="center-align">
-                      <img style={{maxWidth: '100%', maxHeight: 167}} className="circle waves-effect waves-light" src={`${BaseUrl}api/usrfile/${this.props.match.params.id}/${this.state.users.avatar}`}/>
+                      <img style={{maxWidth: '100%', maxHeight: 167}} className="circle waves-effect waves-light" src={this.state.users.avatar.length == 0 ? Config.users.avatarDefault: `${BaseUrl}api/usrfile/${this.props.match.params.id}/${this.state.users.avatar}`}/>
                     </div>
                   </div>
                 </div>

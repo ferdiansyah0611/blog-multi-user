@@ -3,6 +3,7 @@ import {
   Link,
 } from "react-router-dom";
 import axios from 'axios';
+import Config from '../Config';
 import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
 import BaseUrl from '../tools/Base';
 import BreadCrumb from './tools/BreadCrumb.jsx'
@@ -60,7 +61,7 @@ class Home extends React.Component{
                         this.state.users.map((data, key) => {
                           return(
                             <li className="collection-item avatar" key={key}>
-                              <img className="circle" src={BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
+                              <img className="circle" src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
                               <span className="title"><Link to={'/profile/' + data.id}>{data.name}</Link></span>
                               <p>{data.bio ? data.bio: 'Bio is not created by its users'}</p>
                             </li>

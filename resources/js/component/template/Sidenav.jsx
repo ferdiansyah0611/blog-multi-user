@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import axios from 'axios';
+import Config from '../../Config';
 /*tools*/
 import BaseUrl from '../../tools/Base';
 import errorStatusCode from '../../tools/errorStatusCode';
@@ -45,19 +46,9 @@ class SidenavCMP extends React.Component {
     this.context.setState({name: 'menu_preferences', value: []})
     this.context.setState({name: 'users', value: {name: 'You are not signed'}})
     this.context.setState({name: 'ui', value: {
-      navbar: {
-        bg: 'blue darken-2',
-        txt: 'white-text'
-      },
-      sidebar: {
-        bg: '',
-        txt: '',
-        cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
-      },
-      footer: {
-        bg: 'light-blue',
-        status: true
-      }
+      navbar: Config.navbar,
+      sidebar: Config.sidebar,
+      footer: Config.footer
     }})
     M.toast({html: 'Your account has logout'})
   }
@@ -284,7 +275,7 @@ class SidenavCMP extends React.Component {
                     <img src={result.ui.sidebar.cover}/>
                   </div>
                   <Link to={'/profile/' + result.users.id}>
-                    <img className="circle" src={result.users.avatar ? `${BaseUrl}api/usrfile/${result.users.id}/${result.users.avatar}`: 'https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fHBlb3BsZXxlbnwwfHwwfA%3D%3D&auto=format&fit=crop&w=100&q=60'}/>
+                    <img className="circle" src={result.users.avatar ? `${BaseUrl}api/usrfile/${result.users.id}/${result.users.avatar}`: Config.users.avatarDefault}/>
                   </Link>
                   <Link to={'/profile/' + result.users.id}>
                     <span className="white-text name">{result.users.name}</span>
@@ -329,7 +320,12 @@ class SidenavCMP extends React.Component {
                 {
                   result.menu_manage.map((text, key) => {
                   return(
-                    <li key={key}><Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={'/management/' + text.toLowerCase()}><i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>folder</i>{text}</Link></li>
+                    <li key={key}>
+                      <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={'/management/' + text.toLowerCase()}>
+                        <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>folder</i>
+                        {text}
+                      </Link>
+                    </li>
                   )
                 })
                 }
@@ -344,7 +340,12 @@ class SidenavCMP extends React.Component {
                 {
                   result.menu_preferences.map((text, key) => {
                   return(
-                    <li key={key}><Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={text.url}><i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>{text.icon}</i>{text.txt}</Link></li>
+                    <li key={key}>
+                      <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to={text.url}>
+                        <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>{text.icon}</i>
+                        {text.txt}
+                      </Link>
+                    </li>
                   )
                   })
                 }
@@ -387,7 +388,8 @@ class SidenavCMP extends React.Component {
               <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Time Server</a></li>
               <li>
                 <Link to="/" className="black-text waves-effect waves-dark">
-                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>today</i><span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>{this.state.time}</span>
+                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>today</i>
+                  <span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>{this.state.time}</span>
                 </Link>
               </li>
             </ul>

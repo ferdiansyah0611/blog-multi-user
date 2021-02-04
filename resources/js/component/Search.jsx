@@ -9,6 +9,7 @@ import BaseUrl from '../tools/Base';
 import BreadCrumb from './tools/BreadCrumb.jsx'
 
 import axios from 'axios';
+import Config from '../Config';
 /*tools*/
 import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
@@ -117,7 +118,7 @@ class SearchCMP extends React.Component{
                 gender: text.gender,
                 location: text.location,
                 image: `${BaseUrl}api/usrfile/${text.user_id}/${text.image}`,
-                avatar: `${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`,
+                avatar: text.avatar.length == 0 ? Config.users.avatarDefault:`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`,
                 created_at: text.created_at,
               }}/>
             )
@@ -139,15 +140,14 @@ class SearchCMP extends React.Component{
           {
             this.state.users.data.map((data, key) => {
               return(
-              <div className="col s12 m4 l3" key={key}>
+              <div className="col s12 m4 l3 list-profile" key={key}>
                 <div className="card hoverable">
                   <div className="card-image">
-                  {
-                    data.avatar.length == 0 ? <img src={`${BaseUrl}api/usrfile/1/avatar.jpg`}/>: <img src={`${BaseUrl}api/usrfile/${data.id}/${data.avatar}`}/>
-                  }
+                    <img src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar}/>
                     <span className="card-title">{data.name}</span>
                   </div>
                   <div className="card-content">
+                    <button className="btn btn-floating red waves-effect waves-light subscribe"><i className="material-icons">subscriptions</i></button>
                     <p>{data.bio}</p>
                   </div>
                   <div className="card-action">

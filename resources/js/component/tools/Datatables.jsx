@@ -274,7 +274,7 @@ class Datatables extends React.Component {
         {
           this.props.paginate && this.state.data.length >= 24 ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
         }
-        <div id="modal_edit" className="modal modal-fixed-footer">
+        <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
           <div className="modal-content">
             <h4>Edit Data</h4>
             <p>Last Updated : {this.state.updated_at}</p>
@@ -326,8 +326,7 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'textareatinymce' ?
                     <div className="input-field col s12">
-                      <textarea id="edit-content" name={text} onChange={this.handle}/>
-                      <label className="active" htmlFor="email">{text}</label>
+                      <div className="col s12" id="edit-content"/>
                     </div>
                   : false
                 }

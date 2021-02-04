@@ -1,3 +1,6 @@
+body{
+  scroll-behavior: behavior;
+}
 #body{
 	padding-left: 300px;
 }
@@ -133,7 +136,7 @@ input#search::placeholder {
     right: 60px;
     margin-top: -45px;
 }
-.list-article button.share{
+.list-article button.share, .list-profile button.subscribe{
     position: absolute;
     right: 10px;
     margin-top: -45px;
@@ -144,6 +147,9 @@ input#search::placeholder {
     margin-top: -45px;
 }
 
+.modal.modal-fixed-footer.edit-article{
+  width: 80%;
+}
 
 .demo-dfree {
   position: relative;

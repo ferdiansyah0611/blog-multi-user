@@ -17,7 +17,7 @@ class ArticleSubscribe extends ResourceController
 
     public function index()
     {
-        if($this->request->getGet('paginate')){
+        if($this->request->getGet('pagination')){
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
                 $data = [
@@ -55,7 +55,24 @@ class ArticleSubscribe extends ResourceController
             }else{
                 return $this->respond(['message' => 'Access Denied', 'status' => 401], 200);
             }
-        }else{
+        }
+        if($this->request->getGet('default')){
+            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+            if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
+                $data = [
+                    'data' => $this->model->select('app_article_subscribe.*, app_user.name, app_user.avatar, app_user.bio')
+                        ->where(['app_article_subscribe.user_id' => $check->data->id])
+                        ->join('app_user', 'app_article_subscribe.user_subscribe_id = app_user.id')
+                        ->orderBy('app_article_subscribe.created_at', 'DESC')
+                        ->paginate(20),
+                    'total' => $this->model->where('user_id', $check->data->id)->countAllResults()
+                ];
+                return $this->respond($data);
+            }else{
+                return $this->respond(['message' => 'Access Denied'], 401);
+            }
+        }
+        else{
             return $this->respond(['status' => 200], 200);
         }
     }
@@ -79,7 +96,10 @@ class ArticleSubscribe extends ResourceController
                 ]);
                 return $this->respond(['message' => 'Successfuly add data']);
             }else{
-                return $this->respond(['message' => 'Bad Request'], 400);
+                $this->model->where('user_subscribe_id', $this->request->getJSON()->user_subscribe_id)->where('user_id', $check->data->id)->delete();
+                $this->notification->create($this->request->getJSON()->user_subscribe_id, $check->data->name, 'unsubscribe');
+                // return $this->respond(['message' => 'Bad Request'], 400);
+                return $this->respond(['message' => 'Successfuly Unsubscribe User'], 200);
             }
         }else{
             return $this->respond(['message' => 'Access Denied'], 401);

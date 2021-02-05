@@ -70,6 +70,34 @@ class ViewArticleCMP extends React.Component {
   fetchAPI(){
     axios.get(`${BaseUrl}api/article/${this.props.match.params.id}`).then(result => {
       this.setState({'article': result.data,finishedArticle:true})
+      document.querySelector('#show-article').addEventListener('selectstart', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('paste', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('copy', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('cut', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('drag', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('drop', e => {
+        e.preventDefault()
+        return false
+      })
+      document.querySelector('#show-article').addEventListener('contextmenu', e => {
+        e.preventDefault()
+        return false
+      })
       $('#show-article img').materialbox();
       document.title = result.data.title + ' | Go Blog'
       axios.get(`${BaseUrl}api/article-subscribe?user_subscribe_id=${result.data.user_id}`,{
@@ -201,7 +229,7 @@ class ViewArticleCMP extends React.Component {
                         <small>{this.state.article.description}</small>
                         <p><small>{this.state.article.created_at}</small></p>
                       </div>
-                      <div className="col s12" id="show-article" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
+                      <div className="col s12" id="show-article" autoComplete="off" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
                     </div>
                     <div className="divider"/>
                     <p>

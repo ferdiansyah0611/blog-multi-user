@@ -385,7 +385,12 @@ class SidenavCMP extends React.Component {
                 </React.Fragment>
               }
               <li><div className="divider"></div></li>
-              <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>Time Server</a></li>
+              <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>More</a></li>
+              <li>
+                <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/premium">
+                <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>shop</i>
+                Buy Premium</Link>
+              </li>
               <li>
                 <Link to="/" className="black-text waves-effect waves-dark">
                   <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>today</i>

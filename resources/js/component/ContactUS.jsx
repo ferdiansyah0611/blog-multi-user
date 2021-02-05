@@ -51,7 +51,7 @@ class ContactUSCMP extends React.Component {
           <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=600&q=60"/>
         </div>
         <div className="row">
-          <div className="col s12 m4 offset-m4">
+          <div className="col s12 m6 offset-m3">
             <div className="card-panel">
               <h5 className="center-align">Contact US</h5>
               <p className="center-align">If you have questions or just want to get in touch, use the form below. We look forward to hearing from you!</p>

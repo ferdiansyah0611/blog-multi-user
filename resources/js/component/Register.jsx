@@ -50,24 +50,30 @@ class RegisterCMP extends React.Component {
   }
   onFileChange(event) { 
     this.setState({ avatar: event.target.files[0] }); 
-  };
+  }
+  componentWillUnmount(){
+    this.context.setState({
+      name: 'ui',
+      value: {
+        navbar: this.context.ui.navbar,
+        sidebar: this.context.ui.sidebar,
+        footer: {
+          bg: this.context.ui.footer.bg,
+          status: true
+        }
+      }
+    })
+  }
   componentDidMount(){
     document.title = 'Register | Go Blog'
     $('input.len').characterCounter();
     this.context.setState({
       name: 'ui',
       value: {
-        navbar: {
-          bg: 'blue darken-2',
-          txt: 'white-text'
-        },
-        sidebar: {
-          bg: '',
-          txt: '',
-          cover: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60'
-        },
+        navbar: this.context.ui.navbar,
+        sidebar: this.context.ui.sidebar,
         footer: {
-          bg: 'light-blue',
+          bg: this.context.ui.footer.bg,
           status: false
         }
       }

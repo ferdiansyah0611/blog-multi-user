@@ -42,7 +42,12 @@ class UserController extends ResourceController
     }
     public function show($id = null)
     {
-        return $this->respond($this->model->select($this->model->allowedFields)->get_data($id));
+        $db = \Config\Database::connect();
+        return $this->respond($db->table('app_user')
+            ->select('app_user.id, app_user.name, app_user.email, app_user.born, app_user.gender, app_user.location, app_user.role, app_user.type, app_user.avatar, app_user.bio, app_user_ui.profil-cover, app_user.created_at')
+            ->join('app_user_ui', 'app_user.id = app_user_ui.user_id', 'left')
+            ->where('app_user.id', $id)
+            ->get()->getRow());
     }
     public function create()
     {

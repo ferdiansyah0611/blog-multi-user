@@ -78,7 +78,7 @@ class ShowProfileCMP extends React.Component {
         <React.Fragment>
         <div className="parallax-container default">
           <div className="parallax">
-            <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=600&q=60"/>
+            <img src={this.state.users['profil-cover'] ? BaseUrl + 'api/usrfile/' + this.state.users.id + '/' + this.state.users['profil-cover']: Config.users.cover}/>
           </div>
           <div className="row">
             <div className="col s12">

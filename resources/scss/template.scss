@@ -21,6 +21,11 @@ body{
 .sidenav-trigger:hover{
     background-color: #00000000 !important;
 }
+#hover-red div.col.s12 .card-panel:hover{
+  background-color: #F44336 !important;
+  color: white !important;
+  cursor: pointer;
+}
 @media only screen and (max-width : 600px) {
     #body-page{
         margin-top: 56px;

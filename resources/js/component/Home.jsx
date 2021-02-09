@@ -15,13 +15,20 @@ class Home extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      users: []
+      users: [],
+      p_users: 1
     }
+    this.nextRecommend = this.nextRecommend.bind(this)
   }
   componentDidMount(){
     document.title = 'Home Pages | Go Blog'
-    axios.get(BaseUrl + 'api/user?random=true').then(result => {
+    axios.get(BaseUrl + 'api/user?random=true&page=' + this.state.p_users).then(result => {
       this.setState({users: result.data.data})
+    })
+  }
+  nextRecommend(e){
+    axios.get(BaseUrl + 'api/user?random=true&page=' + (this.state.p_users + 1)).then(result => {
+      this.setState({users: result.data.data, p_users: this.state.p_users + 1})
     })
   }
   render(){
@@ -69,6 +76,9 @@ class Home extends React.Component{
                         })
                       }
                     </ul>
+                    <div className="center-align mb-10px">
+                      <a className="waves-effect waves-light blue btn" style={{marginLeft:5}} onClick={this.nextRecommend}><i className="material-icons right">arrow_right</i>Next</a>
+                    </div>
                   </div>
                 </div>
                 {

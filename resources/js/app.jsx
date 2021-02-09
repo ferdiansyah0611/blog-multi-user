@@ -48,6 +48,7 @@ import ContactUSCMP from './component/ContactUS.jsx';
 import MyFavoriteCMP from './component/MyFavorite.jsx';
 import MySubscribeCMP from './component/MySubscribe.jsx';
 import PremiumCMP from './component/Premium.jsx';
+import Category from './component/Category.jsx';
 
 import SidenavCMP from './component/template/Sidenav.jsx';
 import NavbarCMP from './component/template/Navbar.jsx';
@@ -184,6 +185,7 @@ class App extends React.Component {
               <Route path="/search/:search" component={SearchCMP}/>
 			      	<Route path="/premium" component={PremiumCMP}/>
 			      	<Route path="/article/:id" component={ViewArticleCMP}/>
+              <Route path="/category/:name" component={Category}/>
 			      	<Route path="/contact-us" component={ContactUSCMP}/>
 			      	<Route path="/my-favorite" component={MyFavoriteCMP}/>
               <Route path="/my-subscribe" component={MySubscribeCMP} />

@@ -15,7 +15,7 @@ class ArticleController extends ResourceController
     public function index()
     {
         if($this->request->getGet('users')){
-            $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('users')], ['app_article.created_at', 'DESC'], 8);
+            $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('users')], ['app_article.created_at', 'DESC'], 9);
             return $this->respond($data);
         }
         if($this->request->getGet('paginate')){
@@ -27,19 +27,23 @@ class ArticleController extends ResourceController
         }
         if($this->request->getGet('popular')){
             if($this->request->getGet('user_id')){
-                $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('user_id')], ['app_article.views', 'DESC'], 8);
+                $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('user_id')], ['app_article.views', 'DESC'], 9);
                 return $this->respond($data);
             } else {
-                $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.views', 'DESC'], 8);
+                $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.views', 'DESC'], 9);
                 return $this->respond($data);
             }
         }
         if($this->request->getGet('latest')){
-            $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], 2128538, 8);
+            $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], 9);
+            return $this->respond($data);
+        }
+        if($this->request->getGet('category')){
+            $data = $this->model->onWhere(['app_article.status' => 'public', 'app_category.name' => $this->request->getGet('category')], ['app_article.created_at', 'DESC'], 9);
             return $this->respond($data);
         }
         if($this->request->getGet('search')){
-            $data = $this->model->onSearch(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], $this->request->getGet('search'), 8);
+            $data = $this->model->onSearch(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], $this->request->getGet('search'), 9);
             return $this->respond($data);
         }
         if($this->request->getGet('total')){
@@ -53,7 +57,7 @@ class ArticleController extends ResourceController
         if($this->request->getGet('default')){
             $data = [
                 'data' => $this->model->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender')
-                ->join('app_user', 'app_article.user_id = app_user.id')->where('app_article.status', 'public')->orderBy('app_article.id', 'RANDOM')->paginate(8)
+                ->join('app_user', 'app_article.user_id = app_user.id')->where('app_article.status', 'public')->orderBy('app_article.id', 'RANDOM')->paginate(9)
             ];
             return $this->respond($data);
         }
@@ -143,7 +147,7 @@ class ArticleController extends ResourceController
     {
         $data = [
             'data' => $this->model->select('app_article.*, app_user.name, app_user.avatar')
-            ->join('app_user', 'app_article.user_id = app_user.id')->where('app_article.category_id', $id)
+            ->join('app_user', 'app_article.user_id = app_user.id')->where(['app_article.category_id' => $id, 'app_article.status' => 'public'])
             ->whereNotIn('app_article.id', [$this->request->getGet('article_id')])
             ->orderBy('app_article.id', 'RANDOM')->paginate(8),
             'pager' => $this->model->pager->links()

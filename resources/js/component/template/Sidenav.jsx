@@ -148,14 +148,13 @@ class SidenavCMP extends React.Component {
       });
     }
     });
-    $(document).ready(function(){
-      $('.sidenav').sidenav();
-      $('.collapsible').collapsible();
-      $('.fixed-action-btn').floatingActionButton();
-      $('.tooltipped').tooltip();
-      $('#modal-upload-file').modal();
-      $('#modal-add-article').modal();
-    });
+    $('.sidenav').sidenav();
+    $('.collapsible').collapsible();
+    $('.fixed-action-btn').floatingActionButton();
+    $('.tooltipped').tooltip();
+    $('#modal-upload-file').modal();
+    $('#modal-add-article').modal();
+    $('.collapsible').collapsible();
     this.time()
   }
   render() {
@@ -289,6 +288,26 @@ class SidenavCMP extends React.Component {
                 <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/">
                   <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>home</i>Home
                 </Link>
+              </li>
+              <li className="no-padding">
+                <ul className="collapsible collapsible-accordion">
+                  <li>
+                    <a className={result.ui.sidebar.txt ? "collapsible-header sidebar-collapse " + result.ui.sidebar.txt: "collapsible-header sidebar-collapse"}>Category
+                      <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>layers</i>
+                    </a>
+                    <div className="collapsible-body">
+                      <ul>
+                      {
+                        result.category.map((data, key) => {
+                          return(
+                            <li key={key}><Link to={"/category/" + data.name}>{data.name}</Link></li>
+                          )
+                        })
+                      }
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </li>
               {
                 result.menu_manage.length >= 1 ?

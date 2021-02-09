@@ -14,7 +14,11 @@ class CategoryController extends ResourceController
     }
     public function index()
     {
-        return $this->respond($this->model->findAll());
+        if($this->request->getGet('name')){
+            return $this->respond($this->model->where('name', $this->request->getGet('name'))->get()->getRow());
+        }else{
+            return $this->respond($this->model->findAll());
+        }
     }
     public function show($id = null)
     {

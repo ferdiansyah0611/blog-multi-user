@@ -115,7 +115,7 @@ class MySubscribeCMP extends React.Component{
                                     className="material-icons">subscriptions
                                   </i>
                               </button>
-                              <p>{data.bio}</p>
+                              <p className="line-auto">{data.bio}</p>
                             </div>
                             <div className="card-action">
                               <Link to={"/profile/" + data.user_subscribe_id} className="blue-text waves-effect waves-dark">View Profile</Link>

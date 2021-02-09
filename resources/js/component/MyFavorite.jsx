@@ -72,7 +72,7 @@ class MyFavoriteCMP extends React.Component {
                     <div className="card-content">
                       <button className="btn btn-floating cyan waves-effect waves-light share activator"><i className="material-icons">share</i></button>
                       <button className="btn btn-floating white waves-effect waves-light avatar-user"><img className="responsive-img" src={`${BaseUrl}api/usrfile/${article.user_id}/${article.avatar}`} alt="avatar"/></button>
-                      <p>{article.description}</p>
+                      <p className="line-auto">{article.description}</p>
                       <p className="row">
                         <span className="left"><b>Publish</b></span>
                         <span className="right fs-12px">{article.created_at}</span>

@@ -26,6 +26,9 @@ body{
   color: white !important;
   cursor: pointer;
 }
+.sidenav .collapsible-header, .sidenav.fixed .collapsible-header.sidebar-collapse{
+  padding: 0 32px !important;
+}
 @media only screen and (max-width : 600px) {
     #body-page{
         margin-top: 56px;
@@ -127,7 +130,7 @@ input#search::placeholder {
     width: 70px;
     max-height: 70px;
     position: absolute;
-    top: 164px;
+    margin-top: -74px;
     z-index: 1;
     left: 20px;
     cursor: pointer;
@@ -135,7 +138,6 @@ input#search::placeholder {
 .shadow-default{
     box-shadow: 0px 0px 0px 3px #f3f3f3 !important;
 }
-
 .list-article button.favorite{
     position: absolute;
     right: 60px;

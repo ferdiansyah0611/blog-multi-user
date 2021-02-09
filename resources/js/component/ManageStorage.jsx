@@ -174,8 +174,8 @@ class ManageStorageCMP extends React.Component {
                             {
                               typeof this.state.file[data] !== 'number' ?
                               <td>
-                                <button data-name={this.state.file[data]} className="btn-small blue darken-2" onClick={this.openView}><i className="material-icons">visibility</i></button>
-                                <button data-name={this.state.file[data]} onClick={this.deleteFile} style={{marginLeft:10}} className="btn-small red darken-2"><i className="material-icons">delete</i></button>
+                                <button data-name={this.state.file[data]} className="btn-small blue darken-2" onClick={this.openView}><i data-name={this.state.file[data]} className="material-icons">visibility</i></button>
+                                <button data-name={this.state.file[data]} onClick={this.deleteFile} style={{marginLeft:10}} className="btn-small red darken-2"><i data-name={this.state.file[data]} className="material-icons">delete</i></button>
                               </td>: null
                             }
                           </tr>

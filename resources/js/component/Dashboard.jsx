@@ -257,7 +257,6 @@ class DashboardCMP extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
             <div className="col s12 m4">
               <div className="card-panel">
                 <h5>My Payment</h5>
@@ -297,6 +296,7 @@ class DashboardCMP extends React.Component {
                 }
               </div>
             </div>
+          </div>
         </div>
       </div>
       </React.Fragment>

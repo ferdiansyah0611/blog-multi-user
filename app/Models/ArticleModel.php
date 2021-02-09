@@ -49,8 +49,10 @@ class ArticleModel extends Model
     public function onWhere($where = [], $order = [], $paginate)
     {
         $data = [
-            'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender')
-            ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])->paginate($paginate)
+            'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+            ->join('app_user', 'app_article.user_id = app_user.id')
+            ->join('app_category', 'app_article.category_id = app_category.id')
+            ->where($where)->orderBy($order[0], $order[1])->paginate($paginate)
         ];
         return $data;
     }

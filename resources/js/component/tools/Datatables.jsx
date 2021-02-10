@@ -272,7 +272,7 @@ class Datatables extends React.Component {
           this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
         }
         {
-          this.props.paginate && this.state.data.length >= 24 ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
+          this.props.paginate ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
         }
         <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
           <div className="modal-content">

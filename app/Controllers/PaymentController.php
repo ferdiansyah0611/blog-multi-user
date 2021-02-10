@@ -84,7 +84,7 @@ class PaymentController extends ResourceController
 				$price = 1000;
 				$item_details = array();
 				if($this->request->getGet('type') == '1'){
-					$price = 1000;
+					$price = 49000;
 					$item_details = array (
 					    array(
 					      'id' => 'a1',

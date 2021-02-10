@@ -45,22 +45,6 @@ class Home extends React.Component{
                 <div className="row">
                   <div className="col s12 m6">
                     <ul className="collection with-header">
-                      <li className="collection-header"><h4>Category</h4></li>
-                      {
-                        result.category.map((data, key) => {
-                          return(
-                            <li className="collection-item avatar" key={key}>
-                              <i className="material-icons circle">folder</i>
-                              <span className="title"><Link to={'/category/' + data.name}>{data.name}</Link></span>
-                              <p>{data.description}</p>
-                            </li>
-                          )
-                        })
-                      }
-                    </ul>
-                  </div>
-                  <div className="col s12 m6">
-                    <ul className="collection with-header">
                       <li className="collection-header">
                         <h4>Recommended People</h4>
                       </li>
@@ -79,6 +63,9 @@ class Home extends React.Component{
                     <div className="center-align mb-10px">
                       <a className="waves-effect waves-light blue btn" style={{marginLeft:5}} onClick={this.nextRecommend}><i className="material-icons right">arrow_right</i>Next</a>
                     </div>
+                  </div>
+                  <div className="col s12 m6">
+                    <img src="https://via.placeholder.com/468x250?text=Ads Here" style={{height:'100%', width: '100%'}}/>
                   </div>
                 </div>
                 {

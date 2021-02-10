@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx'
+import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -212,93 +213,104 @@ class DashboardCMP extends React.Component {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col s12">
-          <div className="row">
-            <div className="col s12 m8">
-              <div className="card">
-                <div className="card-content">
-                  <h5>Statistic Viewers</h5>
-                  <div className="divider"/>
-                  <canvas id="chart-statistic" width="auto" height="400"></canvas>
-                </div>
-              </div>
-            </div>
-            <div className="col s12 m4">
-              <div className="card" id="card-profile">
-                <div className="card-image waves-effect waves-block waves-light">
-                  <img className="activator" src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60" alt="user background"/>
-                </div>
-                <div className="card-content">
-                <ContextDATA.Consumer>
-                {
-                  result => (
-                    <React.Fragment>
-                    <img src={BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar} alt="" className="circle responsive-img activator profile-image"/>
-                    <p className="col s12"><span className="left">Name</span><span className="right">{result.users.name}</span></p>
-                    <p className="col s12"><span className="left">Email</span><span className="right">{result.users.email}</span></p>
-                    <p className="col s12"><span className="left">Location</span><span className="right">{result.users.location}</span></p>
-                    <Link to={"/profile/" + result.users.id} className="btn waves-effect waves-light w-100 center-align" style={{marginTop:5}}>
-                      <span>Go to profile</span> <i className="material-icons right">send</i>
-                    </Link>
-                    </React.Fragment>
-                  )
-                }
-                </ContextDATA.Consumer>
-                </div>
-              </div>
-            </div>
-            <div className="col s12 m4">
-              <div className="card">
-                <div className="card-content">
-                  <h5>Storage</h5>
-                  <div className="divider" style={{marginBottom:10}}/>
-                  <canvas id="chart-storage" width="auto" height="400"></canvas>
-                </div>
-              </div>
-            </div>
-            <div className="col s12 m4">
-              <div className="card-panel">
-                <h5>My Payment</h5>
-                <div className="divider" style={{marginBottom:10}}/>
-                {
-                  this.state.payment.length === 0 ? <p className="center-align" style={{marginTop:30}}>Not have a payment</p>:
-                  <div style={{maxHeight:400, overflow: 'auto'}}>
-                  <table className="responsive-table highlight">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Order ID</th>
-                        <th style={{cursor:'pointer'}}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        this.state.payment.map((text, key) => {
-                          return(
-                            <tr key={key}>
-                              <td>{text.id}</td>
-                              <td>{text.order_id}</td>
-                              <td>
-                                <button type="button" data-id={text.order_id} className="btn blue" onClick={this.showStatus}>Status</button>
-                              </td>
-                            </tr>
-                          )
-                        })
-                      }
-                        <div className="divider"/>
-                        <p>Check Order ID to Validation Premium</p>
-                        <input type="text" name="order_id" onChange={this.handle} />
-                        <button className="btn blue waves-effect waves-light" onClick={this.checkOrderId}>Check</button>
-                    </tbody>
-                  </table>
+      <ContextDATA.Consumer>
+      {
+        result => (
+          <React.Fragment>
+            <div className="row">
+              <div className="col s12">
+                <div className="row">
+                  <div className="col s12 m8">
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Statistic Viewers</span>
+                      </div>
+                      <div className="card-content">
+                        <canvas id="chart-statistic" width="auto" height="400"></canvas>
+                      </div>
+                    </div>
                   </div>
-                }
+                  <div className="col s12 m4">
+                    <div className="card" id="card-profile">
+                      <div className="card-image waves-effect waves-block waves-light">
+                        <img className="activator" src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60" alt="user background"/>
+                      </div>
+                      <div className="card-content">
+                        <img src={BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar} alt="" className="circle responsive-img activator profile-image"/>
+                        <p className="col s12"><span className="left">Name</span><span className="right">{result.users.name}</span></p>
+                        <p className="col s12"><span className="left">Email</span><span className="right">{result.users.email}</span></p>
+                        <p className="col s12"><span className="left">Location</span><span className="right">{result.users.location}</span></p>
+                        <Link to={"/profile/" + result.users.id} className="btn waves-effect waves-light w-100 center-align" style={{marginTop:5}}>
+                          <span>Go to profile</span> <i className="material-icons right">send</i>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col s12 m4">
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Storage</span>
+                      </div>
+                      <div className="card-content">
+                        <canvas id="chart-storage" width="auto" height="400"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col s12">
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Payment</span>
+                      </div>
+                      <div className="card-content">
+                        {
+                          this.state.payment.length === 0 ? <p className="center-align" style={{marginTop:30}}>Not have a payment</p>:
+                          <div style={{maxHeight:400, overflow: 'auto'}}>
+                          <table className="responsive-table highlight">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Order ID</th>
+                                <th style={{cursor:'pointer'}}>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {
+                                this.state.payment.map((text, key) => {
+                                  return(
+                                    <tr key={key}>
+                                      <td>{text.id}</td>
+                                      <td>{text.order_id}</td>
+                                      <td>
+                                        <button type="button" data-id={text.order_id} className="btn blue" onClick={this.showStatus}>Status</button>
+                                      </td>
+                                    </tr>
+                                  )
+                                })
+                              }
+                                <div className="divider"/>
+                                <p>Check Order ID to Validation Premium</p>
+                                <input type="text" name="order_id" onChange={this.handle} />
+                                <button className="btn blue waves-effect waves-light" onClick={this.checkOrderId}>Check</button>
+                            </tbody>
+                          </table>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col s12">
+                    <h5>My Article</h5>
+                    {
+                      result.users.id ? <ArticleLoadCMP url={BaseUrl + 'api/article'} query={"users=" + result.users.id} id_next="next_article"/>: ''
+                    }
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </React.Fragment>
+        )
+      }
+      </ContextDATA.Consumer>
       </React.Fragment>
     )
   }

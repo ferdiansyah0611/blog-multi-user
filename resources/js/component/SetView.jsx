@@ -135,19 +135,18 @@ class SetViewCMP extends React.Component {
       <React.Fragment>
         <BreadCrumb data={[{url: '/setting/view', str: 'Setting view'}]} />
         <div className="container">
-        <div className="card-panel">
           <form className="row">
             <ContextDATA.Consumer>
               {
                 context => (
                   <React.Fragment>
                   <div className="col s12">
-                    <h5>Custom Pages UI</h5>
-                    <div className="row">
-                      <div className="col s12">
-                        <h6>Navbar</h6>
-                        <div className="divider mb-10px"/>
-                        <p>Color</p>
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Navbar</span>
+                      </div>
+                      <div className="card-content">
+                        <p className="mb-10px">Color</p>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="blue darken-1" className="btn waves-effect waves-light blue darken-1">Default</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="red" className="btn waves-effect waves-light red">Red</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="pink" className="btn waves-effect waves-light pink">pink</button>
@@ -168,9 +167,14 @@ class SetViewCMP extends React.Component {
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="brown" className="btn waves-effect waves-light brown">brown</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="grey" className="btn waves-effect waves-light grey">grey</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-navbar="blue-grey" className="btn waves-effect waves-light blue-grey">blue-grey</button>
-                        <h6>Sidebar</h6>
-                        <div className="divider mb-10px"/>
-                        <p>Color</p>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Sidebar</span>
+                      </div>
+                      <div className="card-content">
+                        <p className="mb-10px">Color</p>
                         <button type="button" onClick={this.setUI} data-text="black-text" data-sidebar="white" className="btn waves-effect waves-light white black-text">Default</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="red" className="btn waves-effect waves-light red">Red</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="pink" className="btn waves-effect waves-light pink">pink</button>
@@ -191,7 +195,7 @@ class SetViewCMP extends React.Component {
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="brown" className="btn waves-effect waves-light brown">brown</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="grey" className="btn waves-effect waves-light grey">grey</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="blue-grey" className="btn waves-effect waves-light blue-grey">blue-grey</button>
-                        <p>Cover Image Sidebar</p>
+                        <p className="mb-10px mt-10px">Cover Image Sidebar</p>
                         <div className="row">
                           <div className="file-field input-field col s12">
                             <div className="btn">
@@ -203,8 +207,7 @@ class SetViewCMP extends React.Component {
                             </div>
                           </div>
                         </div>
-                        <h6>Cover Image Profile</h6>
-                        <div className="divider mb-10px"/>
+                        <h6 className="mb-10px">Cover Image Profile</h6>
                         <div className="row">
                           <div className="file-field input-field col s12">
                             <div className="btn">
@@ -216,9 +219,14 @@ class SetViewCMP extends React.Component {
                             </div>
                           </div>
                         </div>
-                        <h6>Footer</h6>
-                        <div className="divider mb-10px"/>
-                        <p>Color</p>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <div class="card-image blue" style={{height: 80}}>   
+                        <span class="card-title">Footer</span>
+                      </div>
+                      <div className="card-content">
+                        <p className="mb-10px">Color</p>
                         <button type="button" onClick={this.setUI} data-footer="light-blue" className="btn waves-effect waves-light light-blue white-text">Default</button>
                         <button type="button" onClick={this.setUI} data-footer="red" className="btn waves-effect waves-light red">Red</button>
                         <button type="button" onClick={this.setUI} data-footer="pink" className="btn waves-effect waves-light pink">pink</button>
@@ -239,7 +247,7 @@ class SetViewCMP extends React.Component {
                         <button type="button" onClick={this.setUI} data-footer="brown" className="btn waves-effect waves-light brown">brown</button>
                         <button type="button" onClick={this.setUI} data-footer="grey" className="btn waves-effect waves-light grey">grey</button>
                         <button type="button" onClick={this.setUI} data-footer="blue-grey" className="btn waves-effect waves-light blue-grey">blue-grey</button>
-                        <p>Status</p>
+                        <p className="mb-10px">Status</p>
                         <div className="switch">
                           <label>
                             Nonactive
@@ -259,9 +267,7 @@ class SetViewCMP extends React.Component {
                 )
               }
             </ContextDATA.Consumer>
-            
           </form>
-        </div>
         </div>
       </React.Fragment>
     )

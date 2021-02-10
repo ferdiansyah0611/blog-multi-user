@@ -44,8 +44,8 @@ class Slider extends React.Component{
                   <li key={key}>
                     <img src={`${BaseUrl}api/usrfile/${data.user_id}/${data.image}`}/>
                     <div className={"caption " + this.state.align.random()}>
-                      <h3>{data.title}</h3>
-                      <h5 className="light grey-text text-lighten-3">{data.description}</h5>
+                      <h5>{data.title}</h5>
+                      <h5 className="light grey-text text-lighten-3" style={{fontSize: 14}}>{data.description}</h5>
                       <Link className="light grey-text text-lighten-3" to={"/article/" + data.id}>Read More</Link>
                     </div>
                   </li>

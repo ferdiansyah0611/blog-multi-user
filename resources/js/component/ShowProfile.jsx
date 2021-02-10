@@ -92,7 +92,6 @@ class ShowProfileCMP extends React.Component {
             </div>
           </div>
         </div>
-        <div className="card-content">
           <div className="row">
             <div className="col s12 m8 offset-m2 white z-depth-1" style={{marginTop:'-100px'}}>
               <div className="black-text">
@@ -121,11 +120,11 @@ class ShowProfileCMP extends React.Component {
               </div>
             </div>
           </div>
+          {
+            this.state.users.id ? <Slider url={`${BaseUrl}api/article`} query={"popular=true&user_id=" + this.state.users.id}  />:false
+          }
           <div className="row">
             <div className="col s12">
-              {
-                this.state.users.id ? <Slider url={`${BaseUrl}api/article`} query={"popular=true&user_id=" + this.state.users.id}  />:false
-              }
               <ul className="tabs">
                 <li className="tab col s6"><a className="active" href="#blog-tabs">Blog</a></li>
                 <li className="tab col s6"><a href="#information-blog">Information</a></li>
@@ -170,7 +169,6 @@ class ShowProfileCMP extends React.Component {
               </ul>
             </div>
           </div>
-        </div>
         </React.Fragment>
         :''
       }

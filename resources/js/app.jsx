@@ -53,6 +53,14 @@ import Category from './component/Category.jsx';
 import SidenavCMP from './component/template/Sidenav.jsx';
 import NavbarCMP from './component/template/Navbar.jsx';
 import FooterCMP from './component/template/Footer.jsx';
+/*facebook sdk*/
+(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 
 /*---------------------------------------------------*/
 class App extends React.Component {
@@ -78,13 +86,13 @@ class App extends React.Component {
         footer: Config.footer
       },
       notification: [],
+      page_notification: 1,
       getMount: () => {
         this.componentDidMount()
       },
       getNotification: (token) => {
-      	axios.get(`${BaseUrl}api/user-notification?paginate=true`, {headers: {Authorization: token}}).then(result => {
-          this.setState({notification: result.data.data})
-          $(".dropdown-trigger").dropdown();
+      	axios.get(`${BaseUrl}api/user-notification?paginate=true&page=${this.state.page_notification}`, {headers: {Authorization: token}}).then(result => {
+          this.state.page_notification == 1 ? this.setState({notification: result.data.data}): this.setState({notification: [...this.state.page_notification, result.data.data]})
         })
       },
       setState: (data) => {

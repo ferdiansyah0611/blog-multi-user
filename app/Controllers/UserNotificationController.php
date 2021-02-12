@@ -51,6 +51,10 @@ class UserNotificationController extends ResourceController
             {
                 $message = $name . ' has subscribed to your account';
             }
+            if($type === 'commented')
+            {
+                $message = $name . ' has commented on your article';
+            }
             if($type === 'unsubscribe')
             {
                 $message = $name . ' has not subscribed to your account';

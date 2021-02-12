@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
+use App\Controllers\UserNotificationController;
 
 class CommentController extends ResourceController
 {
@@ -10,6 +11,7 @@ class CommentController extends ResourceController
     public function __construct()
     {
         $this->protect = new AuthController();
+        $this->notification = new UserNotificationController();
     }
 
     public function index()
@@ -51,6 +53,7 @@ class CommentController extends ResourceController
             if($validation->withRequest($this->request)->run() === true)
             {
                 $request = $this->request->getJSON();
+                $db = \Config\Database::connect();
                 $this->model->insert_data([
                     'user_id' => $check->data->id,
                     'article_id' => $request->article_id,
@@ -58,6 +61,11 @@ class CommentController extends ResourceController
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
+                $user_id = $db->table('app_article')->where('id', $request->article_id)->get()->getRow()->user_id;
+                if($user_id !== $check->data->id)
+                {
+                    $this->notification->create($user_id, $check->data->name, 'commented');
+                }
                 return $this->respond(['message' => 'Successfuly add data']);
             }else{
                 return $this->respond(['message' => $validation->listErrors()], 403);

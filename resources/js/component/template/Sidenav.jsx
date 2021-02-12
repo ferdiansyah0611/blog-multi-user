@@ -23,7 +23,37 @@ class SidenavCMP extends React.Component {
       headers: {},
       time: ''
     }
+    this.nextNotification = this.nextNotification.bind(this)
+    this.clearNotification = this.clearNotification.bind(this)
+    this.readNotification = this.readNotification.bind(this)
     this.logout = this.logout.bind(this)
+  }
+  nextNotification(e){
+    e.preventDefault()
+    this.context.setState({
+      name: 'page_notification',
+      value: this.context.page_notification + 1
+    })
+    this.context.getNotification()
+  }
+  clearNotification(e){
+    e.preventDefault()
+    axios.get(BaseUrl + 'api/user-notification?clear=all', {headers: this.state.headers}).then(result => {
+      this.context.setState({
+        name: 'notification',
+        value: []
+      })
+    })
+  }
+  readNotification(e){
+    e.preventDefault()
+    let notification = this.context.notification.filter(data => data.status = 'read')
+    axios.get(BaseUrl + 'api/user-notification?read=all', {headers: this.state.headers}).then(result => {
+      this.context.setState({
+        name: 'notification',
+        value: notification
+      })
+    })
   }
   logout(e){
     window.localStorage.removeItem('account')
@@ -112,7 +142,7 @@ class SidenavCMP extends React.Component {
                       <React.Fragment key={key}>
                       {
                         data.type == 'subscribe' ?
-                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer active'}>
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
                             <i className="material-icons circle red">subscriptions</i>
                             <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
                             <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
@@ -121,9 +151,18 @@ class SidenavCMP extends React.Component {
                       }
                       {
                         data.type == 'unsubscribe' ?
-                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer active'}>
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
                             <i className="material-icons circle red">unsubscribe</i>
                             <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
+                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                          </li>
+                          :false
+                      }
+                      {
+                        data.type == 'commented' ?
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
+                            <i className="material-icons circle red">comment</i>
+                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Commented</span>
                             <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
                           </li>
                           :false
@@ -133,10 +172,13 @@ class SidenavCMP extends React.Component {
                   })
                 }
                 </ul>
-                <a className="btn waves-effect waves-light blue w-100">
+                <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.nextNotification}>
+                  Next
+                </a>
+                <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
                   Read All
                 </a>
-                <a className="btn waves-effect waves-light red w-100">
+                <a href="#" className="btn waves-effect waves-light red w-100" onClick={this.clearNotification}>
                   Clear All
                 </a>
                 </React.Fragment>

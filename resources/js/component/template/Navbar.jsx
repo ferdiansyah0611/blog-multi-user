@@ -5,6 +5,7 @@ import {
 import ContextDATA from '../../ContextDATA';
 
 class Navbar extends React.Component{
+	static contextType = ContextDATA
 	constructor(props){
 		super(props)
 		this.state = {
@@ -77,39 +78,6 @@ class Navbar extends React.Component{
 									              <a href="/search" className={result.ui.navbar.bg ? "btn-floating pulse darken-3 z-depth-0 pointer " + result.ui.navbar.bg: "btn-floating pulse blue darken-2 z-depth-0 pointer"} onClick={this.openSearch}>
 									              	<i className="material-icons left">search</i>
 									              </a>
-									              <div id="dropdown-notification-mobile" className="dropdown-content z-depth-3">
-														{
-														  result.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
-														  <ul className="collection" style={{border:'none !important'}}>
-														  {
-														    result.notification.map((data, key) => {
-														      return(
-														        <React.Fragment key={key}>
-														        {
-														          data.type == 'subscribe' ?
-														            <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-														              <i className="material-icons circle red">subscriptions</i>
-														              <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
-														              <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-														            </li>
-														            :false
-														        }
-														        {
-														          data.type == 'unsubscribe' ?
-														            <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-														              <i className="material-icons circle red">unsubscribe</i>
-														              <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
-														              <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-														            </li>
-														            :false
-														        }
-														        </React.Fragment>
-														      )
-														    })
-														  }
-														  </ul>
-														}
-													</div>
 								            	</li>
 								            	: 	<li className="right">
 								          				<Link className="btn-small blue darken-2 z-depth-0" to="/login"><i className="material-icons">login</i></Link>

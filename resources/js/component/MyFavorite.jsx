@@ -36,7 +36,7 @@ class MyFavoriteCMP extends React.Component {
     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
   }
   componentDidMount(){
-    document.title = 'My Favorite'
+    document.title = 'My Favorite | Go Blog'
     var account = window.localStorage.getItem('account')
     if(account){
       this.setState({

@@ -230,6 +230,7 @@ class ViewArticleCMP extends React.Component {
                         <p><small>{this.state.article.created_at}</small></p>
                       </div>
                       <div className="col s12" id="show-article" autoComplete="off" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
+                      <div className="fb-share-button" data-href={window.location.href} data-layout="button_count"></div>
                     </div>
                     <div className="divider"/>
                     <p>

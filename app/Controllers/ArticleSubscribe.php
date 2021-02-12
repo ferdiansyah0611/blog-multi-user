@@ -45,7 +45,7 @@ class ArticleSubscribe extends ResourceController
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
                 if($this->request->getGet('unsubscribe')){
-                    $this->model->where('user_subscribe_id', $this->request->getGet('user_subscribe_id'))->where('user_id', $check->data->id)->delete();
+                    $this->model->where(['user_subscribe_id' => $this->request->getGet('user_subscribe_id'), 'user_id' => $check->data->id])->delete();
                     $this->notification->create($this->request->getGet('user_subscribe_id'), $check->data->name, 'unsubscribe');
                     return $this->respond(['message' => 'Successfuly Unsubscribe User'], 200);
                 }else{

@@ -49,6 +49,7 @@ $routes->group('api', function($routes)
 	$routes->resource('user-ui', ['controller' => 'UserUiController']);
 	$routes->resource('comment', ['controller' => 'CommentController']);
 	$routes->resource('category', ['controller' => 'CategoryController']);
+	$routes->get('dashboard/(:num)', 'UserController::dashboard/$1');
 	$routes->get('usrfile/(:num)/(:any)', 'FileController::index/$1/$2');
 	$routes->post('upload-usrfile', 'FileController::upload');
 	$routes->get('search/category', 'CategoryController::search');

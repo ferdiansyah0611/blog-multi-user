@@ -256,12 +256,12 @@ class SetViewCMP extends React.Component {
                             Active
                           </label>
                         </div>
-                        <button type="button" onClick={this.saveUi} className="btn waves-effect waves-light blue darken-2 mt-10px">
-                          <i className="material-icons right">save</i>
-                          Save Changes
-                        </button>
                       </div>
                     </div>
+                    <button type="button" onClick={this.saveUi} className="btn waves-effect waves-light blue darken-2 mt-10px">
+                      <i className="material-icons right">save</i>
+                      Save Changes
+                    </button>
                   </div>
                   </React.Fragment>
                 )

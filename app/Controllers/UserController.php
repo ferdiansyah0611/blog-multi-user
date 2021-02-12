@@ -143,8 +143,50 @@ class UserController extends ResourceController
     }
     public function delete($id = null)
     {
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
     	   $this->model->delete_data($id);
+        }
+        else{
+            return $this->respond(['message' => 'Access Denied'], 401);
+        }
+    }
+    public function dashboard($year = null)
+    {
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+        if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+            $db = \Config\Database::connect();
+            $data = [
+                'viewers' => [
+                    'jan' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-01%')->get()->getRow()->views,
+                    'feb' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-02%')->get()->getRow()->views,
+                    'mar' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-03%')->get()->getRow()->views,
+                    'apr' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-04%')->get()->getRow()->views,
+                    'may' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-05%')->get()->getRow()->views,
+                    'jun' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-06%')->get()->getRow()->views,
+                    'jul' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-07%')->get()->getRow()->views,
+                    'aug' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-08%')->get()->getRow()->views,
+                    'sep' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-09%')->get()->getRow()->views,
+                    'oct' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-10%')->get()->getRow()->views,
+                    'nov' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-11%')->get()->getRow()->views,
+                    'dec' => $db->table('app_article')->select('SUM(app_article.views) as views')->where(['user_id' => $check->data->id])->like('created_at', $year . '-12%')->get()->getRow()->views,
+                ],
+                'subscribers' => [
+                    'jan' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-01%')->countAllResults(),
+                    'feb' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-02%')->countAllResults(),
+                    'mar' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-03%')->countAllResults(),
+                    'apr' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-04%')->countAllResults(),
+                    'may' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-05%')->countAllResults(),
+                    'jun' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-06%')->countAllResults(),
+                    'jul' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-07%')->countAllResults(),
+                    'aug' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-08%')->countAllResults(),
+                    'sep' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-09%')->countAllResults(),
+                    'oct' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-10%')->countAllResults(),
+                    'nov' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-11%')->countAllResults(),
+                    'dec' => $db->table('app_article_subscribe')->where(['user_subscribe_id' => $check->data->id])->like('created_at', $year . '-12%')->countAllResults(),
+                ]
+            ];
+            return $this->respond($data);
         }
         else{
             return $this->respond(['message' => 'Access Denied'], 401);

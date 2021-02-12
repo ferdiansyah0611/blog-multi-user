@@ -83,7 +83,7 @@ class MyFavoriteCMP extends React.Component {
                       </p>
                       <p className="row">
                         <span className="left"><b>By</b></span>
-                        <span className="right fs-12px"><Link to={'/profile/' + article.user_id} className="blue-text waves-effect waves-dark">{article.author}</Link></span>
+                        <span className="right fs-12px"><Link to={'/profile/' + article.user_id} className="blue-text waves-effect waves-dark">{article.name}</Link></span>
                       </p>
                     </div>
                     <div className="card-action">

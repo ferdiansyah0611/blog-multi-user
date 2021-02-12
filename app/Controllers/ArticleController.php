@@ -53,6 +53,11 @@ class ArticleController extends ResourceController
                 $build = ['total' => $db->table('app_article')->where('user_id', $check->data->id)->countAllResults()];
                 return $this->respond($build);
             }
+            if($this->request->getGet('user_id')){
+                $db = \Config\Database::connect();
+                $build = ['total' => $db->table('app_article')->where('user_id', $this->request->getGet('user_id'))->countAllResults()];
+                return $this->respond($build);
+            }
         }
         if($this->request->getGet('default')){
             $data = [

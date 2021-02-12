@@ -40,6 +40,11 @@ class ArticleSubscribe extends ResourceController
                 $build = ['total' => $db->table('app_article_subscribe')->where('user_subscribe_id', $check->data->id)->countAllResults()];
                 return $this->respond($build);
             }
+            if($this->request->getGet('user_id')){
+                $db = \Config\Database::connect();
+                $build = ['total' => $db->table('app_article_subscribe')->where('user_subscribe_id', $this->request->getGet('user_id'))->countAllResults()];
+                return $this->respond($build);
+            }
         }
         if($this->request->getGet('user_subscribe_id')){
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));

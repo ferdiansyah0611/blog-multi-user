@@ -16,8 +16,21 @@ class UserNotificationController extends ResourceController
 	{
 		$check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-			$data = ['data' => $this->model->where('user_id', $check->data->id)->paginate(25)];
-			return $this->respond($data);
+            if($this->request->getGet('read') == 'all')
+            {
+                $this->model->update(['status' => 'read'],['user_id' => $check->data->id]);
+                return $this->respond(['message' => 'Successfuly read all data']);
+            }
+            if($this->request->getGet('clear') == 'all')
+            {
+                $this->model->where(['user_id' => $check->data->id])->delete();
+                return $this->respond(['message' => 'Successfuly clear data']);
+            }
+            else
+            {
+                $data = ['data' => $this->model->where('user_id', $check->data->id)->paginate(25)];
+                return $this->respond($data);
+            }
         }else{
         	return $this->respond(['message' => 'Access Denied'], 401);
         }

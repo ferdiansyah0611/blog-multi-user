@@ -13,10 +13,14 @@ class Navbar extends React.Component{
 			showonsmall: 'show-on-small',
 			inputsearch: ''
 		}
+		this.openNotification = this.openNotification.bind(this)
 		this.search = this.search.bind(this)
 		this.openSearch = this.openSearch.bind(this)
 		this.closeSearch = this.closeSearch.bind(this)
 		this.handle = this.handle.bind(this)
+	}
+	openNotification(e){
+		$('#slide-in').sidenav('open');
 	}
 	search(e){
 		e.preventDefault()
@@ -67,7 +71,7 @@ class Navbar extends React.Component{
 								            {
 								            	result.users.id ?
 								          		<li className="right">
-									              <a className={result.ui.navbar.bg ? "dropdown-trigger btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "dropdown-trigger btn-floating pulse lighten-1 pointer"} data-target="dropdown-notification-mobile">
+									              <a data-target="slide-in" onClick={this.openNotification} className={result.ui.navbar.bg ? "btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "btn-floating pulse lighten-1 pointer"}>
 									              	<i className="material-icons left">notifications_none</i>
 									              </a>
 									              <a href="/search" className={result.ui.navbar.bg ? "btn-floating pulse darken-3 z-depth-0 pointer " + result.ui.navbar.bg: "btn-floating pulse blue darken-2 z-depth-0 pointer"} onClick={this.openSearch}>
@@ -119,42 +123,9 @@ class Navbar extends React.Component{
 								          {
 								            result.users.id ?
 								            <li>
-								              	<a className={result.ui.navbar.bg ? "dropdown-trigger btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "dropdown-trigger btn-floating pulse lighten-1 pointer"} data-target="dropdown-notification">
+								              	<a data-target="slide-in" onClick={this.openNotification} className={result.ui.navbar.bg ? "btn-floating pulse darken-3 pointer " + result.ui.navbar.bg: "btn-floating pulse lighten-1 pointer"}>
 								              		<i className="material-icons left">notifications_none</i>
 								              	</a>
-												<div id="dropdown-notification" className="dropdown-content z-depth-3">
-												{
-												  result.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
-												  <ul className="collection" style={{border:'none !important'}}>
-												  {
-												    result.notification.map((data, key) => {
-												      return(
-												        <React.Fragment key={key}>
-												        {
-												          data.type == 'subscribe' ?
-												            <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-												              <i className="material-icons circle red">subscriptions</i>
-												              <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
-												              <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-												            </li>
-												            :false
-												        }
-												        {
-												          data.type == 'unsubscribe' ?
-												            <li className={data.status == 'unread' ? 'collection-item avatar': 'collection-item avatar active'}>
-												              <i className="material-icons circle red">unsubscribe</i>
-												              <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
-												              <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
-												            </li>
-												            :false
-												        }
-												        </React.Fragment>
-												      )
-												    })
-												  }
-												  </ul>
-												}
-												</div>
 								            </li>
 								            : false
 								          }

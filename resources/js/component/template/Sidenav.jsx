@@ -80,6 +80,8 @@ class SidenavCMP extends React.Component {
     }
     });
     $('.sidenav').sidenav();
+    $('#slide-in').sidenav({edge:'right'});
+    $('#slide-in').sidenav('close');
     $('.collapsible').collapsible();
     $('.tooltipped').tooltip();
     $('#modal-upload-file').modal();
@@ -99,6 +101,47 @@ class SidenavCMP extends React.Component {
         {
           result => (
             <React.Fragment>
+            <div id="slide-in" className="sidenav">
+              {
+                result.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
+                <React.Fragment>
+                <ul className="collection" style={{border:'none !important'}}>
+                {
+                  result.notification.map((data, key) => {
+                    return(
+                      <React.Fragment key={key}>
+                      {
+                        data.type == 'subscribe' ?
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer active'}>
+                            <i className="material-icons circle red">subscriptions</i>
+                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
+                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                          </li>
+                          :false
+                      }
+                      {
+                        data.type == 'unsubscribe' ?
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer active'}>
+                            <i className="material-icons circle red">unsubscribe</i>
+                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
+                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                          </li>
+                          :false
+                      }
+                      </React.Fragment>
+                    )
+                  })
+                }
+                </ul>
+                <a className="btn waves-effect waves-light blue w-100">
+                  Read All
+                </a>
+                <a className="btn waves-effect waves-light red w-100">
+                  Clear All
+                </a>
+                </React.Fragment>
+              }
+            </div>
             <ul id="slide-out" className={result.ui.sidebar.bg ? "sidenav sidenav-fixed " + result.ui.sidebar.bg: "sidenav sidenav-fixed"}>
               <li>
                 <div className="user-view">

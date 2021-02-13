@@ -74,7 +74,7 @@ EOD;
             ];
             $register = $this->auth->register($dataRegister);
             if($register == true){
-                $avatar->move(WRITEPATH.'uploads/'. $id);
+                $avatar->move(WRITEPATH.'uploads/'. $_POST['id']);
                 $output = [
                     'message' => 'Successfully Register'
                 ];
@@ -125,7 +125,6 @@ EOD;
                         'gender' => $cek_login['gender'],
                         'location' => $cek_login['location'],
                         'role' => $cek_login['role'],
-                        'rekening' => $cek_login['rekening'],
                         'type' => $cek_login['type'],
                         'bio' => $cek_login['bio'],
                         'avatar' => $cek_login['avatar'],

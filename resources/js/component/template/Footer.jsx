@@ -7,6 +7,12 @@ import {
 import ContextDATA from '../../ContextDATA';
 
 class FooterCMP extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      year: new Date().getFullYear()
+    }
+  }
   render() {
     return(
       <ContextDATA.Consumer>
@@ -32,7 +38,7 @@ class FooterCMP extends React.Component {
                 </div>
                 <div className="footer-copyright">
                   <div className="container">
-                  © 2020 Copyright
+                  © {this.state.year} Copyright
                   <a className="grey-text text-lighten-4 right" href="#!">Privacy & Policy</a>
                   </div>
                 </div>

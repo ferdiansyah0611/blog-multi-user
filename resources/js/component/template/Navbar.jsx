@@ -41,9 +41,7 @@ class Navbar extends React.Component{
 	handle(e){
 		this.setState({inputsearch: e.target.value})
 	}
-	componentDidMount(){
-		$('.dropdown-trigger').dropdown();
-	}
+	componentDidMount(){}
 	render(){
 		return(
 			<ContextDATA.Consumer>
@@ -79,10 +77,14 @@ class Navbar extends React.Component{
 									              	<i className="material-icons left">search</i>
 									              </a>
 								            	</li>
-								            	: 	<li className="right">
-								          				<Link className="btn-small blue darken-2 z-depth-0" to="/login"><i className="material-icons">login</i></Link>
-								          			</li>
-								          		}
+								            	: 
+								            	<li className="right">
+								            		<a href="/search" className={result.ui.navbar.bg ? "btn-floating pulse darken-3 z-depth-0 pointer " + result.ui.navbar.bg: "btn-floating pulse blue darken-2 z-depth-0 pointer"} onClick={this.openSearch}>
+									              		<i className="material-icons left">search</i>
+									              	</a>
+								          			<Link className="btn-small blue darken-2 z-depth-0" to="/login"><i className="material-icons">login</i></Link>
+								          		</li>
+								          	}
 								        </ul>
 								        <ul id="nav-mobile" className={"right " + this.state.navmobile}>
 								          <li><Link to="/popular">Popular<i className="material-icons left">view_quilt</i></Link></li>

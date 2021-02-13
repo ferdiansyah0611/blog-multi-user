@@ -105,20 +105,6 @@ input#search::placeholder {
     overflow: hidden;
     line-break: anywhere;
 }
-#dropdown-notification{
-    left: unset !important;
-    top: 66px !important;
-    right: calc(0px + 300px);
-    width: 300px !important;
-    height: 300px;
-}
-#dropdown-notification-mobile{
-    left: unset !important;
-    top: 66px !important;
-    right: 0px;
-    width: 300px !important;
-    height: 300px;
-}
 .collection{
     font-size: 13px;
 }
@@ -134,9 +120,6 @@ input#search::placeholder {
     z-index: 1;
     left: 20px;
     cursor: pointer;
-}
-.shadow-default{
-    box-shadow: 0px 0px 0px 3px #f3f3f3 !important;
 }
 .list-article button.favorite{
     position: absolute;
@@ -230,4 +213,21 @@ input#search::placeholder {
 .demo-dfree .dfree-body td,
 .demo-dfree .dfree-body tr {
   border: 1px solid #696969;
+}
+#slide-in{
+  overflow: hidden;
+}
+#slide-in ul.collection{
+  position: fixed;
+  max-height: calc(100% - 260px);
+  overflow: auto;
+}
+#slide-in div.action{
+  position: absolute;
+  bottom: 70px;
+  left: 13px;
+}
+#slide-in div.header p{
+  font-size: 17px;
+  font-weight: 600;
 }

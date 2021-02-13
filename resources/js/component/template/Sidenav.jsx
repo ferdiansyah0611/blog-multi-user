@@ -66,6 +66,8 @@ class SidenavCMP extends React.Component {
       footer: Config.footer
     }})
     M.toast({html: 'Your account has logout'})
+    $('#slide-in').sidenav('close');
+    $('#slide-in').sidenav('destroy');
   }
   time(){
     setInterval(() => {
@@ -109,9 +111,8 @@ class SidenavCMP extends React.Component {
       });
     }
     });
-    $('.sidenav').sidenav();
-    $('#slide-in').sidenav({edge:'right'});
-    $('#slide-in').sidenav('close');
+    $('#slide-out').sidenav();
+    
     $('.collapsible').collapsible();
     $('.tooltipped').tooltip();
     $('#modal-upload-file').modal();
@@ -132,10 +133,11 @@ class SidenavCMP extends React.Component {
           result => (
             <React.Fragment>
             <div id="slide-in" className="sidenav">
+              <div className="header"><p className="center-align">Notification</p></div>
               {
                 result.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
                 <React.Fragment>
-                <ul className="collection" style={{border:'none !important'}}>
+                <ul className="collection">
                 {
                   result.notification.map((data, key) => {
                     return(
@@ -172,15 +174,17 @@ class SidenavCMP extends React.Component {
                   })
                 }
                 </ul>
-                <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.nextNotification}>
-                  Next
-                </a>
-                <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
-                  Read All
-                </a>
-                <a href="#" className="btn waves-effect waves-light red w-100" onClick={this.clearNotification}>
-                  Clear All
-                </a>
+                <div className="action">
+                  <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.nextNotification}>
+                    Next
+                  </a>
+                  <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
+                    Read All
+                  </a>
+                  <a href="#" className="btn waves-effect waves-light red w-100" onClick={this.clearNotification}>
+                    Clear All
+                  </a>
+                </div>
                 </React.Fragment>
               }
             </div>

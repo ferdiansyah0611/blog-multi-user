@@ -144,7 +144,7 @@ class App extends React.Component {
         }
         else{
           this.setState({
-            menu_manage: ['Article', 'Storage'],
+            menu_manage: ['Article', 'Comment', 'Storage'],
             menu_preferences: [
             {txt:'Apps',icon:'app_settings_alt',url: '/setting/apps'},
               {txt:'Account',icon:'account_box',url: '/setting/account'},
@@ -152,6 +152,9 @@ class App extends React.Component {
             ]
           })
         }
+        /*notification sidenav*/
+        $('#slide-in').sidenav({edge:'right'});
+        $('#slide-in').sidenav('close');
       }).catch(e => {
         if(e.response && e.response.status == 401){
           this.setState({

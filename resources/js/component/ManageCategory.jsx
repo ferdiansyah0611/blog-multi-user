@@ -80,7 +80,8 @@ class ManageCategoryCMP extends React.Component {
               </ul>
               <div className="row">
                 <div id="tabs-data" className="col s12">
-                  <Datatables 
+                  <Datatables
+                    editable={true}
                     heading={
                       ['#', 'Name', 'Created']
                     }

@@ -54,26 +54,33 @@ class ManageCommentCMP extends React.Component {
             <div className="card-content">
               <div className="row">
                 <div className="col s12">
-                  <Datatables 
-                    paginate={true}
-                    heading={
-                      ['#', 'User', 'Article', 'Comment']
-                    }
-                    td={
-                      ['id', 'user_id', 'article_id', 'comment']
-                    }
-                    url={{
-                      default: BaseUrl + 'api/comment',
-                      deleted: BaseUrl + 'api/comment/',
-                      edited: BaseUrl + 'api/comment/',
-                      search: BaseUrl + 'api/search/comment'
-                    }}
-                    form={
-                      ['id', 'user_id', 'article_id', 'comment', 'updated_at']
-                    }
-                    type={[false,'number-disabled', 'number-disabled', 'textarea', false]}
-                    edited={this.e_edited}
-                  />
+                <ContextDATA.Consumer>
+                  {
+                    result => (
+                      <Datatables 
+                        editable={result.users.role == 'admin' ? true: false}
+                        paginate={true}
+                        heading={
+                          ['#', 'User', 'Article', 'Comment']
+                        }
+                        td={
+                          ['id', 'user_id', 'article_id', 'comment']
+                        }
+                        url={{
+                          default: BaseUrl + 'api/comment',
+                          deleted: BaseUrl + 'api/comment/',
+                          edited: BaseUrl + 'api/comment/',
+                          search: BaseUrl + 'api/search/comment'
+                        }}
+                        form={
+                          ['id', 'user_id', 'article_id', 'comment', 'updated_at']
+                        }
+                        type={[false,'number-disabled', 'number-disabled', 'textarea', false]}
+                        edited={this.e_edited}
+                      />
+                    )
+                  }
+                </ContextDATA.Consumer>
                 </div>
               </div>
             </div>

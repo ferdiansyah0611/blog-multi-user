@@ -108,83 +108,86 @@ class ManageArticleCMP extends React.Component {
       <BreadCrumb data={[{url: '/management/article', str: 'Management Article'}]} />
       <div className="row">
         <div className="col s12">
-              <ul id="tabs-swipe-demo" className="tabs">
-                <li className="tab col s6"><a className="active" href="#tabs-data">Data</a></li>
-                <li className="tab col s6"><a href="#tabs-create">Create</a></li>
-              </ul>
-              <div className="row">
-                <div id="tabs-data" className="col s12">
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <Datatable 
-                      hasArticle={true}
-                      paginate={true}
-                      heading={
-                        ['#', 'Title', 'Created']
+          <div className="card-panel">
+            <ul id="tabs-swipe-demo" className="tabs">
+              <li className="tab col s6"><a className="active" href="#tabs-data">Data</a></li>
+              <li className="tab col s6"><a href="#tabs-create">Create</a></li>
+            </ul>
+            <div className="row">
+              <div id="tabs-data" className="col s12">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Datatable 
+                    editable={true}
+                    hasArticle={true}
+                    paginate={true}
+                    heading={
+                      ['#', 'Title', 'Created']
+                    }
+                    td={
+                      ['id', 'title', 'created_at']
+                    }
+                    url={{
+                      default: BaseUrl + 'api/article',
+                      deleted: BaseUrl + 'api/article/',
+                      edited: BaseUrl + 'api/article/',
+                      search: BaseUrl + 'api/search/article'
+                    }}
+                    form={
+                      ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
+                    }
+                    type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
+                  />
+                </Suspense>
+              </div>
+              <div id="tabs-create" className="col s12">
+                <div className="row mt-10px">
+                  <div className="input-field col s12 m6">
+                    <input id="last_name" type="text" name="create_title" onChange={this.handle} className="validate"/>
+                    <label htmlFor="last_name">Title</label>
+                  </div>
+                  <div className="col s12 m6">
+                    <select name="create_category_id" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
+                      <option value="Choose your option" disabled>Choose category article</option>
+                      {
+                        this.state.category.map((text, key) => {
+                          return(
+                            <option key={key} value={text.id}>{text.name}</option>
+                          )
+                        })
                       }
-                      td={
-                        ['id', 'title', 'created_at']
-                      }
-                      url={{
-                        default: BaseUrl + 'api/article',
-                        deleted: BaseUrl + 'api/article/',
-                        edited: BaseUrl + 'api/article/',
-                        search: BaseUrl + 'api/search/article'
-                      }}
-                      form={
-                        ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
-                      }
-                      type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
-                    />
-                  </Suspense>
-                </div>
-                <div id="tabs-create" className="col s12">
-                  <div className="row mt-10px">
-                    <div className="input-field col s12 m6">
-                      <input id="last_name" type="text" name="create_title" onChange={this.handle} className="validate"/>
-                      <label htmlFor="last_name">Title</label>
+                    </select>
+                  </div>
+                  <div className="input-field col s12">
+                    <label>Description</label>
+                    <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
+                  </div>
+                  <div className="col s12 m6">
+                    <select name="create_status" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
+                      <option value="Choose your option" disabled>Choose status article</option>
+                      <option value="public">Public</option>
+                      <option value="archive">Archives</option>
+                    </select>
+                  </div>
+                  <div className="file-field input-field col s12 m6">
+                    <div className="btn">
+                      <span>File</span>
+                      <input onChange={this.onFileChange} type="file"/>
                     </div>
-                    <div className="col s12 m6">
-                      <select name="create_category_id" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
-                        <option value="Choose your option" disabled>Choose category article</option>
-                        {
-                          this.state.category.map((text, key) => {
-                            return(
-                              <option key={key} value={text.id}>{text.name}</option>
-                            )
-                          })
-                        }
-                      </select>
+                    <div className="file-path-wrapper">
+                      <input className="file-path validate" type="text" placeholder="Upload Image Files"/>
                     </div>
-                    <div className="input-field col s12">
-                      <label>Description</label>
-                      <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
+                  </div>
+                  <div className="col s12">
+                    <div className='demo-dfree' id="content-add">
                     </div>
-                    <div className="col s12 m6">
-                      <select name="create_status" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
-                        <option value="Choose your option" disabled>Choose status article</option>
-                        <option value="public">Public</option>
-                        <option value="archive">Archives</option>
-                      </select>
-                    </div>
-                    <div className="file-field input-field col s12 m6">
-                      <div className="btn">
-                        <span>File</span>
-                        <input onChange={this.onFileChange} type="file"/>
-                      </div>
-                      <div className="file-path-wrapper">
-                        <input className="file-path validate" type="text" placeholder="Upload Image Files"/>
-                      </div>
-                    </div>
-                    <div className="col s12">
-                      <div className='demo-dfree' id="content-add">
-                      </div>
-                    </div>
-                    <div className="col s12">
-                      <button className="btn waves-effect waves-light blue" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>
-                    </div>
+                  </div>
+                  <div className="col s12">
+                    <button className="btn waves-effect waves-light blue" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
         </div>
       </div>
       </React.Fragment>

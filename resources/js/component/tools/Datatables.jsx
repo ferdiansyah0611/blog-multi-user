@@ -213,16 +213,20 @@ class Datatables extends React.Component {
     return(
       <React.Fragment>
         <div className="row">
-          <div className="input-field col s12 m6">
+          <div className={this.props.editable ? "input-field col s12 m6": "input-field col s12"}>
             <i className="material-icons prefix">search</i>
             <input placeholder="Search data..." id="first_name" type="text" defaultValue="" className="validate" onKeyUp={this.searching}/>
           </div>
-          <div className="input-field col s12 m6">
-            <select name="select_action" defaultValue="Choose your option" className="browser-default" onChange={this.removing}>
-              <option value="Choose your option">Choose your option</option>
-              <option value="2">Remove</option>
-            </select>
-          </div>
+          {
+            this.props.editable ?
+              <div className="input-field col s12 m6">
+                <select name="select_action" defaultValue="Choose your option" className="browser-default" onChange={this.removing}>
+                  <option value="Choose your option">Choose your option</option>
+                  <option value="2">Remove</option>
+                </select>
+              </div>
+            :''
+          }
         </div>
         <table className="responsive-table highlight">
           <thead>
@@ -234,8 +238,14 @@ class Datatables extends React.Component {
                 )
               })
             }
-            <th className="pointer">Action</th>
-            <th>Selection</th>
+            {
+              this.props.editable ?
+                <React.Fragment>
+                  <th className="pointer">Action</th>
+                  <th>Selection</th>
+                </React.Fragment>
+              :false
+            }
             </tr>
           </thead>
           <tbody>
@@ -250,15 +260,21 @@ class Datatables extends React.Component {
                     )
                   })
                 }
-                  <td>
-                      <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i data-id={text.id} className="material-icons">edit</i></button>
-                  </td>
-                  <td>
-                    <label>
-                    <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
-                    <span>Select</span>
-                    </label>
-                  </td>
+                {
+                  this.props.editable ?
+                  <React.Fragment>
+                    <td>
+                        <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i data-id={text.id} className="material-icons">edit</i></button>
+                    </td>
+                    <td>
+                      <label>
+                      <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
+                      <span>Select</span>
+                      </label>
+                    </td>
+                  </React.Fragment>
+                  :false
+                }
                 </tr>
               )
             })
@@ -272,7 +288,7 @@ class Datatables extends React.Component {
           this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
         }
         {
-          this.props.paginate ? <p className="center-align"><button className="btn waves-effect waves-light blue" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
+          this.props.paginate ? <p className="center-align"><button className="btn waves-effect waves-light blue mt-10px" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
         }
         <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
           <div className="modal-content">

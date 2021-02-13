@@ -302,8 +302,7 @@ class DashboardCMP extends React.Component {
                     <span className="card-title">My Article</span>
                   </div>
                   <div className="card-content overflow-auto">
-                  {
-                    /*<Datatables
+                    <Datatables
                         hasArticle={true}
                         paginate={true}
                         heading={
@@ -322,8 +321,7 @@ class DashboardCMP extends React.Component {
                           ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
                         }
                         type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
-                      />*/
-                  }
+                      />
                   </div>
                 </div>
               </div>

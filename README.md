@@ -1,83 +1,111 @@
-# CodeIgniter 4 Development
+## Project CI4 React Blog Multiuser
 
-[![Build Status](https://github.com/codeigniter4/CodeIgniter4/workflows/PHPUnit/badge.svg)](https://github.com/codeigniter4/CodeIgniter4/actions?query=workflow%3A%22PHPUnit%22)
-[![Coverage Status](https://coveralls.io/repos/github/codeigniter4/CodeIgniter4/badge.svg?branch=develop)](https://coveralls.io/github/codeigniter4/CodeIgniter4?branch=develop)
-[![Downloads](https://poser.pugx.org/codeigniter4/framework/downloads)](https://packagist.org/packages/codeigniter4/framework)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/codeigniter4/CodeIgniter4)](https://packagist.org/packages/codeigniter4/framework)
-[![GitHub stars](https://img.shields.io/github/stars/codeigniter4/CodeIgniter4)](https://packagist.org/packages/codeigniter4/framework)
-[![GitHub license](https://img.shields.io/github/license/codeigniter4/CodeIgniter4)](https://github.com/codeigniter4/CodeIgniter4/blob/develop/LICENSE)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/codeigniter4/CodeIgniter4/pulls)
-<br>
+Is an application for registered blog users with several great features and templates.
 
-## What is CodeIgniter?
+## Installation
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](http://codeigniter.com).
+1. Cloning Project
 
-This repository holds the source code for CodeIgniter 4 only.
-Version 4 is a complete rewrite to bring the quality and the code into a more modern version,
-while still keeping as many of the things intact that has made people love the framework over the years.
+```bash
+git clone https://gitlab.com/ferdif9996/project-blog-ci4-react.git
+```
+2. Change file env
+```bash
+copy copy-env .env
+```
+3. Edit file env
 
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
+Change the database with your database server
+4. Key generate
+```bash
+php spark key:generate
+```
+5. Install composer
+```bash
+composer install
+```
+6. Migration & Seed Database
 
-### Documentation
+```bash
+php spark migrate && php spark db:seed ArticleSeeder && php spark db:seed UserFakerSeeder
+```
 
-The [User Guide](https://codeigniter4.github.io/userguide/) is the primary documentation for CodeIgniter 4.
+## Usage
 
-The current **in-progress** User Guide can be found [here](https://codeigniter4.github.io/CodeIgniter4/).
-As with the rest of the framework, it is a work in progress, and will see changes over time to structure, explanations, etc.
+```bash
+php spark serve
+```
+## List API
+```php
+<?php
+$routes->group('api', function($routes)
+{
+	$routes->post('login', 'AuthController::login');
+	$routes->post('register', 'AuthController::register');
+    $routes->add('list', 'Admin\Users::list');
+	$routes->resource('article', ['controller' => 'ArticleController']);
+	$routes->resource('article-subscribe', ['controller' => 'ArticleSubscribe']);
+	$routes->resource('article-viewer', ['controller' => 'ArticleViewerController']);
+	$routes->resource('article-favorite', ['controller' => 'ArticleFavoriteController']);
+	$routes->resource('article-share', ['controller' => 'ArticleShareController']);
+	$routes->resource('user', ['controller' => 'UserController']);
+	$routes->resource('user-report', ['controller' => 'UserReportController']);
+	$routes->resource('user-notification', ['controller' => 'UserNotificationController']);
+	$routes->resource('user-ui', ['controller' => 'UserUiController']);
+	$routes->resource('comment', ['controller' => 'CommentController']);
+	$routes->resource('category', ['controller' => 'CategoryController']);
+	$routes->get('dashboard/(:num)', 'UserController::dashboard/$1');
+	$routes->get('usrfile/(:num)/(:any)', 'FileController::index/$1/$2');
+	$routes->post('upload-usrfile', 'FileController::upload');
+	$routes->get('search/category', 'CategoryController::search');
+	$routes->get('search/comment', 'CommentController::search');
+	$routes->get('article-category/(:num)', 'ArticleController::category/$1');
+	$routes->get('storage', 'FileController::storage');
+	$routes->get('storage/usage', 'FileController::usage');
+	$routes->get('valid', 'AuthController::valid');
+	$routes->get('pay/status/(:num)', 'PaymentController::status/$1');
+	$routes->get('pay/approve/(:num)', 'PaymentController::approve/$1');
+	$routes->get('pay/cancel/(:num)', 'PaymentController::cancel/$1');
+	$routes->get('pay/expire/(:num)', 'PaymentController::expire/$1');
+	$routes->get('pay/check/(:num)', 'PaymentController::check/$1');
+	$routes->get('pay', 'PaymentController::pay');
+	$routes->post('pay', 'PaymentController::index');
+	$routes->post('user-ui/update/(:num)', 'UserUiController::update/$1');
+	$routes->post('users/update/(:num)', 'UserController::update/$1');
+});
+?>
+```
 
-You might also be interested in the [API documentation](https://codeigniter4.github.io/api/) for the framework components.
-
-## Important Change with index.php
-
-index.php is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-CodeIgniter is developed completely on a volunteer basis. As such, please give up to 7 days
-for your issues to be reviewed. If you haven't heard from one of the team in that time period,
-feel free to leave a comment on the issue so that it gets brought back to our attention.
-
-We use Github issues to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-If you raise an issue here that pertains to support or a feature request, it will
-be closed! If you are not sure if you have found a bug, raise a thread on the forum first -
-someone else may have encountered the same thing.
-
-Before raising a new Github issue, please check that your bug hasn't already
-been reported or fixed.
-
-We use pull requests (PRs) for CONTRIBUTIONS to the repository.
-We are looking for contributions that address one of the reported bugs or
-approved work packages.
-
-Do not use a PR as a form of feature request.
-Unsolicited contributions will only be considered if they fit nicely
-into the framework roadmap.
-Remember that some components that were part of CodeIgniter 3 are being moved
-to optional packages, with their own repository.
-
-## Contributing
-
-We **are** accepting contributions from the community!
-
-We will try to manage the process somewhat, by adding a ["help wanted" label](https://github.com/codeigniter4/CodeIgniter4/labels/help%20wanted) to those that we are
-specifically interested in at any point in time. Join the discussion for those issues and let us know
-if you want to take the lead on one of them.
-
-At this time, we are not looking for out-of-scope contributions, only those that would be considered part of our controlled evolution!
-
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the user guide.
+## Development
+On first time or installation, Your mut be write:
+```bash
+npm install
+```
+Command for development
+```bash
+npm run dev
+```
+Command for production
+```bash
+npm run production
+```
+## Library Frontend
+- react@17.0.1
+- react-dom@17.0.1
+- react-router-dom@5.2.0
+- materializecss@1.0.0-rc.2
+- jquery@3.5.1
+- axios@^0.21.1
+- dropzone@^5.7.2
+- sweetalert2@10.13.3
+- tinymce@5.6.2
+- vanilla-lazyload@17.3.0
+- googlechart
+## Library Backend
+- codeigniter@4.0.4
+- fakerphp/faker@1.13
+- Midtrans
+- Firebase/JWT
 
 ## Server Requirements
 
@@ -94,6 +122,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - xml (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
 
-## Running CodeIgniter Tests
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Information on running the CodeIgniter test suite can be found in the [README.md](tests/README.md) file in the tests directory.
+Please make sure to update tests as appropriate.

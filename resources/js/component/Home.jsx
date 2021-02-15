@@ -8,6 +8,7 @@ import ArticleLoadCMP from './tools/ArticleLoadCMP.jsx';
 import BaseUrl from '../tools/Base';
 import BreadCrumb from './tools/BreadCrumb.jsx'
 import Slider from './tools/Slider.jsx';
+import Loader from './tools/Loader.jsx';
 /*context*/
 import ContextDATA from '../ContextDATA';
 
@@ -16,14 +17,15 @@ class Home extends React.Component{
     super(props)
     this.state = {
       users: [],
-      p_users: 1
+      p_users: 1,
+      finishedUser: false
     }
     this.nextRecommend = this.nextRecommend.bind(this)
   }
   componentDidMount(){
     document.title = 'Home Pages | Go Blog'
     axios.get(BaseUrl + 'api/user?random=true&page=' + this.state.p_users).then(result => {
-      this.setState({users: result.data.data})
+      this.setState({users: result.data.data, finishedUser: true})
     })
   }
   nextRecommend(e){
@@ -49,15 +51,17 @@ class Home extends React.Component{
                         <h4>Recommended People</h4>
                       </li>
                       {
-                        this.state.users.map((data, key) => {
-                          return(
-                            <li className="collection-item avatar" key={key}>
-                              <img className="circle" src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
-                              <span className="title"><Link to={'/profile/' + data.id}>{data.name}</Link></span>
-                              <p>{data.bio ? data.bio: 'Bio is not created by its users'}</p>
-                            </li>
-                          )
-                        })
+                        this.state.finishedUser ?
+                          this.state.users.map((data, key) => {
+                            return(
+                              <li className="collection-item avatar" key={key}>
+                                <img className="circle" src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
+                                <span className="title"><Link to={'/profile/' + data.id}>{data.name}</Link></span>
+                                <p>{data.bio ? data.bio: 'Bio is not created by its users'}</p>
+                              </li>
+                            )
+                          })
+                          : <Loader/>
                       }
                     </ul>
                     <div className="center-align mb-10px">

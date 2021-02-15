@@ -18,7 +18,7 @@ class UserNotificationController extends ResourceController
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
             if($this->request->getGet('read') == 'all')
             {
-                $this->model->update(['status' => 'read'],['user_id' => $check->data->id]);
+                $this->model->update_data(['status' => 'read'],['user_id' => $check->data->id]);
                 return $this->respond(['message' => 'Successfuly read all data']);
             }
             if($this->request->getGet('clear') == 'all')

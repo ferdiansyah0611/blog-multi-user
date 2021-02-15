@@ -38,9 +38,9 @@ class UserNotificationModel extends Model
         $this->db->table($this->table)->insert($data);
         return true;
     }
-    public function update_data($data, $id)
+    public function update_data($data, $where)
     {
-        return $this->db->table($this->table)->update($data, ['id' => $id]);
+        return $this->db->table($this->table)->update($data, $where);
     }
     public function delete_data($id)
     {

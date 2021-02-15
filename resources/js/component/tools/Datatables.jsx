@@ -113,7 +113,7 @@ class Datatables extends React.Component {
   }
   searching(event) {
     axios.get(this.props.url.search + '?q=' + event.target.value, {headers: this.state.headers}).then(result => {
-      this.setState({data: result.data})
+      this.setState({data: result.data.data})
     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
   }
   editing(event) {

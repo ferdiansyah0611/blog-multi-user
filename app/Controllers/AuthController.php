@@ -109,7 +109,7 @@ EOD;
                 $audience_claim = "THE_AUDIENCE";
                 $issuedat_claim = time();
                 $notbefore_claim = $issuedat_claim + 10;
-                $expire_claim = $issuedat_claim + 7200;
+                $expire_claim = $issuedat_claim + 3600;
                 $token = array(
                     "iss" => $issuer_claim,
                     "aud" => $audience_claim,
@@ -135,8 +135,6 @@ EOD;
                     'status' => 200,
                     'message' => 'Successfully Login',
                     "token" => $token,
-                    'csrf_name' => csrf_token(),
-                    'csrf_value' => csrf_hash(),
                     "data" => array(
                         'id' => $cek_login['id'],
                         'name' => $cek_login['name'],
@@ -189,35 +187,5 @@ EOD;
         }else{
             return $this->respond(['message' => 'Not Valid Tokens'], 401);
         }
-    }
-    public function email()
-    {
-        $email = \Config\Services::email();
-        $config['protocol'] = 'smtp';
-        $config['SMTPHost'] = 'smtp.gmail.com';
-        $config['SMTPUser'] = 'ferdif9996@gmail.com';
-        $config['SMTPPass'] = 'lovesafinaforever';
-        $config['SMTPPort'] = '587';
-        $config['mailType'] = 'html';
-        $config['mailPath'] = '/usr/sbin/sendmail';
-        $config['charset']  = 'iso-8859-1';
-        $config['wordWrap'] = true;
-        $config['SMTPCrypto'] = 'tls';
-        $email->initialize($config);
-
-        $email->setFrom('ferdif9996@gmail.com', 'Go Blog');
-        $email->setTo('ferdisafina123@gmail.com');
-        $email->setSubject('Verifaction code | Go Blog');
-        $email->setMessage('
-            <div class="header p-5">
-                <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
-                <hr class="divider"/>
-            </div>
-            <div style="font-size: 20px;text-align:center;">
-                <p>Verification Code</p>
-                <button>18293</button>
-            </div>');
-        $email->send();
-        return $this->respond(['message' => 'ok']);
     }
 }

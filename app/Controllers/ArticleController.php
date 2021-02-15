@@ -48,15 +48,17 @@ class ArticleController extends ResourceController
         }
         if($this->request->getGet('total')){
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
-            if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-                $db = \Config\Database::connect();
-                $build = ['total' => $db->table('app_article')->where('user_id', $check->data->id)->countAllResults()];
-                return $this->respond($build);
-            }
             if($this->request->getGet('user_id')){
                 $db = \Config\Database::connect();
                 $build = ['total' => $db->table('app_article')->where('user_id', $this->request->getGet('user_id'))->countAllResults()];
                 return $this->respond($build);
+            }
+            else{
+                if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+                    $db = \Config\Database::connect();
+                    $build = ['total' => $db->table('app_article')->where('user_id', $check->data->id)->countAllResults()];
+                    return $this->respond($build);
+                }
             }
         }
         if($this->request->getGet('default')){
@@ -158,5 +160,13 @@ class ArticleController extends ResourceController
             'pager' => $this->model->pager->links()
         ];
         return $this->respond($data);
+    }
+    public function search()
+    {
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+        if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+            $data = $this->model->onSearch(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], ['app_article.created_at', 'DESC'], $this->request->getGet('q'), 25, true);
+            return $this->respond($data);
+        }
     }
 }

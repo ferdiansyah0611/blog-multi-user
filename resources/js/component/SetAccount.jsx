@@ -122,7 +122,7 @@ class SetAccountCMP extends React.Component {
                 <div className="col s12 m6">
                   <h5>My Photo Profile</h5>
                   {
-                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>: <img className="responsive-img" src={BaseUrl + 'api/usrfile/' + context.users.id + '/' + context.users.avatar}/>
+                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>: <img className="responsive-img" src={context.users.id ? BaseUrl + 'api/usrfile/' + context.users.id + '/' + context.users.avatar: 'https://via.placeholder.com/320x400.png?text=Waiting...'}/>
                   }
                 </div>
                 <div className="col s12 m6">

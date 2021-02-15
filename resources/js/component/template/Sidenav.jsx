@@ -112,7 +112,6 @@ class SidenavCMP extends React.Component {
     }
     });
     $('#slide-out').sidenav();
-    
     $('.collapsible').collapsible();
     $('.tooltipped').tooltip();
     $('#modal-upload-file').modal();
@@ -135,37 +134,37 @@ class SidenavCMP extends React.Component {
             <div id="slide-in" className="sidenav">
               <div className="header"><p className="center-align">Notification</p></div>
               {
-                result.notification.length === 0 ? <p className="black-text center-align">No Notification</p>:
+                result.notification.length === 0 ? <p className="black-text center-align" style={{marginTop: 100}}>Not Have Notification</p>:
                 <React.Fragment>
-                <ul className="collection">
+                <ul className="collection list-notification">
                 {
                   result.notification.map((data, key) => {
                     return(
                       <React.Fragment key={key}>
                       {
                         data.type == 'subscribe' ?
-                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer black-text': 'collection-item avatar pointer grey lighten-3 black-text'}>
                             <i className="material-icons circle red">subscriptions</i>
-                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Subscriptions</span>
-                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                            <span className="title">Subscriptions</span>
+                            <p>{data.message}</p>
                           </li>
                           :false
                       }
                       {
                         data.type == 'unsubscribe' ?
-                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer black-text': 'collection-item avatar pointer grey lighten-3 black-text'}>
                             <i className="material-icons circle red">unsubscribe</i>
-                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Unsubscribe</span>
-                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                            <span className="title">Unsubscribe</span>
+                            <p>{data.message}</p>
                           </li>
                           :false
                       }
                       {
                         data.type == 'commented' ?
-                          <li className={data.status == 'unread' ? 'collection-item avatar pointer': 'collection-item avatar pointer grey darken-2'}>
+                          <li className={data.status == 'unread' ? 'collection-item avatar pointer black-text': 'collection-item avatar pointer grey lighten-3 black-text'} onContextMenu={this.chooseAction}>
                             <i className="material-icons circle red">comment</i>
-                            <span className={data.status == 'unread' ? 'title black-text': 'title white-text'}>Commented</span>
-                            <p className={data.status == 'unread' ? 'black-text': 'white-text'}>{data.message}</p>
+                            <span className="title">Commented</span>
+                            <p>{data.message}</p>
                           </li>
                           :false
                       }
@@ -175,7 +174,7 @@ class SidenavCMP extends React.Component {
                 }
                 </ul>
                 <div className="action">
-                  <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.nextNotification}>
+                  <a href="#" className="btn waves-effect waves-light teal w-100" onClick={this.nextNotification}>
                     Next
                   </a>
                   <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
@@ -240,13 +239,13 @@ class SidenavCMP extends React.Component {
                   </Link>
                 </li>
                 <li>
-                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/my-favorite">
+                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/me/favorite">
                     <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>favorite</i>
                     My Favorite
                   </Link>
                 </li>
                 <li>
-                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/my-subscribe">
+                  <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/me/subscribe">
                     <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>subscriptions</i>
                     My Subscribe
                   </Link>

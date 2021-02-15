@@ -1,5 +1,5 @@
 body{
-  scroll-behavior: behavior;
+  scroll-behavior: scroll;
 }
 #body{
 	padding-left: 300px;
@@ -20,6 +20,9 @@ body{
 }
 .sidenav-trigger:hover{
     background-color: #00000000 !important;
+}
+.dropdown-content.select-dropdown li{
+  padding: 10px;
 }
 #hover-red div.col.s12 .card-panel:hover{
   background-color: #F44336 !important;

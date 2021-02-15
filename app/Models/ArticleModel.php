@@ -56,18 +56,36 @@ class ArticleModel extends Model
         ];
         return $data;
     }
-    public function onSearch($where = [], $order = [], $search, $paginate)
+    public function onSearch($where = [], $order = [], $search, $paginate, $count = null)
     {
-        $db = \Config\Database::connect();
-        $build = $db->table('app_article');
-        $data = [
-            'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar')
-            ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
-            ->like($this->allowedFields[2], $search)->orLike($this->allowedFields[0], $search)->orLike($this->allowedFields[3], $search)
-            ->paginate($paginate),
-            'total' => $build->where($where)->orderBy($order[0], $order[1])
-            ->like($this->allowedFields[2], $search)->orLike($this->allowedFields[0], $search)->orLike($this->allowedFields[3], $search)->countAllResults()
-        ];
-        return $data;
+        if($count)
+        {
+            $data = [
+                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                    ->join('app_category', 'app_article.category_id = app_category.id')
+                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->paginate($paginate)
+            ];
+            return $data;
+        }
+        else{
+            $db = \Config\Database::connect();
+            $build = $db->table('app_article');
+            $data = [
+                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                    ->join('app_category', 'app_article.category_id = app_category.id')
+                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->paginate($paginate),
+                'total' => $build->where($where)
+                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                    ->join('app_category', 'app_article.category_id = app_category.id')
+                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->countAllResults()
+            ];
+            return $data;
+
+        }
     }
 }

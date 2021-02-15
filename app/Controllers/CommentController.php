@@ -23,13 +23,18 @@ class CommentController extends ResourceController
                 $build = ['total' => $db->table('app_comment')->where('user_id', $check->data->id)->countAllResults()];
                 return $this->respond($build);
             }
-        }else{
-            $data = [
-                'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar')
-                ->join('app_user', 'app_comment.user_id = app_user.id')->orderBy('app_comment.created_at', 'DESC')->paginate(20),
-                'pager' => $this->model->pager->links()
-            ];
-            return $this->respond($data);
+        }
+        if($this->request->getGet('paginate')){
+            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+            if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+                $data = [
+                    'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar')
+                    ->join('app_user', 'app_comment.user_id = app_user.id')->orderBy('app_comment.created_at', 'DESC')
+                    ->where('user_id', $check->data->id)->paginate(20),
+                    'pager' => $this->model->pager->links()
+                ];
+                return $this->respond($data);
+            }
         }
     }
     public function show($id = null)

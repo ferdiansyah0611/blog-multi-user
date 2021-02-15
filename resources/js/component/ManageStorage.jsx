@@ -112,7 +112,8 @@ class ManageStorageCMP extends React.Component {
       let dropzone = new Dropzone(".dropzone", {
         url: BaseUrl + "api/upload-usrfile",
         headers: {
-          Authorization: JSON.parse(account).token
+          Authorization: JSON.parse(account).token,
+          'X-CSRF-TOKEN': document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content')
         },
         paramName: 'file_upload'
       }),
@@ -122,6 +123,9 @@ class ManageStorageCMP extends React.Component {
         M.toast({html: 'Upload Files Successfuly'});
         _this.fetchAPI();
       });
+      dropzone.on('error', (file, message) => {
+        M.toast({html: message, classes: 'red'})
+      })
       this.setState({
         headers: {Authorization: JSON.parse(account).token}
       })

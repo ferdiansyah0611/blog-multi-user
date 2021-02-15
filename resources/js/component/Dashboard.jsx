@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx'
 import Datatables from './tools/Datatables.jsx';
+import Loader from './tools/Loader.jsx';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -26,7 +27,9 @@ class DashboardCMP extends React.Component {
       payment: [],
       statusPay: {},
       order_id: '',
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
+      finishedChartDashboard: false,
+      finishedChartStorage: false,
     }
     this.showStatus = this.showStatus.bind(this)
     this.checkOrderId = this.checkOrderId.bind(this)
@@ -69,7 +72,8 @@ class DashboardCMP extends React.Component {
           };
           var chart = new google.charts.Bar(document.getElementById('chart-statistic'));chart.draw(data, google.charts.Bar.convertOptions(options))
         };
-      }).catch(e => console.log(e))
+        this.setState({finishedChartDashboard: true})
+      })
     }
     const ChartStorage = () => {
       axios.get(`${BaseUrl}api/storage/usage`,{headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
@@ -86,6 +90,7 @@ class DashboardCMP extends React.Component {
           var chart = new google.visualization.PieChart(document.getElementById('chart-storage'));
           chart.draw(data, options);
         }
+        this.setState({finishedChartStorage: true})
       })
     }
     var account = window.localStorage.getItem('account')
@@ -208,9 +213,13 @@ class DashboardCMP extends React.Component {
                       <div className={result.ui.navbar.bg ? "card-image " + result.ui.navbar.bg: "card-image blue"} style={{height: 80}}>   
                         <span className="card-title">Statistic</span>
                       </div>
-                      <div className="card-content overflow-auto">
-                        <div id="chart-statistic" style={{width: '100%',height: 'auto'}}></div>
-                      </div>
+                      {
+                        this.state.finishedChartDashboard ?
+                          <div className="card-content overflow-auto">
+                            <div id="chart-statistic" style={{width: '100%',height: 'auto'}}></div>
+                          </div>
+                        : <Loader/>
+                      }
                       <div className="card-action">
                         <input type="text" className="datepicker" placeholder="Set year"/>
                       </div>
@@ -221,9 +230,13 @@ class DashboardCMP extends React.Component {
                       <div className={result.ui.navbar.bg ? "card-image " + result.ui.navbar.bg: "card-image blue"} style={{height: 80}}>   
                         <span className="card-title">Storage</span>
                       </div>
-                      <div className="card-content overflow-auto">
-                        <div id="chart-storage" style={{width: '100%',height: 'auto'}}></div>
-                      </div>
+                      {
+                        this.state.finishedChartStorage ?
+                          <div className="card-content overflow-auto">
+                            <div id="chart-storage" style={{width: '100%',height: 'auto'}}></div>
+                          </div>
+                        : <Loader/>
+                      }
                       <div className="card-action">
                         <a href="#" id="refresh-chart-storage" className={"btn waves-effect waves-light w-100 center-align lighten-1 " + result.ui.navbar.bg} style={{marginTop:5}}>
                           <span>Refresh</span> <i className="material-icons right">refresh</i>

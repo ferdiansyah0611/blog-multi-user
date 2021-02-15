@@ -44,7 +44,9 @@ class ManageArticleCMP extends React.Component {
     formData.append('image', this.state.create_image)
     axios.post(BaseUrl + 'api/article', formData, {headers: this.state.headers}).then(result => {
       Swal.fire('Successfuly', result.data.message, 'success')
-    }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
+    }).catch(e => {
+      M.toast({html: e.response.data.message, classes: 'red'})
+    })
   }
   fetch() {
     axios.get(BaseUrl + 'api/category', {headers: this.state.headers}).then(result => {
@@ -141,13 +143,13 @@ class ManageArticleCMP extends React.Component {
               </div>
               <div id="tabs-create" className="col s12">
                 <div className="row mt-10px">
-                  <div className="input-field col s12 m6">
+                  <div className="input-field col s12">
                     <input id="last_name" type="text" name="create_title" onChange={this.handle} className="validate"/>
                     <label htmlFor="last_name">Title</label>
                   </div>
                   <div className="col s12 m6">
-                    <select name="create_category_id" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
-                      <option value="Choose your option" disabled>Choose category article</option>
+                    <select name="create_category_id" onChange={this.handle} defaultValue="Choose category" className="browser-default">
+                      <option value="Choose your option" disabled>Category article</option>
                       {
                         this.state.category.map((text, key) => {
                           return(
@@ -157,10 +159,6 @@ class ManageArticleCMP extends React.Component {
                       }
                     </select>
                   </div>
-                  <div className="input-field col s12">
-                    <label>Description</label>
-                    <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
-                  </div>
                   <div className="col s12 m6">
                     <select name="create_status" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
                       <option value="Choose your option" disabled>Choose status article</option>
@@ -168,7 +166,11 @@ class ManageArticleCMP extends React.Component {
                       <option value="archive">Archives</option>
                     </select>
                   </div>
-                  <div className="file-field input-field col s12 m6">
+                  <div className="input-field col s12">
+                    <label>Description</label>
+                    <textarea name="create_description" className="materialize-textarea" onChange={this.handle}/>
+                  </div>
+                  <div className="file-field input-field col s12">
                     <div className="btn">
                       <span>File</span>
                       <input onChange={this.onFileChange} type="file"/>
@@ -182,7 +184,7 @@ class ManageArticleCMP extends React.Component {
                     </div>
                   </div>
                   <div className="col s12">
-                    <button className="btn waves-effect waves-light blue" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>
+                    <button className="btn waves-effect waves-light blue mt-10px" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>
                   </div>
                 </div>
               </div>

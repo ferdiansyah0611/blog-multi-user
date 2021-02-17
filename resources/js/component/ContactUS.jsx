@@ -18,14 +18,16 @@ class ContactUSCMP extends React.Component {
     email: '',
     description: '',
     className: '',
-    classEmail: ''
+    classEmail: '',
+    statusSend: false
   }
   constructor(props){
     super(props)
     this.handle = this.handle.bind(this)
+    this.send = this.send.bind(this)
   }
   componentDidMount(){
-    document.title = 'Contact US'
+    document.title = 'Contact US | Go Blog'
     $('.parallax').parallax();
     if(JSON.parse(window.localStorage.getItem('account'))){
       this.setState({
@@ -35,6 +37,21 @@ class ContactUSCMP extends React.Component {
         classEmail: 'active'
       })
     }
+  }
+  send(e){
+    e.preventDefault()
+    this.setState({statusSend: true})
+    let form = new FormData()
+    form.append('name', this.state.name)
+    form.append('email', this.state.email)
+    form.append('description', this.state.description)
+    axios.post(BaseUrl + 'api/contact-us', form).then(result => {
+      M.toast({html: result.data.message})
+      this.setState({statusSend: false})
+    }).catch(e => {
+      M.toast({html: e.response.data.message, classes: 'red'})
+      this.setState({statusSend: false})
+    })
   }
   handle(event) {
     const target = event.target;
@@ -55,7 +72,7 @@ class ContactUSCMP extends React.Component {
             <div className="card-panel">
               <h5 className="center-align">Contact US</h5>
               <p className="center-align">If you have questions or just want to get in touch, use the form below. We look forward to hearing from you!</p>
-              <form>
+              <form onSubmit={this.send}>
                 <div className="row">
                   <div className="input-field col s12">
                     <i className="material-icons prefix">account_circle</i>
@@ -65,19 +82,18 @@ class ContactUSCMP extends React.Component {
                   <div className="input-field col s12">
                     <i className="material-icons prefix">email</i>
                     <input id="icon_telephone" value={this.state.email} onChange={this.handle} name="email" type="email" className="validate"/>
-                    <label className={this.state.classEmail} htmlFor="icon_telephone">Email</label>
+                    <label htmlFor="icon_telephone">Email</label>
                   </div>
                   <div className="input-field col s12">
                     <i className="material-icons prefix">description</i>
                     <textarea id="icon_prefix2" value={this.state.description} onChange={this.handle} name="description" className="materialize-textarea"></textarea>
-                    <label htmlFor="icon_prefix2">Description</label>
+                    <label className={this.state.classEmail} htmlFor="icon_prefix2">Description</label>
                   </div>
                 </div>
                 <div className="center-align">
-                  <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+                  <button disabled={this.state.statusSend ? true: false} className="btn waves-effect waves-light" type="submit" name="action">Submit
                     <i className="material-icons right">send</i>
                   </button>
-
                 </div>
               </form>
             </div>

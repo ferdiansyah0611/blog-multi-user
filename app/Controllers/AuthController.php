@@ -74,10 +74,29 @@ EOD;
             ];
             $register = $this->auth->register($dataRegister);
             if($register == true){
+                $id = base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000));
                 $avatar->move(WRITEPATH.'uploads/'. $_POST['id']);
+                $this->sendingmail($email, '
+                    <div class="header p-5">
+                        <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
+                        <hr class="divider"/>
+                    </div>
+                    <div style="font-size: 20px;text-align:center;">
+                        <p>Verification Code</p>
+                        <button>'. $id .'</button>
+                    </div>
+                ');
                 $output = [
-                    'message' => 'Successfully Register'
+                    'message' => 'Successfully Register. Please verified code by email to free access Go Blog!'
                 ];
+                $db = \Config\Database::connect();
+                $db->table('app_verification_code')->insert([
+                    'id' => rand(),
+                    'user_id' => $_POST['id'],
+                    'code' => $id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
                 return $this->respond($output, 200);
             } else {
                 $output = [
@@ -104,12 +123,75 @@ EOD;
             $cek_login = $this->auth->cek_login($data['email']);
             if(password_verify($data['password'],$cek_login['password']))
             {
-                $secret_key = $this->privateKey();
+                $verified = \Config\Database::connect()->table('app_verification_code')->where('user_id', $cek_login['id'])->get()->getResult();
+                if(count($verified) == 1)
+                {
+                    foreach ($verified as $key => $value) {
+                        if($value->verified_at !== null)
+                        {
+                            $secret_key = $this->privateKey();
+                            $issuer_claim = "THE_CLAIM";
+                            $audience_claim = "THE_AUDIENCE";
+                            $issuedat_claim = time();
+                            $notbefore_claim = $issuedat_claim + 10;
+                            $expire_claim = $issuedat_claim + 7200;
+                            $token = array(
+                                "iss" => $issuer_claim,
+                                "aud" => $audience_claim,
+                                "iat" => $issuedat_claim,
+                                "nbf" => $notbefore_claim,
+                                "exp" => $expire_claim,
+                                "data" => array(
+                                    'id' => $cek_login['id'],
+                                    'name' => $cek_login['name'],
+                                    'email' => $cek_login['email'],
+                                    'password' => $cek_login['password'],
+                                    'born' => $cek_login['born'],
+                                    'gender' => $cek_login['gender'],
+                                    'location' => $cek_login['location'],
+                                    'role' => $cek_login['role'],
+                                    'type' => $cek_login['type'],
+                                    'bio' => $cek_login['bio'],
+                                    'avatar' => $cek_login['avatar'],
+                                )
+                            );
+                            $token = JWT::encode($token, $secret_key);
+                            $output = [
+                                'status' => 200,
+                                'message' => 'Successfully Login',
+                                "token" => $token,
+                                'csrf_name' => csrf_token(),
+                                'csrf_value' => csrf_hash(),
+                                "data" => array(
+                                    'id' => $cek_login['id'],
+                                    'name' => $cek_login['name'],
+                                    'email' => $cek_login['email'],
+                                    'born' => $cek_login['born'],
+                                    'gender' => $cek_login['gender'],
+                                    'location' => $cek_login['location'],
+                                    'role' => $cek_login['role'],
+                                    'type' => $cek_login['type'],
+                                    'avatar' => $cek_login['avatar'],
+                                ),
+                                "expireAt" => $expire_claim
+                            ];
+                            return $this->respond($output, 200);
+
+                        }
+                        else{
+                            return $this->respond(['message' => 'The email has not verification'], 400);
+                        }
+                    }
+                }
+                else{
+                    return $this->respond(['message' => 'The email has not verification'], 400);
+                }
+                /*$secret_key = $this->privateKey();
                 $issuer_claim = "THE_CLAIM";
                 $audience_claim = "THE_AUDIENCE";
                 $issuedat_claim = time();
                 $notbefore_claim = $issuedat_claim + 10;
-                $expire_claim = $issuedat_claim + 3600;
+                $expire_claim = $issuedat_claim + 7200;
                 $token = array(
                     "iss" => $issuer_claim,
                     "aud" => $audience_claim,
@@ -135,6 +217,8 @@ EOD;
                     'status' => 200,
                     'message' => 'Successfully Login',
                     "token" => $token,
+                    'csrf_name' => csrf_token(),
+                    'csrf_value' => csrf_hash(),
                     "data" => array(
                         'id' => $cek_login['id'],
                         'name' => $cek_login['name'],
@@ -148,7 +232,7 @@ EOD;
                     ),
                     "expireAt" => $expire_claim
                 ];
-                return $this->respond($output, 200);
+                return $this->respond($output, 200);*/
             } else {
                 $output = [
                     'status' => 401,
@@ -187,5 +271,107 @@ EOD;
         }else{
             return $this->respond(['message' => 'Not Valid Tokens'], 401);
         }
+    }
+    public function resetcode()
+    {
+        $db = \Config\Database::connect()->table('app_verification_code');
+        $user = \Config\Database::connect()->table('app_user')->where('email', $this->request->getGet('email'))->get()->getRow();
+        if($user->id)
+        {
+            $result = $db->where('user_id', $user->id)->get()->getResult();
+            if(count($result) == 1)
+            {
+                foreach ($result as $key => $value) {
+                    if($value->verified_at == null || $value->verified_at !== date('Y-m-d'))
+                    {
+                        $id = base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000));
+                        $db->update(['code' => $id, 'verified_at' => null], ['user_id' => $user->id]);
+                        $this->sendingmail($user->email, '
+                            <div class="header p-5">
+                                <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
+                                <hr class="divider"/>
+                            </div>
+                            <div style="font-size: 20px;text-align:center;">
+                                <p>Verification Code</p>
+                                <button>'. $id .'</button>
+                            </div>
+                        ');
+                        return $this->respond(['message' => 'The code has reset. Please check your email']);
+                    }
+                    else{
+                        return $this->respond(['message' => 'The email has verified'], 400);
+                    }
+                }
+            }
+            if(count($result) == 0)
+            {
+                return $this->respond(['message' => 'The code is wrong'], 400);
+            }
+            else{
+                return $this->respond(['message' => 'The email has verified'], 400);
+            }
+
+        }
+    }
+    public function verifiedcode()
+    {
+        $db = \Config\Database::connect()->table('app_verification_code');
+        $result = $db->where('code', $this->request->getGet('code'))->get()->getResult();
+        if(count($result) == 1)
+        {
+            foreach ($result as $key => $value) {
+                if($value->verified_at == null || $value->verified_at !== date('Y-m-d'))
+                {
+                    $db->update(['verified_at' => date('Y-m-d')], ['code' => $this->request->getGet('code')]);
+                    return $this->respond(['message' => 'Thanks you for verification code. Now you can access Go Blog in free.']);
+                }
+                else{
+                    return $this->respond(['message' => 'The email has verified'], 400);
+                }
+            }
+        }
+        if(count($result) == 0)
+        {
+            return $this->respond(['message' => 'The code is wrong'], 400);
+        }
+        else{
+            return $this->respond(['message' => 'The email has verified'], 400);
+        }
+    }
+    public function sendingmail($emls, $msg)
+    {
+        $email = \Config\Services::email();
+        $config['protocol'] = getenv('email.protocol');
+        $config['SMTPHost'] = getenv('email.SMTPHost');
+        $config['SMTPUser'] = getenv('email.SMTPUser');
+        $config['SMTPPass'] = getenv('email.SMTPPass');
+        $config['SMTPPort'] = getenv('email.SMTPPort');
+        $config['mailType'] = getenv('email.mailType');
+        $config['mailPath'] = getenv('email.mailPath');
+        $config['charset']  = getenv('email.charset');
+        $config['wordWrap'] = getenv('email.wordWrap');
+        $config['SMTPCrypto'] = getenv('email.SMTPCrypto');
+        $email->initialize($config);
+
+        $email->setFrom('ferdif9996@gmail.com', 'Go Blog');
+        $email->setTo($emls);
+        $email->setSubject('Go Blog');
+        $email->setMessage($msg);
+        $email->send();
+        return true;
+    }
+    public function sendcontactus()
+    {
+        $this->sendingmail('ferdif9996@gmail.com', '
+            <div class="header p-5">
+                <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
+                <hr class="divider"/>
+            </div>
+            <div style="font-size: 20px;text-align:center;">
+                <p>Contact US from '. $this->request->getPost('name'). ', ' . $this->request->getPost('email') .'</p>
+                <p>'. $this->request->getPost('description') .'</p>
+            </div>
+        ');
+        return $this->respond(['message' => 'Send is successfully']);
     }
 }

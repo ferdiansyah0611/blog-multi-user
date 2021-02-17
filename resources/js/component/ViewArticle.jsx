@@ -41,6 +41,15 @@ class ViewArticleCMP extends React.Component {
     this.handle = this.handle.bind(this)
   }
   componentDidMount(){
+    /*facebook sdk*/
+    (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    
     window.scrollTo(0,0)
     $('#modal-report').modal();
     this.fetchAPI()
@@ -211,7 +220,7 @@ class ViewArticleCMP extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col s12 m8">
+          <div className="col s12">
             <div className="card-panel">
             {
               this.state.finishedArticle ?
@@ -269,8 +278,9 @@ class ViewArticleCMP extends React.Component {
             }
             </div>
           </div>
-          <div className="col s12 m4">
-            <ul className="collection" style={{maxHeight: 700}}>
+          <div className="col s12">
+            <h5>Comment</h5>
+            <ul className="collection" style={{maxHeight: 500, overflow: 'auto'}}>
             {
               this.state.finishedComment ?
               <React.Fragment>

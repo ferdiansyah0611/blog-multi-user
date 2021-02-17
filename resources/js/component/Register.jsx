@@ -51,33 +51,9 @@ class RegisterCMP extends React.Component {
   onFileChange(event) { 
     this.setState({ avatar: event.target.files[0] }); 
   }
-  componentWillUnmount(){
-    this.context.setState({
-      name: 'ui',
-      value: {
-        navbar: this.context.ui.navbar,
-        sidebar: this.context.ui.sidebar,
-        footer: {
-          bg: this.context.ui.footer.bg,
-          status: true
-        }
-      }
-    })
-  }
   componentDidMount(){
     document.title = 'Register | Go Blog'
     $('input.len').characterCounter();
-    this.context.setState({
-      name: 'ui',
-      value: {
-        navbar: this.context.ui.navbar,
-        sidebar: this.context.ui.sidebar,
-        footer: {
-          bg: this.context.ui.footer.bg,
-          status: false
-        }
-      }
-    })
   }
   handle(event) {
     const target = event.target;

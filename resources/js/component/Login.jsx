@@ -24,33 +24,9 @@ class LoginCMP extends React.Component{
     this.actionLogin = this.actionLogin.bind(this)
     this.handle = this.handle.bind(this)
   }
-  componentWillUnmount(){
-    this.context.setState({
-      name: 'ui',
-      value: {
-        navbar: this.context.ui.navbar,
-        sidebar: this.context.ui.sidebar,
-        footer: {
-          bg: this.context.ui.footer.bg,
-          status: true
-        }
-      }
-    })
-  }
   componentDidMount(){
     document.title = 'Login | Go Blog'
     $('input.counter').characterCounter();
-    this.context.setState({
-      name: 'ui',
-      value: {
-        navbar: this.context.ui.navbar,
-        sidebar: this.context.ui.sidebar,
-        footer: {
-          bg: this.context.ui.footer.bg,
-          status: false
-        }
-      }
-    })
   }
   actionLogin(e){
     this.setState({process: true})
@@ -114,7 +90,7 @@ class LoginCMP extends React.Component{
                       </div>
                       <div className="col s12 left-align">
                         <button disabled={this.state.process ? true:false} type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>
-                        <p style={{marginTop:25}}><Link to="/register">Reset Password</Link></p>
+                        <p style={{marginTop:25}}><Link to="/register">Reset Password</Link><Link className="ml-10px" to="/verification">Verification Code</Link></p>
                         <div className="divider"/>
                         <p>Don't have a account ? <Link to="/register">Create Now</Link></p>
                       </div>

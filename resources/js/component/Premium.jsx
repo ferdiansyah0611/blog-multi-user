@@ -106,7 +106,7 @@ const PremiumCMP = (props) => {
                         </label>
                       </p>
                     </div>
-                    <button disabled={result.users.type && result.users.type !== 0 ? true: false} className="btn blue waves-effect waves-light w-100" data-type="1" onClick={pay}>Rp. 49.000</button>
+                    <button disabled={result.users.type && result.users.type !== 0 ? false: true} className="btn blue waves-effect waves-light w-100" data-type="1" onClick={pay}>Rp. 49.000</button>
                   </div>
                 </div>
                 <div className="col s12 m3" style={{padding:0}}>
@@ -158,7 +158,7 @@ const PremiumCMP = (props) => {
                         </label>
                       </p>
                     </div>
-                    <button disabled={result.users.type && result.users.type !== 0 ? true: false} className="btn blue waves-effect waves-light w-100" data-type="2" onClick={pay}>Rp. 156.000</button>
+                    <button disabled={result.users.type && result.users.type !== 0 ? false: true} className="btn blue waves-effect waves-light w-100" data-type="2" onClick={pay}>Rp. 156.000</button>
                   </div>
                 </div>
                 <div className="col s12 m3" style={{padding:0}}>
@@ -209,7 +209,7 @@ const PremiumCMP = (props) => {
                         </label>
                       </p>
                     </div>
-                    <button disabled={result.users.type && result.users.type !== 0 ? true: false} className="btn blue waves-effect waves-light w-100" data-type="3" onClick={pay}>Rp. 200.000</button>
+                    <button disabled={result.users.type && result.users.type !== 0 ? false: true} className="btn blue waves-effect waves-light w-100" data-type="3" onClick={pay}>Rp. 200.000</button>
                   </div>
                 </div>
                 <div className="col s12 m3" style={{padding:0}}>
@@ -260,7 +260,7 @@ const PremiumCMP = (props) => {
                         </label>
                       </p>
                     </div>
-                    <button disabled={result.users.type && result.users.type !== 0 ? true: false} className="btn blue waves-effect waves-light w-100" data-type="4" onClick={pay}>Rp. 300.000</button>
+                    <button disabled={result.users.type && result.users.type !== 0 ? false: true} className="btn blue waves-effect waves-light w-100" data-type="4" onClick={pay}>Rp. 300.000</button>
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import BreadCrumb from './tools/BreadCrumb.jsx'
 
 class PopularCMP extends React.Component{
   componentDidMount(){
-    document.title = 'Popular Article'
+    document.title = 'Popular | Go Blog'
   }
   render(){
     return(

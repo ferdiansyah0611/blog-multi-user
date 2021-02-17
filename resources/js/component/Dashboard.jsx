@@ -126,7 +126,10 @@ class DashboardCMP extends React.Component {
   checkOrderId(e){
     this.state.order_id.length > 1 ?
     axios.get(`${BaseUrl}api/pay/check/${this.state.order_id}`, {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
-      result.data.status === 200 ? Swal.fire('Successfuly',result.data.message,'success'): Swal.fire('Warning',result.data.message,'warning')
+      if(result.data.status === 200){
+        Swal.fire('Successfuly',result.data.message,'success');this.context.getMount()
+      }
+      else Swal.fire('Warning',result.data.message,'warning')
     })
     :''
   }

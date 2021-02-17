@@ -115,3 +115,23 @@ database.default.DBDriver = MySQLi
 # security.regenerate = true
 # security.redirect   = true
 # security.samesite   = 'Lax'
+
+#--------------------------------------------------------------------
+# Email
+#--------------------------------------------------------------------
+
+# email.protocol = 
+# email.SMTPHost = 
+# email.SMTPUser = 
+# email.SMTPPass = 
+# email.SMTPPort = 
+# email.mailType = html
+# email.mailPath = /usr/sbin/sendmail
+# email.charset = iso-8859-1
+# email.wordWrap = true
+# email.SMTPCrypto = tls
+
+#--------------------------------------------------------------------
+# Midtrans
+#--------------------------------------------------------------------
+# midtrans.serverKey = 

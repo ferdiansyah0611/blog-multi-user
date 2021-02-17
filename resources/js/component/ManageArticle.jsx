@@ -66,7 +66,7 @@ class ManageArticleCMP extends React.Component {
     });
   }
   componentDidMount() {
-    document.title = 'Manage Article'
+    document.title = 'Manage Article | Go Blog'
     var account = window.localStorage.getItem('account')
     if(account){
       this.setState({

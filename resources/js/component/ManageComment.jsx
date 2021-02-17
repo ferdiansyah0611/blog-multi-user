@@ -18,28 +18,11 @@ class ManageCommentCMP extends React.Component {
     super(props)
     this.state = {
       redirect: '',
-      headers: {}
     }
   }
   componentDidMount() {
-    document.title = 'Manage Comment'
+    document.title = 'Manage Comment | Go Blog'
     var account = window.localStorage.getItem('account')
-    if(account){
-      this.setState({
-        headers: {Authorization: JSON.parse(account).token}
-      })
-    }
-    $(document).ready(function(){
-      $('.tabs').tabs();$('select').formSelect();$('.modal').modal();
-    });
-    document.querySelectorAll('th').forEach((text, key) => {
-      text.addEventListener('click', e => {
-        if(e.target.classList.contains('ordered')){
-
-        }
-      })
-    });
-    
   }
   render() {
     if(this.state.redirect || !window.localStorage.getItem('account')) {

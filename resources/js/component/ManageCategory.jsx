@@ -32,7 +32,7 @@ class ManageCategoryCMP extends React.Component {
       name: this.state.create_name,
       description: this.state.create_description
     }
-    axios.post(BaseUrl + 'api/category', data, {headers: this.state.headers}).then(result => {
+    axios.post(BaseUrl + 'api/category', data).then(result => {
       Swal.fire('Success',result.data.message,'success')
     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
   }
@@ -46,22 +46,7 @@ class ManageCategoryCMP extends React.Component {
     });
   }
   componentDidMount() {
-    document.title = 'Manage Category'
-    var account = window.localStorage.getItem('account')
-    if(account){
-      this.setState({
-        headers: {Authorization: JSON.parse(account).token}
-      })
-    }
-    $(document).ready(function(){
-      $('.tabs').tabs();$('select').formSelect();$('.modal').modal();
-    });
-    document.querySelectorAll('th').forEach((text, key) => {
-      text.addEventListener('click', e => {
-        if(e.target.classList.contains('ordered')){
-        }
-      })
-    });
+    document.title = 'Manage Category | Go Blog'
   }
   render() {
     if(this.state.redirect || !window.localStorage.getItem('account')) {

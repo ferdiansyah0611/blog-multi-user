@@ -44,7 +44,7 @@ class ManageStorageCMP extends React.Component {
       for (var i = 0; i < this.state.file_upload.length; i++) {
         var formData = new FormData()
         formData.append('file_upload', this.state.file_upload[i])
-        axios.post(`${BaseUrl}api/upload-usrfile`, formData, {headers: this.state.headers}).then(result => {
+        axios.post(`${BaseUrl}api/upload-usrfile`, formData).then(result => {
           this.setState({file_upload: ''})
           Swal.fire('Successfuly',result.data.message,'success');
           this.fetchAPI()
@@ -105,7 +105,7 @@ class ManageStorageCMP extends React.Component {
     this.setState({ file_upload: event.target.files }); 
   }
   componentDidMount(){
-    document.title = 'Manage Storage'
+    document.title = 'Manage Storage | Go Blog'
     $('#modal-preview').modal();
     var account = window.localStorage.getItem('account')
     if(account){

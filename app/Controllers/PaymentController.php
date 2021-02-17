@@ -5,7 +5,7 @@ use App\Controllers\AuthController;
 
 require_once APPPATH . 'ThirdParty/Midtrans/Midtrans.php';
 
-\Midtrans\Config::$serverKey = 'SB-Mid-server-rvSjxE1VujIDkQSJilHOrCa9';
+\Midtrans\Config::$serverKey = getenv('midtrans.serverKey');
 \Midtrans\Config::$isProduction = false;
 \Midtrans\Config::$isSanitized = true;
 \Midtrans\Config::$is3ds = true;

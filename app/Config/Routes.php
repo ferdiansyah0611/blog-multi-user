@@ -35,8 +35,11 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->group('api', function($routes)
 {
+	$routes->get('verified-email', 'AuthController::verifiedcode');
+	$routes->get('reset-code', 'AuthController::resetcode');
 	$routes->post('login', 'AuthController::login');
 	$routes->post('register', 'AuthController::register');
+	$routes->post('contact-us', 'AuthController::sendcontactus');
     $routes->add('list', 'Admin\Users::list');
 	$routes->resource('article', ['controller' => 'ArticleController']);
 	$routes->resource('article-subscribe', ['controller' => 'ArticleSubscribe']);
@@ -52,6 +55,7 @@ $routes->group('api', function($routes)
 	$routes->get('dashboard/(:num)', 'UserController::dashboard/$1');
 	$routes->get('usrfile/(:num)/(:any)', 'FileController::index/$1/$2');
 	$routes->post('upload-usrfile', 'FileController::upload');
+	$routes->get('search/article', 'ArticleController::search');
 	$routes->get('search/category', 'CategoryController::search');
 	$routes->get('search/comment', 'CommentController::search');
 	$routes->get('article-category/(:num)', 'ArticleController::category/$1');

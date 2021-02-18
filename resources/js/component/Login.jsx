@@ -43,9 +43,7 @@ class LoginCMP extends React.Component{
       }
     }).catch(e => {
       this.setState({process: false})
-      if(e.response.status === 403 || e.response.status === 401){
-        M.toast({html: e.response.data.message, classes: 'red'})
-      }
+      M.toast({html: e.response.data.message, classes: 'red'})
     })
   }
   handle(event) {
@@ -64,40 +62,39 @@ class LoginCMP extends React.Component{
       <React.Fragment>
       <div className="row">
         <div className="col s12 m8 offset-m2 l6 offset-l3">
-          <div className="card">
+          <div className="card" style={this.state.successLogin ? {marginBottom: 220}: {}}>
             <div className="card-content">
             {
               this.state.process ? <div className="progress"><div className="indeterminate"></div></div>:''
             }
-              
-              {
-                this.state.successLogin ? <p className="center-align mt-10px">Please Wait A Moment...</p>:
-                <React.Fragment>
-                  <h6>Login Account</h6>
-                  <form onSubmit={this.actionLogin}>
-                    <div className="row">
-                      <div className="input-field col s12">
-                        <i className="material-icons prefix">email</i>
-                        <input disabled={this.state.process ? true:false} name="email" id="icon_prefix" type="email" className="validate counter" value={this.state.email} onChange={this.handle} data-length="50" />
-                        <label htmlFor="icon_prefix" className={this.state.process  || this.state.email.length >= 1 ? 'active':''}>Email</label>
-                        <span className="helper-text" data-error="Invalid Email" data-success="OK">* Required</span>
-                      </div>
-                      <div className="input-field col s12">
-                        <i className="material-icons prefix">vpn_key</i>
-                        <input disabled={this.state.process ? true:false} name="password" id="icon_telephone" type="password" className="validate counter" value={this.state.password} onChange={this.handle} data-length="20" />
-                        <label htmlFor="icon_telephone" className={this.state.process || this.state.password.length >= 1 ? 'active':''}>Password</label>
-                        <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
-                      </div>
-                      <div className="col s12 left-align">
-                        <button disabled={this.state.process ? true:false} type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>
-                        <p style={{marginTop:25}}><Link to="/register">Reset Password</Link><Link className="ml-10px" to="/verification">Verification Code</Link></p>
-                        <div className="divider"/>
-                        <p>Don't have a account ? <Link to="/register">Create Now</Link></p>
-                      </div>
+            {
+              this.state.successLogin ? <p className="center-align mt-10px">Please Wait A Moment...</p>:
+              <React.Fragment>
+                <h6>Login Account</h6>
+                <form onSubmit={this.actionLogin}>
+                  <div className="row">
+                    <div className="input-field col s12">
+                      <i className="material-icons prefix">email</i>
+                      <input disabled={this.state.process ? true:false} name="email" id="icon_prefix" type="email" className="validate counter" value={this.state.email} onChange={this.handle} data-length="50" />
+                      <label htmlFor="icon_prefix" className={this.state.process  || this.state.email.length >= 1 ? 'active':''}>Email</label>
+                      <span className="helper-text" data-error="Invalid Email" data-success="OK">* Required</span>
                     </div>
-                  </form>
-                </React.Fragment>
-              }
+                    <div className="input-field col s12">
+                      <i className="material-icons prefix">vpn_key</i>
+                      <input disabled={this.state.process ? true:false} name="password" id="icon_telephone" type="password" className="validate counter" value={this.state.password} onChange={this.handle} data-length="20" />
+                      <label htmlFor="icon_telephone" className={this.state.process || this.state.password.length >= 1 ? 'active':''}>Password</label>
+                      <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
+                    </div>
+                    <div className="col s12 left-align">
+                      <button disabled={this.state.process ? true:false} type="submit" className="btn waves-effect waves-light w-100 blue">Login</button>
+                      <p style={{marginTop:25}}><Link to="/reset">Reset Password</Link><Link className="ml-10px" to="/verification">Verification Code</Link></p>
+                      <div className="divider"/>
+                      <p>Don't have a account ? <Link to="/register">Create Now</Link></p>
+                    </div>
+                  </div>
+                </form>
+              </React.Fragment>
+            }
             </div>
           </div>
         </div>

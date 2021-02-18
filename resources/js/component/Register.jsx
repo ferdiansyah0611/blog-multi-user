@@ -21,7 +21,6 @@ class RegisterCMP extends React.Component {
       password: '',
       location: '',
       gender: 'male',
-      born: '',
       avatar: '',
       redirect: '',
       process: false
@@ -37,15 +36,14 @@ class RegisterCMP extends React.Component {
     Object.getOwnPropertyNames(this.state).forEach((name) => {
       formData.append(name, this.state[name])
     })
+    formData.append('born', $('input[name="born"]').val())
     axios.post(`${BaseUrl}api/register`, formData).then(result => {
       this.setState({process: false})
       M.toast({html: 'Please Wait A Moment...'})
       this.setState({redirect: '/login'});
     }).catch(e => {
       this.setState({process: false})
-      if(e.response.status === 403){
-        M.toast({html: e.response.data.message, classes: 'red'})
-      }
+      M.toast({html: e.response.data.message, classes: 'red'})
     })
   }
   onFileChange(event) { 
@@ -54,6 +52,7 @@ class RegisterCMP extends React.Component {
   componentDidMount(){
     document.title = 'Register | Go Blog'
     $('input.len').characterCounter();
+    $('.datepicker').datepicker();
   }
   handle(event) {
     const target = event.target;
@@ -125,8 +124,7 @@ class RegisterCMP extends React.Component {
                     </ContextDATA.Consumer>
                   </div>
                   <div className="input-field col s12">
-                    <i className="material-icons prefix">date_range</i>
-                    <input type="date" name="born" className="datepicker" onKeyUp={this.handle}/>
+                    <input type="text" name="born" className="datepicker"/>
                     <label className="active">Born</label>
                   </div>
                   <div className="file-field input-field col s12">

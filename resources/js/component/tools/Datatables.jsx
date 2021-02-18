@@ -18,6 +18,7 @@ class Datatables extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      table_id: 'id-' + Math.floor(Math.random() * 1100),
       id: '',
       status: '',
       title: '',
@@ -28,7 +29,9 @@ class Datatables extends React.Component {
       redirect: '',
       paginate: 1,
       headers: {},
-      finished: false
+      finished: false,
+      order_by: 'id',
+      order_status: false,/*false: asc,true: desc*/
     }
     this.rightClick = this.rightClick.bind(this)
     this.nextData = this.nextData.bind(this)
@@ -42,7 +45,12 @@ class Datatables extends React.Component {
     e.preventDefault()
   }
   nextData(e){
-    axios.get(`${this.props.url.default}?paginate=25&page=${this.state.paginate + 1}`, {headers: this.state.headers}).then(result => {
+    let url = `${this.props.url.default}?paginate=25&page=${this.state.paginate + 1}`;
+    axios.get(url + `&order_by=${this.state.order_by}&order_status=${this.state.order_status}`,
+      {
+        headers: this.state.headers
+      })
+    .then(result => {
       if(result.data.data.length >= 1){
         this.setState({
           data: [...this.state.data, ...result.data.data],
@@ -165,8 +173,9 @@ class Datatables extends React.Component {
       url = url + '?paginate=25&page=' + this.state.paginate;
     }
     if(account){
-      this.setState({headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}})
-      await axios.get(url, {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
+      this.setState({headers: {Authorization: JSON.parse(account).token}})
+      await axios.get(url  + `&order_by=${this.state.order_by}&order_status=${this.state.order_status}`,
+        {headers: {Authorization: JSON.parse(account).token}}).then(result => {
         if(this.props.paginate){
           this.setState({
             data: result.data.data,
@@ -178,7 +187,7 @@ class Datatables extends React.Component {
             finished: true
           })
         }
-      }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
+      }).catch(e => console.error(e))
       var form = this.props.form.reduce(function(res, item, index, array) {
         res[item] = '';
         return res
@@ -190,6 +199,36 @@ class Datatables extends React.Component {
   }
   componentDidMount() {
     this.loadData()
+    let _this = this
+    document.querySelectorAll(`#${this.state.table_id} th`).forEach((data, key) => {
+      data.addEventListener('click', async e => {
+        _this.setState({order_by: e.target.dataset.name})
+        let account = window.localStorage.getItem('account'),
+        url = this.props.url.default;
+        if(this.props.paginate){
+          url = url + '?paginate=25&page=' + this.state.paginate;
+        }
+        if(account){
+          this.setState({headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}})
+          await axios.get(url + `&order_by=${e.target.dataset.name}&order_status=${this.state.order_status}`,
+            {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
+            if(this.props.paginate){
+              this.setState({
+                data: result.data.data,
+                finished: true
+              })
+            }else{
+              this.setState({
+                data: result.data,
+                finished: true
+              })
+            }
+          }).catch(e => console.error(e))
+        }else{
+          this.setState({redirect: '/login'})
+        }
+      })
+    })
     var tiny = new tinymce.Editor('edit-content', {
       plugins: [
         'advlist autolink link image lists charmap print preview hr anchor pagebreak',
@@ -205,6 +244,9 @@ class Datatables extends React.Component {
       menubar: 'favs file edit view insert format tools table help',
     }, tinymce.EditorManager);
     tiny.render();
+    $(document).ready(() => {
+      $('.modal').modal();
+    })
   }
   render() {
     if(this.state.redirect) {
@@ -227,14 +269,24 @@ class Datatables extends React.Component {
               </div>
             :''
           }
+          <div className="col s12">
+            <div className="switch">
+              <label>
+                Asc
+                <input name="order_status" type="checkbox" onChange={this.handle}/>
+                <span className="lever"></span>
+                Desc
+              </label>
+            </div>
+          </div>
         </div>
-        <table className="responsive-table highlight">
+        <table className="responsive-table highlight" id={this.state.table_id}>
           <thead>
             <tr>
             {
               this.props.heading.map((text, key) => {
                 return(
-                  <th key={key} className="pointer">{text}</th>
+                  <th data-name={this.props.td[key]} key={key} className="pointer">{text}</th>
                 )
               })
             }
@@ -256,7 +308,12 @@ class Datatables extends React.Component {
                 {
                   this.props.td.map((datatd, keytd) => {
                     return(
-                      <td className={'row-' + datatd} data-id={text.id} onContextMenu={this.rightClick} key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}</td>
+                      <td
+                        className={'row-' + datatd}
+                        data-id={text.id}
+                        onContextMenu={this.rightClick}
+                        key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}
+                      </td>
                     )
                   })
                 }
@@ -264,7 +321,13 @@ class Datatables extends React.Component {
                   this.props.editable ?
                   <React.Fragment>
                     <td>
-                        <button type="button" data-id={text.id} className="btn blue" onClick={this.editing}><i data-id={text.id} className="material-icons">edit</i></button>
+                        <button
+                          type="button"
+                          data-id={text.id}
+                          className="btn blue"
+                          onClick={this.editing}>
+                          <i data-id={text.id} className="material-icons">edit</i>
+                        </button>
                     </td>
                     <td>
                       <label>
@@ -288,7 +351,12 @@ class Datatables extends React.Component {
           this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
         }
         {
-          this.props.paginate ? <p className="center-align"><button className="btn waves-effect waves-light blue mt-10px" onClick={this.nextData}>Load More<i className="material-icons right">expand_more</i></button></p>:''
+          this.props.paginate ?
+            <p className="center-align">
+              <button className="btn waves-effect waves-light blue mt-10px" onClick={this.nextData}>Load More
+                <i className="material-icons right">expand_more</i>
+              </button>
+            </p>:''
         }
         <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
           <div className="modal-content">
@@ -302,7 +370,8 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'text' ?
                     <div className="input-field col s12">
-                      <input placeholder="Name" id="last_name" type="text" className="validate" name={text} value={this.state[text] || ''} onChange={this.handle}/>
+                      <input placeholder="Name"
+                        type="text" className="validate" name={text} value={this.state[text] || ''} onChange={this.handle}/>
                       <label className="active" htmlFor="email">{text}</label>
                     </div>
                   : false
@@ -310,7 +379,14 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'number' ?
                     <div className="input-field col s12">
-                      <input placeholder="Name" id="last_name" type="number" className="validate" name={text} value={this.state[text] || ''} onChange={this.handle}/>
+                      <input
+                        placeholder="Name"
+                        type="number"
+                        className="validate"
+                        name={text}
+                        value={this.state[text] || ''}
+                        onChange={this.handle}
+                      />
                       <label className="active" htmlFor="email">{text}</label>
                     </div>
                   : false
@@ -318,7 +394,15 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'text-disabled' ?
                     <div className="input-field col s12">
-                      <input placeholder="Name" id="last_name" type="text" className="validate" name={text} defaultValue={this.state[text] || ''} onChange={this.handle} disabled/>
+                      <input
+                        placeholder="Name"
+                        type="text"
+                        className="validate"
+                        name={text}
+                        defaultValue={this.state[text] || ''}
+                        onChange={this.handle}
+                        disabled
+                      />
                       <label className="active" htmlFor="email">{text}</label>
                     </div>
                   : false
@@ -326,7 +410,15 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'number-disabled' ?
                     <div className="input-field col s12">
-                      <input placeholder="Name" id="last_name" type="number" className="validate" name={text} defaultValue={this.state[text] || ''} onChange={this.handle} disabled/>
+                      <input
+                        placeholder="Name"
+                        type="number"
+                        className="validate"
+                        name={text}
+                        defaultValue={this.state[text] || ''}
+                        onChange={this.handle}
+                        disabled
+                      />
                       <label className="active" htmlFor="email">{text}</label>
                     </div>
                   : false
@@ -362,7 +454,12 @@ class Datatables extends React.Component {
             </div>
           </div>
           <div className="modal-footer">
-            <button className="btn waves-effect waves-light blue" onClick={this.updating}>Submit<i className="material-icons right">send</i></button>
+            <button
+              className="btn waves-effect waves-light blue"
+              onClick={this.updating}>
+              Submit
+              <i className="material-icons right">send</i>
+            </button>
           </div>
         </div>
       </React.Fragment>

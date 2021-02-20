@@ -11,6 +11,7 @@ import Loader from './tools/Loader.jsx';
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
+import Config from '../Config'
 /*context*/
 import ContextDATA from '../ContextDATA';
 
@@ -118,14 +119,14 @@ class DashboardCMP extends React.Component {
     }
   }
   showStatus(e){
-    axios.get(`${BaseUrl}api/pay/status/${e.target.dataset.id}`, {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
+    axios.get(`${BaseUrl}api/pay/status/${e.target.dataset.id}`).then(result => {
       this.setState({statusPay: result.data})
       $('#modal-show-status').modal('open')
     })
   }
   checkOrderId(e){
     this.state.order_id.length > 1 ?
-    axios.get(`${BaseUrl}api/pay/check/${this.state.order_id}`, {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
+    axios.get(`${BaseUrl}api/pay/check/${this.state.order_id}`).then(result => {
       if(result.data.status === 200){
         Swal.fire('Successfuly',result.data.message,'success');this.context.getMount()
       }
@@ -180,28 +181,28 @@ class DashboardCMP extends React.Component {
           <React.Fragment>
             <div className="row">
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
+                <div className={result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>notes</i>
                   <h6 style={{marginTop:0}}>Article</h6>
                   <p><b>{this.state.totalArticle}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
+                <div className={result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>comment</i>
                   <h6 style={{marginTop:0}}>Comment</h6>
                   <p><b>{this.state.totalComment}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
+                <div className={result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>favorite</i>
                   <h6 style={{marginTop:0}}>Favorite</h6>
                   <p><b>{this.state.totalFavorite}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
+                <div className={result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>subscriptions</i>
                   <h6 style={{marginTop:0}}>Subscriber</h6>
                   <p><b>{this.state.totalSubscribe}</b></p>
@@ -241,8 +242,14 @@ class DashboardCMP extends React.Component {
                         : <Loader/>
                       }
                       <div className="card-action">
-                        <a href="#" id="refresh-chart-storage" className={"btn waves-effect waves-light w-100 center-align lighten-1 " + result.ui.navbar.bg} style={{marginTop:5}}>
-                          <span>Refresh</span> <i className="material-icons right">refresh</i>
+                        <a
+                          href="#"
+                          id="refresh-chart-storage"
+                          className={"btn waves-effect waves-light w-100 center-align lighten-1 " + result.ui.navbar.bg} 
+                          style={{marginTop:5}}
+                        >
+                          <span>Refresh</span>
+                          <i className="material-icons right">refresh</i>
                         </a>
                       </div>
                     </div>
@@ -254,17 +261,36 @@ class DashboardCMP extends React.Component {
                   <div className="card-image waves-effect waves-block waves-light">
                     {
                       result.ui.sidebar.cover ? <img className="activator" src={result.ui.sidebar.cover} alt="user background"/>:
-                      <img className="activator" src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=300&q=60" alt="user background"/>
+                      <img className="activator" src={Config.sidebar.cover} alt="user background"/>
                     }
                   </div>
                   <div className="card-content">
                     {
-                      result.users.avatar ? <img src={BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar} alt="" className="circle responsive-img activator profile-image"/>:''
+                      result.users.avatar ?
+                      <img
+                        src={BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar}
+                        alt=""
+                        className="circle responsive-img activator profile-image"
+                      />
+                      :''
                     }
-                    <p className="col s12"><span className="left">Name</span><span className="right">{result.users.name}</span></p>
-                    <p className="col s12"><span className="left">Email</span><span className="right">{result.users.email}</span></p>
-                    <p className="col s12"><span className="left">Location</span><span className="right">{result.users.location}</span></p>
-                    <Link to={"/profile/" + result.users.id} className={"btn waves-effect waves-light w-100 center-align lighten-1 " + result.ui.navbar.bg} style={{marginTop:5}}>
+                    <p className="col s12">
+                      <span className="left">Name</span>
+                      <span className="right">{result.users.name}</span>
+                    </p>
+                    <p className="col s12">
+                      <span className="left">Email</span>
+                      <span className="right">{result.users.email}</span>
+                    </p>
+                    <p className="col s12">
+                      <span className="left">Location</span>
+                      <span className="right">{result.users.location}</span>
+                    </p>
+                    <Link
+                      to={"/profile/" + result.users.id}
+                      className={"btn waves-effect waves-light w-100 center-align lighten-1 " + result.ui.navbar.bg}
+                      style={{marginTop:5}}
+                    >
                       <span>Go to profile</span> <i className="material-icons right">send</i>
                     </Link>
                   </div>
@@ -275,10 +301,9 @@ class DashboardCMP extends React.Component {
                   <div className={result.ui.navbar.bg ? "card-image " + result.ui.navbar.bg: "card-image blue"} style={{height: 80}}>   
                     <span className="card-title">Payment</span>
                   </div>
-                  <div className="card-content">
+                  <div className="card-content" style={{maxHeight: '161.5px',overflow: 'auto'}}>
                     {
                       this.state.payment.length === 0 ? <p className="center-align" style={{marginTop:30}}>Not have a payment</p>:
-                      <div style={{maxHeight:400, overflow: 'auto'}}>
                       <table className="highlight">
                         <thead>
                           <tr>
@@ -303,7 +328,6 @@ class DashboardCMP extends React.Component {
                           }
                         </tbody>
                       </table>
-                      </div>
                     }
                   </div>
                   <div className="card-action">
@@ -314,7 +338,7 @@ class DashboardCMP extends React.Component {
               </div>
               <div className="col s12">
                 <div className="card">
-                  <div className={result.ui.navbar.bg ? "card-image " + result.ui.navbar.bg: "card-image blue"} style={{height: 80}}>   
+                  <div className={"card-image " + result.ui.navbar.bg} style={{height: 80}}>   
                     <span className="card-title">My Article</span>
                   </div>
                   <div className="card-content overflow-auto">

@@ -48,12 +48,6 @@ class ManageArticleCMP extends React.Component {
       M.toast({html: e.response.data.message, classes: 'red'})
     })
   }
-  fetch() {
-    axios.get(BaseUrl + 'api/category', {headers: this.state.headers}).then(result => {
-      var data = result.data
-      this.setState({category: data})
-    }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
-  }
   onFileChange(event) {
     this.setState({ create_image: event.target.files[0] }); 
   };
@@ -72,10 +66,9 @@ class ManageArticleCMP extends React.Component {
       this.setState({
         headers: {Authorization: JSON.parse(account).token}
       })
-      this.fetch()
-      $(document).ready(function(){
-        $('.tabs').tabs();$('select').formSelect();$('.modal').modal();
-      });
+      $(document).ready(() => {
+        $('.tabs').tabs();$('select').formSelect();
+      })
       var tiny = new tinymce.Editor('content-add', {
         plugins: [
           'advlist autolink link image lists charmap print preview hr anchor pagebreak',
@@ -148,16 +141,22 @@ class ManageArticleCMP extends React.Component {
                     <label htmlFor="last_name">Title</label>
                   </div>
                   <div className="col s12 m6">
-                    <select name="create_category_id" onChange={this.handle} defaultValue="Choose category" className="browser-default">
-                      <option value="Choose your option" disabled>Category article</option>
-                      {
-                        this.state.category.map((text, key) => {
-                          return(
-                            <option key={key} value={text.id}>{text.name}</option>
-                          )
-                        })
-                      }
-                    </select>
+                  <ContextDATA.Consumer>
+                  {
+                    result => (
+                      <select name="create_category_id" onChange={this.handle} defaultValue="Choose category" className="browser-default">
+                        <option value="Choose your option" disabled>Category article</option>
+                        {
+                          result.category.map((text, key) => {
+                            return(
+                              <option key={key} value={text.id}>{text.name}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    )
+                  }
+                  </ContextDATA.Consumer>
                   </div>
                   <div className="col s12 m6">
                     <select name="create_status" onChange={this.handle} defaultValue="Choose your option" className="browser-default">
@@ -173,7 +172,7 @@ class ManageArticleCMP extends React.Component {
                   <div className="file-field input-field col s12">
                     <div className="btn">
                       <span>File</span>
-                      <input onChange={this.onFileChange} type="file"/>
+                      <input onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
                     </div>
                     <div className="file-path-wrapper">
                       <input className="file-path validate" type="text" placeholder="Upload Image Files"/>

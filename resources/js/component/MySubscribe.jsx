@@ -85,7 +85,6 @@ class MySubscribeCMP extends React.Component{
     return(
       <React.Fragment>
       <BreadCrumb data={[{url: '/my-subscribe', str: 'My Subscribe'}]} />
-        <h5 className="ml-10px">My Subscribe</h5>
         <ContextDATA.Consumer>
         {
           result => (

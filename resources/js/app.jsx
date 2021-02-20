@@ -10,9 +10,9 @@ import {
   useHistory,
   HashRouter
 } from "react-router-dom";
-import axios from 'axios';
 import Config from './Config';
 /*packages*/
+window.axios = require('axios')
 window.Swal = require('sweetalert2')
 import 'dropzone/dist/min/dropzone.min.css'
 require('dropzone/dist/min/dropzone.min.js')
@@ -32,8 +32,10 @@ import ContextDATA from './ContextDATA';
 import LoginCMP from './component/Login.jsx';
 import RegisterCMP from './component/Register.jsx';
 import Home from './component/Home.jsx';
+import VerifiedCode from './component/VerifiedCode.jsx';
 import PopularCMP from './component/Popular.jsx';
 import SearchCMP from './component/Search.jsx';
+import ResetCode from './component/ResetCode.jsx';
 import LatestCMP from './component/Latest.jsx';
 import ViewArticleCMP from './component/ViewArticle.jsx';
 import DashboardCMP from './component/Dashboard.jsx';
@@ -53,14 +55,7 @@ import Category from './component/Category.jsx';
 import SidenavCMP from './component/template/Sidenav.jsx';
 import NavbarCMP from './component/template/Navbar.jsx';
 import FooterCMP from './component/template/Footer.jsx';
-/*facebook sdk*/
-(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+
 
 /*---------------------------------------------------*/
 class App extends React.Component {
@@ -90,9 +85,9 @@ class App extends React.Component {
       getMount: () => {
         this.componentDidMount()
       },
-      getNotification: (token) => {
-      	axios.get(`${BaseUrl}api/user-notification?paginate=true&page=${this.state.page_notification}`, {headers: {Authorization: token}}).then(result => {
-          this.state.page_notification == 1 ? this.setState({notification: result.data.data}): this.setState({notification: [...this.state.page_notification, result.data.data]})
+      getNotification: (page = null) => {
+      	axios.get(`${BaseUrl}api/user-notification?paginate=true&page=${page}`).then(result => {
+          this.setState({page_notification: page,notification: [...this.state.notification, ...result.data.data]})
         })
       },
       setState: (data) => {
@@ -107,10 +102,15 @@ class App extends React.Component {
     var account = window.localStorage.getItem('account')
     if(account){
       axios.get(`${BaseUrl}api/valid?token=${JSON.parse(account).token}`, {headers: {Authorization: JSON.parse(account).token}}).then(result => {
-        this.state.getNotification(JSON.parse(account).token)
+        axios.defaults.headers.common['Authorization'] = JSON.parse(account).token;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content')
+        this.state.getNotification(1)
         this.setState({users: result.data.data})
-        let type = result.data.data.type
-        type == 1 || type == 2 || type == 3 || type == 4 || type == 5 ?
+        let type = result.data.data.type, role = result.data.data.role;
+        /*notification sidenav*/
+        $('#slide-in').sidenav({edge:'right'});
+        $('#slide-in').sidenav('close');
+        type == '1' || type == '2' || type == '3' || type == '4' || type == '5' ?
           axios.get(BaseUrl + 'api/user-ui', {headers: {Authorization: JSON.parse(account).token}}).then(result => {
             this.setState({
               ui: {
@@ -131,30 +131,37 @@ class App extends React.Component {
               }
             })
           })
-        :''
-        if(result.data.data.type == 5 && result.data.data.role == 'admin'){
+        : ''
+        if(type == '5' && role == 'admin'){
           this.setState({
             menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
             menu_preferences: [
-            {txt:'Apps',icon:'app_settings_alt',url: '/setting/apps'},
               {txt:'Account',icon:'account_box',url: '/setting/account'},
               {txt:'View',icon:'preview',url: '/setting/view'}
             ]
           })
+          return true;
+        }
+        if(type == '1' || type == '2' || type == '3' || type == '4' && role == 'premium'){
+          this.setState({
+            menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
+            menu_preferences: [
+              {txt:'Account',icon:'account_box',url: '/setting/account'},
+              {txt:'View',icon:'preview',url: '/setting/view'}
+            ]
+          })
+          return true;
         }
         else{
           this.setState({
             menu_manage: ['Article', 'Comment', 'Storage'],
             menu_preferences: [
-            {txt:'Apps',icon:'app_settings_alt',url: '/setting/apps'},
               {txt:'Account',icon:'account_box',url: '/setting/account'},
-              {txt:'View',icon:'preview',url: '/setting/view'}
             ]
           })
+          return true;
         }
-        /*notification sidenav*/
-        $('#slide-in').sidenav({edge:'right'});
-        $('#slide-in').sidenav('close');
+        
       }).catch(e => {
         if(e.response && e.response.status == 401){
           this.setState({
@@ -198,11 +205,13 @@ class App extends React.Component {
 			      	<Route path="/article/:id" component={ViewArticleCMP}/>
               <Route path="/category/:name" component={Category}/>
 			      	<Route path="/contact-us" component={ContactUSCMP}/>
-			      	<Route path="/my-favorite" component={MyFavoriteCMP}/>
-              <Route path="/my-subscribe" component={MySubscribeCMP} />
+			      	<Route path="/me/favorite" component={MyFavoriteCMP}/>
+              <Route path="/me/subscribe" component={MySubscribeCMP} />
 			      	<Route path="/login" component={LoginCMP}/>
 			      	<Route path="/login?destination=:destination" component={LoginCMP}/>
 			      	<Route path="/register" component={RegisterCMP}/>
+              <Route path="/verification" component={VerifiedCode}/>
+              <Route path="/reset" component={ResetCode}/>
 			      	<Route path="/dashboard">
 			      	  <DashboardCMP/>
 			      	</Route>

@@ -201,7 +201,7 @@ class ViewArticleCMP extends React.Component {
           <div className="modal-content">
             <h4>Viewers Articles</h4>
             <ul className="collection" style={{maxHeight: 700,overflow: 'auto'}}>
-            {this.state.listuserview.length == 0 ? <p style={{paddingLeft: 10}}>Empty Comment</p>: ''}
+            {this.state.listuserview.length == 0 ? <p style={{paddingLeft: 10}}>No Viewers</p>: ''}
             {
               this.state.listuserview.map((text,key) => {
                 return(

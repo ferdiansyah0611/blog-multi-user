@@ -228,4 +228,39 @@ class PaymentController extends ResourceController
         	return $this->respond(['message' => 'Access Denied'], 401);
         }
 	}
+	public function me()
+    {
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+        if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
+        	$db = \Config\Database::connect();
+            $data = $db->table('app_user_premium')->where(['user_id' => $check->data->id])->orderBy('expired_at', 'DESC')->get()->getRow();
+            $status = \Midtrans\Transaction::status($data->order_id);
+            $data->price = $status->gross_amount;
+            if($data->price === '49000.00')
+			{
+				$premium = getenv('premium.type_1');
+				$data->storage = explode(', ', $premium)[0] . ' mb';
+				$data->days = explode(', ', $premium)[1];
+			}
+			if($data->price === '156000.00')
+			{
+				$premium = getenv('premium.type_2');
+				$data->storage = explode(', ', $premium)[0] . ' mb';
+				$data->days = explode(', ', $premium)[1];
+			}
+			if($data->price === '200000.00')
+			{
+				$premium = getenv('premium.type_3');
+				$data->storage = explode(', ', $premium)[0] . ' mb';
+				$data->days = explode(', ', $premium)[1];
+			}
+			if($data->price === '300000.00')
+			{
+				$premium = getenv('premium.type_4');
+				$data->storage = explode(', ', $premium)[0] . ' mb';
+				$data->days = explode(', ', $premium)[1];
+			}
+            return $this->respond($data);
+        }
+    }
 }

@@ -84,7 +84,8 @@ class PaymentController extends ResourceController
 				$price = 1000;
 				$item_details = array();
 				if($this->request->getGet('type') == '1'){
-					$price = 49000;
+					$premium = getenv('premium.type_1');
+					$price = explode(', ', $premium)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a1',
@@ -95,7 +96,8 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '2'){
-					$price = 156000;
+					$premium = getenv('premium.type_2');
+					$price = explode(', ', $premium)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a2',
@@ -106,7 +108,8 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '3'){
-					$price = 200000;
+					$premium = getenv('premium.type_3');
+					$price = explode(', ', $premium)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a3',
@@ -117,7 +120,8 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '4'){
-					$price = 300000;
+					$premium = getenv('premium.type_4');
+					$price = explode(', ', $premium)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a4',
@@ -167,27 +171,31 @@ class PaymentController extends ResourceController
 				$hasOrderId = $premium->where('order_id', $orderid)->get()->getResultArray();
 				if(empty($hasOrderId))
 				{
+					$premium1 = getenv('premium.type_1');
+					$premium2 = getenv('premium.type_2');
+					$premium3 = getenv('premium.type_3');
+					$premium4 = getenv('premium.type_4');
 					$type = 1;
 					$expired_at = strtotime("+30 days");
-					if($status->gross_amount === '49000.00')
+					if($status->gross_amount === explode(', ', $premium1)[2])
 					{
 						$type = 1;
-						$expired_at = strtotime("+30 days");
+						$expired_at = strtotime(explode(', ', $premium1)[1]);
 					}
-					if($status->gross_amount === '156000.00')
+					if($status->gross_amount === explode(', ', $premium2)[2])
 					{
 						$type = 2;
-						$expired_at = strtotime("+90 days");
+						$expired_at = strtotime(explode(', ', $premium2)[1]);
 					}
-					if($status->gross_amount === '200000.00')
+					if($status->gross_amount === explode(', ', $premium3)[2])
 					{
 						$type = 3;
-						$expired_at = strtotime("+180 days");
+						$expired_at = strtotime(explode(', ', $premium3)[1]);
 					}
-					if($status->gross_amount === '300000.00')
+					if($status->gross_amount === explode(', ', $premium4)[2])
 					{
 						$type = 4;
-						$expired_at = strtotime("+365 days");
+						$expired_at = strtotime(explode(', ', $premium4)[1]);
 					}
 					$db->table('app_user')->where('id', $check->data->id)->update(['role' => 'premium', 'type' => $type]);
 					$premium->insert([
@@ -236,31 +244,62 @@ class PaymentController extends ResourceController
             $data = $db->table('app_user_premium')->where(['user_id' => $check->data->id])->orderBy('expired_at', 'DESC')->get()->getRow();
             $status = \Midtrans\Transaction::status($data->order_id);
             $data->price = $status->gross_amount;
-            if($data->price === '49000.00')
+            $premium1 = getenv('premium.type_1');
+			$premium2 = getenv('premium.type_2');
+			$premium3 = getenv('premium.type_3');
+			$premium4 = getenv('premium.type_4');
+            if($data->price === explode(', ', $premium1)[2])
 			{
-				$premium = getenv('premium.type_1');
-				$data->storage = explode(', ', $premium)[0] . ' mb';
-				$data->days = explode(', ', $premium)[1];
+				$data->storage = explode(', ', $premium1)[0] . ' mb';
+				$data->days = explode(', ', $premium1)[1];
 			}
-			if($data->price === '156000.00')
+			if($data->price === explode(', ', $premium2)[2])
 			{
-				$premium = getenv('premium.type_2');
-				$data->storage = explode(', ', $premium)[0] . ' mb';
-				$data->days = explode(', ', $premium)[1];
+				$data->storage = explode(', ', $premium2)[0] . ' mb';
+				$data->days = explode(', ', $premium2)[1];
 			}
-			if($data->price === '200000.00')
+			if($data->price === explode(', ', $premium3)[2])
 			{
-				$premium = getenv('premium.type_3');
-				$data->storage = explode(', ', $premium)[0] . ' mb';
-				$data->days = explode(', ', $premium)[1];
+				$data->storage = explode(', ', $premium3)[0] . ' mb';
+				$data->days = explode(', ', $premium3)[1];
 			}
-			if($data->price === '300000.00')
+			if($data->price === explode(', ', $premium4)[2])
 			{
-				$premium = getenv('premium.type_4');
-				$data->storage = explode(', ', $premium)[0] . ' mb';
-				$data->days = explode(', ', $premium)[1];
+				$data->storage = explode(', ', $premium4)[0] . ' mb';
+				$data->days = explode(', ', $premium4)[1];
 			}
             return $this->respond($data);
         }
+    }
+    public function price()
+    {
+    	$premium1 = getenv('premium.type_1');
+		$premium2 = getenv('premium.type_2');
+		$premium3 = getenv('premium.type_3');
+		$premium4 = getenv('premium.type_4');
+
+    	$data = [
+    		'1' => [
+    			'storage' => explode(', ', $premium1)[0] . ' MB Storage',
+    			'days' => explode(', ', $premium1)[1],
+    			'price' => 'Rp. ' . explode(', ', $premium1)[2],
+    		],
+    		'2' => [
+    			'storage' => explode(', ', $premium2)[0] . ' MB Storage',
+    			'days' => explode(', ', $premium2)[1],
+    			'price' => 'Rp. ' . explode(', ', $premium2)[2],
+    		],
+    		'3' => [
+    			'storage' => explode(', ', $premium3)[0] . ' MB Storage',
+    			'days' => explode(', ', $premium3)[1],
+    			'price' => 'Rp. ' . explode(', ', $premium3)[2],
+    		],
+    		'4' => [
+    			'storage' => explode(', ', $premium4)[0] . ' MB Storage',
+    			'days' => explode(', ', $premium4)[1],
+    			'price' => 'Rp. ' . explode(', ', $premium4)[2],
+    		],
+    	];
+    	return $this->respond($data);
     }
 }

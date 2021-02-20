@@ -23,7 +23,7 @@ class AppUserPremium extends Migration
             	'null'		=> false
             ],
             'expired_at' => [
-            	'type'			=> 'timestamp',
+            	'type'			=> 'date',
             	'null'			=> true,
             ],
             'created_at' => [

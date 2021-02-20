@@ -138,12 +138,12 @@ class SetViewCMP extends React.Component {
           <form className="row">
             <ContextDATA.Consumer>
               {
-                context => (
+                result => (
                   <React.Fragment>
                   <div className="col s12">
                     <div className="card">
-                      <div class="card-image blue" style={{height: 80}}>   
-                        <span class="card-title">Navbar</span>
+                      <div className={result.ui.navbar.bg + " card-image darken-1"} style={{height: 80}}>   
+                        <span className={result.ui.navbar.txt + " card-title"}>Navbar</span>
                       </div>
                       <div className="card-content">
                         <p className="mb-10px">Color</p>
@@ -170,8 +170,8 @@ class SetViewCMP extends React.Component {
                       </div>
                     </div>
                     <div className="card">
-                      <div class="card-image blue" style={{height: 80}}>   
-                        <span class="card-title">Sidebar</span>
+                      <div className={result.ui.navbar.bg + " card-image darken-1"} style={{height: 80}}>   
+                        <span className={result.ui.navbar.txt + " card-title"}>Sidebar</span>
                       </div>
                       <div className="card-content">
                         <p className="mb-10px">Color</p>
@@ -195,7 +195,7 @@ class SetViewCMP extends React.Component {
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="brown" className="btn waves-effect waves-light brown">brown</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="grey" className="btn waves-effect waves-light grey">grey</button>
                         <button type="button" onClick={this.setUI} data-text="white-text" data-sidebar="blue-grey" className="btn waves-effect waves-light blue-grey">blue-grey</button>
-                        <p className="mb-10px mt-10px">Cover Image Sidebar</p>
+                        <p style={{marginTop: 30}}>Cover Image Sidebar</p>
                         <div className="row">
                           <div className="file-field input-field col s12">
                             <div className="btn">
@@ -203,27 +203,15 @@ class SetViewCMP extends React.Component {
                               <input onChange={this.onFileChange} name="sidebar-cover" accept=".jpg,.png" type="file"/>
                             </div>
                             <div className="file-path-wrapper">
-                              <input className="file-path validate" type="text"/>
-                            </div>
-                          </div>
-                        </div>
-                        <h6 className="mb-10px">Cover Image Profile</h6>
-                        <div className="row">
-                          <div className="file-field input-field col s12">
-                            <div className="btn">
-                              <span>Image</span>
-                              <input onChange={this.onFileChange} name="profil-cover" accept=".jpg,.png" type="file"/>
-                            </div>
-                            <div className="file-path-wrapper">
-                              <input className="file-path validate" type="text"/>
+                              <input className="file-path validate" type="text" placeholder="Select images"/>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="card">
-                      <div class="card-image blue" style={{height: 80}}>   
-                        <span class="card-title">Footer</span>
+                      <div className={result.ui.navbar.bg + " card-image darken-1"} style={{height: 80}}>   
+                        <span className={result.ui.navbar.txt + " card-title"}>Footer</span>
                       </div>
                       <div className="card-content">
                         <p className="mb-10px">Color</p>
@@ -247,7 +235,7 @@ class SetViewCMP extends React.Component {
                         <button type="button" onClick={this.setUI} data-footer="brown" className="btn waves-effect waves-light brown">brown</button>
                         <button type="button" onClick={this.setUI} data-footer="grey" className="btn waves-effect waves-light grey">grey</button>
                         <button type="button" onClick={this.setUI} data-footer="blue-grey" className="btn waves-effect waves-light blue-grey">blue-grey</button>
-                        <p className="mb-10px">Status</p>
+                        <p style={{marginTop: 30}}>Status</p>
                         <div className="switch">
                           <label>
                             Nonactive
@@ -255,6 +243,25 @@ class SetViewCMP extends React.Component {
                             <span className="lever"></span>
                             Active
                           </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <div className={result.ui.navbar.bg + " card-image darken-1"} style={{height: 80}}>   
+                        <span className={result.ui.navbar.txt + " card-title"}>Profile</span>
+                      </div>
+                      <div className="card-content">
+                        <p className="mb-10px">Cover</p>
+                        <div className="row">
+                          <div className="file-field input-field col s12">
+                            <div className="btn">
+                              <span>Image</span>
+                              <input onChange={this.onFileChange} name="profil-cover" accept=".jpg,.png" type="file"/>
+                            </div>
+                            <div className="file-path-wrapper">
+                              <input className="file-path validate" type="text" placeholder="Select images"/>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

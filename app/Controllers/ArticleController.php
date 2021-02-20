@@ -14,19 +14,29 @@ class ArticleController extends ResourceController
     }
     public function index()
     {
-        if($this->request->getGet('users')){
+        if($this->request->getGet('users'))
+        {
             $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('users')], ['app_article.created_at', 'DESC'], 9);
             return $this->respond($data);
         }
-        if($this->request->getGet('paginate')){
+        if($this->request->getGet('paginate'))
+        {
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
-            if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-                $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], ['app_article.created_at', 'DESC'], $this->request->getGet('manage'));
-                return $this->respond($data);
+            if(!empty($check->{'message'}) && $check->message == 'Access Granted')
+            {
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status'))
+                {
+                    $order_status = 'ASC';
+                    $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                    $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], [$this->request->getGet('order_by'), $order_status], $this->request->getGet('manage'));
+                    return $this->respond($data);
+                }
             }
         }
-        if($this->request->getGet('popular')){
-            if($this->request->getGet('user_id')){
+        if($this->request->getGet('popular'))
+        {
+            if($this->request->getGet('user_id'))
+            {
                 $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $this->request->getGet('user_id')], ['app_article.views', 'DESC'], 9);
                 return $this->respond($data);
             } else {
@@ -34,19 +44,23 @@ class ArticleController extends ResourceController
                 return $this->respond($data);
             }
         }
-        if($this->request->getGet('latest')){
+        if($this->request->getGet('latest'))
+        {
             $data = $this->model->onWhere(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], 9);
             return $this->respond($data);
         }
-        if($this->request->getGet('category')){
+        if($this->request->getGet('category'))
+        {
             $data = $this->model->onWhere(['app_article.status' => 'public', 'app_category.name' => $this->request->getGet('category')], ['app_article.created_at', 'DESC'], 9);
             return $this->respond($data);
         }
-        if($this->request->getGet('search')){
+        if($this->request->getGet('search'))
+        {
             $data = $this->model->onSearch(['app_article.status' => 'public'], ['app_article.created_at', 'DESC'], $this->request->getGet('search'), 9);
             return $this->respond($data);
         }
-        if($this->request->getGet('total')){
+        if($this->request->getGet('total'))
+        {
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if($this->request->getGet('user_id')){
                 $db = \Config\Database::connect();

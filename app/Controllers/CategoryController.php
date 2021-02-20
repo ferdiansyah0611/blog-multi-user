@@ -14,10 +14,34 @@ class CategoryController extends ResourceController
     }
     public function index()
     {
+        if($this->request->getGet('paginate'))
+        {
+            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+            if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status'))
+                {
+                    $order_status = 'ASC';
+                    $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                    $data = [
+                        'data' => $this->model->orderBy($this->request->getGet('order_by'), $order_status)->paginate(100)
+                    ];
+                    return $this->respond($data);
+                }
+            }
+        }
         if($this->request->getGet('name')){
             return $this->respond($this->model->where('name', $this->request->getGet('name'))->get()->getRow());
         }else{
-            return $this->respond($this->model->findAll());
+            $cache = \Config\Services::cache();
+            if (!$cache->get('category'))
+            {
+                $data = $this->model->findAll();
+                cache()->save('category', $data, 600);
+                return $this->respond($data);
+            }
+            else{    
+                return $this->respond($cache->get('category'));
+            }
         }
     }
     public function show($id = null)
@@ -95,6 +119,20 @@ class CategoryController extends ResourceController
     }
     public function search()
     {
-        return $this->respond($this->model->search_data($this->request->getGet('q')));
+        if($this->request->getGet('order_by') && $this->request->getGet('order_status'))
+        {
+            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+            if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
+                $order_status = 'ASC';
+                $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                $data = [
+                    'data' => $this->model->like('name', $this->request->getGet('q'))->orderBy($this->request->getGet('order_by'), $order_status)->paginate(100)
+                ];
+                return $this->respond($data);
+            }
+        }
+        else{
+            return $this->respond($this->model->search_data($this->request->getGet('q')));
+        }
     }
 }

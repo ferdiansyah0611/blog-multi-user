@@ -94,7 +94,7 @@ class Datatables extends React.Component {
                 if(chooseaction == '2') {
                   iddelete.forEach(d_delete => {
                     axios.delete(this.props.url.deleted + d_delete, {headers: this.state.headers}).then(response => {
-                      Swal.fire(title,response.data.message,'success')
+                      M.toast({html: response.data.message, classes: 'green'})
                       var newcategory = this.state.data.filter((datacategory, key) => {
                         if(datacategory.id !== d_delete){
                           return true;
@@ -116,11 +116,13 @@ class Datatables extends React.Component {
           }
         }
       })
-
     }
   }
   searching(event) {
-    axios.get(this.props.url.search + '?q=' + event.target.value, {headers: this.state.headers}).then(result => {
+    let url = `${this.props.url.search}?q=${event.target.value}&paginate=25&page=${this.state.paginate}&order_by=${this.state.order_by}&order_status=${this.state.order_status}`;
+    axios.get(url,
+      {headers: this.state.headers})
+    .then(result => {
       this.setState({data: result.data.data})
     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
   }
@@ -257,7 +259,7 @@ class Datatables extends React.Component {
         <div className="row">
           <div className={this.props.editable ? "input-field col s12 m6": "input-field col s12"}>
             <i className="material-icons prefix">search</i>
-            <input placeholder="Search data..." id="first_name" type="text" defaultValue="" className="validate" onKeyUp={this.searching}/>
+            <input autoComplete="off" placeholder="Search data..." type="text" defaultValue="" className="validate" onKeyUp={this.searching}/>
           </div>
           {
             this.props.editable ?
@@ -370,9 +372,14 @@ class Datatables extends React.Component {
                 {
                   this.props.type[key] == 'text' ?
                     <div className="input-field col s12">
-                      <input placeholder="Name"
-                        type="text" className="validate" name={text} value={this.state[text] || ''} onChange={this.handle}/>
-                      <label className="active" htmlFor="email">{text}</label>
+                      <input
+                        type="text"
+                        className="validate"
+                        name={text}
+                        value={this.state[text] || ''}
+                        onChange={this.handle}
+                      />
+                      <label className="active">{text}</label>
                     </div>
                   : false
                 }
@@ -380,14 +387,13 @@ class Datatables extends React.Component {
                   this.props.type[key] == 'number' ?
                     <div className="input-field col s12">
                       <input
-                        placeholder="Name"
                         type="number"
                         className="validate"
                         name={text}
                         value={this.state[text] || ''}
                         onChange={this.handle}
                       />
-                      <label className="active" htmlFor="email">{text}</label>
+                      <label className="active">{text}</label>
                     </div>
                   : false
                 }
@@ -403,7 +409,7 @@ class Datatables extends React.Component {
                         onChange={this.handle}
                         disabled
                       />
-                      <label className="active" htmlFor="email">{text}</label>
+                      <label className="active">{text}</label>
                     </div>
                   : false
                 }
@@ -419,7 +425,7 @@ class Datatables extends React.Component {
                         onChange={this.handle}
                         disabled
                       />
-                      <label className="active" htmlFor="email">{text}</label>
+                      <label className="active">{text}</label>
                     </div>
                   : false
                 }
@@ -427,7 +433,7 @@ class Datatables extends React.Component {
                   this.props.type[key] == 'textarea' ?
                     <div className="input-field col s12">
                       <textarea className="materialize-textarea" name={text} value={this.state[text] || ''} onChange={this.handle}/>
-                      <label className="active" htmlFor="email">{text}</label>
+                      <label className="active">{text}</label>
                     </div>
                   : false
                 }

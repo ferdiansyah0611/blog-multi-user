@@ -180,28 +180,28 @@ class DashboardCMP extends React.Component {
           <React.Fragment>
             <div className="row">
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-0": "blue lighten-1 center white-text card-panel z-depth-0"}>
+                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>notes</i>
                   <h6 style={{marginTop:0}}>Article</h6>
                   <p><b>{this.state.totalArticle}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-0": "blue lighten-1 center white-text card-panel z-depth-0"}>
+                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>comment</i>
                   <h6 style={{marginTop:0}}>Comment</h6>
                   <p><b>{this.state.totalComment}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-0": "blue lighten-1 center white-text card-panel z-depth-0"}>
+                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>favorite</i>
                   <h6 style={{marginTop:0}}>Favorite</h6>
                   <p><b>{this.state.totalFavorite}</b></p>
                 </div>
               </div>
               <div className="col s12 m6 l3 waves-effect waves-dark">
-                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-0": "blue lighten-1 center white-text card-panel z-depth-0"}>
+                <div className={result.ui.navbar.bg ? result.ui.navbar.bg + " lighten-1 center white-text card-panel z-depth-1": "blue lighten-1 center white-text card-panel z-depth-1"}>
                   <i className="material-icons" style={{fontSize: 50}}>subscriptions</i>
                   <h6 style={{marginTop:0}}>Subscriber</h6>
                   <p><b>{this.state.totalSubscribe}</b></p>
@@ -307,7 +307,7 @@ class DashboardCMP extends React.Component {
                     }
                   </div>
                   <div className="card-action">
-                    <input type="text" name="order_id" onChange={this.handle} />
+                    <input autoComplete="off" type="text" name="order_id" onChange={this.handle} />
                     <button className="btn blue waves-effect waves-light" onClick={this.checkOrderId}>Check Order ID</button>
                   </div>
                 </div>
@@ -319,25 +319,26 @@ class DashboardCMP extends React.Component {
                   </div>
                   <div className="card-content overflow-auto">
                     <Datatables
-                        hasArticle={true}
-                        paginate={true}
-                        heading={
-                          ['#', 'Title', 'Created']
-                        }
-                        td={
-                          ['id', 'title', 'created_at']
-                        }
-                        url={{
-                          default: BaseUrl + 'api/article',
-                          deleted: BaseUrl + 'api/article/',
-                          edited: BaseUrl + 'api/article/',
-                          search: BaseUrl + 'api/search/article'
-                        }}
-                        form={
-                          ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
-                        }
-                        type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
-                      />
+                      editable={true}
+                      hasArticle={true}
+                      paginate={true}
+                      heading={
+                        ['#', 'Title', 'Created']
+                      }
+                      td={
+                        ['id', 'title', 'created_at']
+                      }
+                      url={{
+                        default: BaseUrl + 'api/article',
+                        deleted: BaseUrl + 'api/article/',
+                        edited: BaseUrl + 'api/article/',
+                        search: BaseUrl + 'api/search/article'
+                      }}
+                      form={
+                        ['id', 'category_id', 'title', 'description', 'content', 'status', 'updated_at']
+                      }
+                      type={[false,'number-disabled','text', 'textarea', 'textareatinymce', 'select|public,private', false]}
+                    />
                   </div>
                 </div>
               </div>

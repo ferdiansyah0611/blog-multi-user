@@ -70,6 +70,7 @@ $routes->group('api', function($routes)
 	$routes->get('pay', 'PaymentController::pay');
 	$routes->post('pay', 'PaymentController::index');
 	$routes->get('pay/me', 'PaymentController::me');
+	$routes->get('price', 'PaymentController::price');
 	$routes->post('user-ui/update/(:num)', 'UserUiController::update/$1');
 	$routes->post('users/update/(:num)', 'UserController::update/$1');
 });

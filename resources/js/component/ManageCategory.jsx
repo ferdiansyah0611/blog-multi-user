@@ -47,6 +47,7 @@ class ManageCategoryCMP extends React.Component {
   }
   componentDidMount() {
     document.title = 'Manage Category | Go Blog'
+    $('.tabs').tabs();
   }
   render() {
     if(this.state.redirect || !window.localStorage.getItem('account')) {
@@ -67,6 +68,7 @@ class ManageCategoryCMP extends React.Component {
                 <div id="tabs-data" className="col s12">
                   <Datatables
                     editable={true}
+                    paginate={true}
                     heading={
                       ['#', 'Name', 'Created']
                     }
@@ -89,8 +91,8 @@ class ManageCategoryCMP extends React.Component {
                 <div id="tabs-create" className="col s12">
                   <div className="row mt-10px">
                     <div className="input-field col s12 m6">
-                      <input id="last_name" type="text" className="validate" name="create_name" onKeyUp={this.handle}/>
-                      <label htmlFor="last_name">Name</label>
+                      <input type="text" className="validate" name="create_name" onKeyUp={this.handle}/>
+                      <label>Name</label>
                     </div>
                     <div className="input-field col s12 m6">
                       <textarea className="materialize-textarea" placeholder="Description" name="create_description" onKeyUp={this.handle}></textarea>

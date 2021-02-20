@@ -9,6 +9,7 @@ import Loader from './Loader.jsx';
 /*tools*/
 import BaseUrl from '../../tools/Base';
 import errorStatusCode from '../../tools/errorStatusCode';
+import ContextDATA from '../../ContextDATA';
 
 const text_truncate = function(str, length, ending) {
   return str.substring(0,length) + '...';
@@ -256,218 +257,226 @@ class Datatables extends React.Component {
     }
     return(
       <React.Fragment>
-        <div className="row">
-          <div className={this.props.editable ? "input-field col s12 m6": "input-field col s12"}>
-            <i className="material-icons prefix">search</i>
-            <input autoComplete="off" placeholder="Search data..." type="text" defaultValue="" className="validate" onKeyUp={this.searching}/>
-          </div>
-          {
-            this.props.editable ?
-              <div className="input-field col s12 m6">
-                <select name="select_action" defaultValue="Choose your option" className="browser-default" onChange={this.removing}>
-                  <option value="Choose your option">Choose your option</option>
-                  <option value="2">Remove</option>
-                </select>
+      <ContextDATA.Consumer>
+      {
+        result => (
+          <React.Fragment>
+            <div className="row">
+              <div className={this.props.editable ? "input-field col s12 m6": "input-field col s12"}>
+                <i className="material-icons prefix">search</i>
+                <input autoComplete="off" placeholder="Search data..." type="text" defaultValue="" className="validate" onKeyUp={this.searching}/>
               </div>
-            :''
-          }
-          <div className="col s12">
-            <div className="switch">
-              <label>
-                Asc
-                <input name="order_status" type="checkbox" onChange={this.handle}/>
-                <span className="lever"></span>
-                Desc
-              </label>
+              {
+                this.props.editable ?
+                  <div className="input-field col s12 m6">
+                    <select name="select_action" defaultValue="Choose your option" className="browser-default" onChange={this.removing}>
+                      <option value="Choose your option">Choose your option</option>
+                      <option value="2">Remove</option>
+                    </select>
+                  </div>
+                :''
+              }
+              <div className="col s12">
+                <div className="switch">
+                  <label>
+                    Asc
+                    <input name="order_status" type="checkbox" onChange={this.handle}/>
+                    <span className="lever"></span>
+                    Desc
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <table className="responsive-table highlight" id={this.state.table_id}>
-          <thead>
-            <tr>
-            {
-              this.props.heading.map((text, key) => {
-                return(
-                  <th data-name={this.props.td[key]} key={key} className="pointer">{text}</th>
-                )
-              })
-            }
-            {
-              this.props.editable ?
-                <React.Fragment>
-                  <th className="pointer">Action</th>
-                  <th>Selection</th>
-                </React.Fragment>
-              :false
-            }
-            </tr>
-          </thead>
-          <tbody>
-          {
-            this.state.data.map((text, key) => {
-              return(
-                <tr key={key}>
+            <table className="responsive-table highlight" id={this.state.table_id}>
+              <thead>
+                <tr>
                 {
-                  this.props.td.map((datatd, keytd) => {
+                  this.props.heading.map((text, key) => {
                     return(
-                      <td
-                        className={'row-' + datatd}
-                        data-id={text.id}
-                        onContextMenu={this.rightClick}
-                        key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}
-                      </td>
+                      <th data-name={this.props.td[key]} key={key} className="pointer">{text}</th>
                     )
                   })
                 }
                 {
                   this.props.editable ?
-                  <React.Fragment>
-                    <td>
-                        <button
-                          type="button"
-                          data-id={text.id}
-                          className="btn blue"
-                          onClick={this.editing}>
-                          <i data-id={text.id} className="material-icons">edit</i>
-                        </button>
-                    </td>
-                    <td>
-                      <label>
-                      <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
-                      <span>Select</span>
-                      </label>
-                    </td>
-                  </React.Fragment>
+                    <React.Fragment>
+                      <th className="pointer">Action</th>
+                      <th>Selection</th>
+                    </React.Fragment>
                   :false
                 }
                 </tr>
-              )
-            })
-          }
-          </tbody>
-        </table>
-        {
-          this.state.finished ? this.state.data.length == 0 ? <h6 className="center mt-10px">Empty Data</h6>: '': <Loader/>
-        }
-        {
-          this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
-        }
-        {
-          this.props.paginate ?
-            <p className="center-align">
-              <button className="btn waves-effect waves-light blue mt-10px" onClick={this.nextData}>Load More
-                <i className="material-icons right">expand_more</i>
-              </button>
-            </p>:''
-        }
-        <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
-          <div className="modal-content">
-            <h4>Edit Data</h4>
-            <p>Last Updated : {this.state.updated_at}</p>
-            <div className="row mt-10px">
+              </thead>
+              <tbody>
+              {
+                this.state.data.map((text, key) => {
+                  return(
+                    <tr key={key}>
+                    {
+                      this.props.td.map((datatd, keytd) => {
+                        return(
+                          <td
+                            className={'row-' + datatd}
+                            data-id={text.id}
+                            onContextMenu={this.rightClick}
+                            key={keytd}>{text[datatd].length > 49 ? text_truncate(text[datatd], 50): text[datatd]}
+                          </td>
+                        )
+                      })
+                    }
+                    {
+                      this.props.editable ?
+                      <React.Fragment>
+                        <td>
+                            <button
+                              type="button"
+                              data-id={text.id}
+                              className={result.ui.navbar.bg + " btn darken-1"}
+                              onClick={this.editing}>
+                              <i data-id={text.id} className="material-icons">edit</i>
+                            </button>
+                        </td>
+                        <td>
+                          <label>
+                          <input type="checkbox" data-id={text.id} name="select" className="filled-in" />
+                          <span>Select</span>
+                          </label>
+                        </td>
+                      </React.Fragment>
+                      :false
+                    }
+                    </tr>
+                  )
+                })
+              }
+              </tbody>
+            </table>
             {
-              this.props.form.map((text, key) => {
-                return(
-                  <div key={key}>
+              this.state.finished ? this.state.data.length == 0 ? <h6 className="center mt-10px">Empty Data</h6>: '': <Loader/>
+            }
+            {
+              this.state.finished === 'error' ? <h6 className="center">Data Not found</h6>: ''
+            }
+            {
+              this.props.paginate ?
+                <p className="center-align">
+                  <button className={"btn waves-effect waves-light mt-10px darken-1 " + result.ui.navbar.bg} onClick={this.nextData}>Load More
+                    <i className="material-icons right">expand_more</i>
+                  </button>
+                </p>:''
+            }
+            <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
+              <div className="modal-content">
+                <h4>Edit Data</h4>
+                <p>Last Updated : {this.state.updated_at}</p>
+                <div className="row mt-10px">
                 {
-                  this.props.type[key] == 'text' ?
-                    <div className="input-field col s12">
-                      <input
-                        type="text"
-                        className="validate"
-                        name={text}
-                        value={this.state[text] || ''}
-                        onChange={this.handle}
-                      />
-                      <label className="active">{text}</label>
+                  this.props.form.map((text, key) => {
+                    return(
+                      <div key={key}>
+                    {
+                      this.props.type[key] == 'text' ?
+                        <div className="input-field col s12">
+                          <input
+                            type="text"
+                            className="validate"
+                            name={text}
+                            value={this.state[text] || ''}
+                            onChange={this.handle}
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'number' ?
+                        <div className="input-field col s12">
+                          <input
+                            type="number"
+                            className="validate"
+                            name={text}
+                            value={this.state[text] || ''}
+                            onChange={this.handle}
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'text-disabled' ?
+                        <div className="input-field col s12">
+                          <input
+                            placeholder="Name"
+                            type="text"
+                            className="validate"
+                            name={text}
+                            defaultValue={this.state[text] || ''}
+                            onChange={this.handle}
+                            disabled
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'number-disabled' ?
+                        <div className="input-field col s12">
+                          <input
+                            placeholder="Name"
+                            type="number"
+                            className="validate"
+                            name={text}
+                            defaultValue={this.state[text] || ''}
+                            onChange={this.handle}
+                            disabled
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'textarea' ?
+                        <div className="input-field col s12">
+                          <textarea className="materialize-textarea" name={text} value={this.state[text] || ''} onChange={this.handle}/>
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'textareatinymce' ?
+                        <div className="input-field col s12">
+                          <div className="col s12" id="edit-content"/>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'select' ?
+                        <select name={text} onChange={this.handle} defaultValue="Choose option" className="browser-default">
+                          <option value="Choose your option" disabled>Choose option</option>
+                          <option value="public">Public</option>
+                          <option value="archive">Archives</option>
+                        </select>
+                      : false
+                    }
                     </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'number' ?
-                    <div className="input-field col s12">
-                      <input
-                        type="number"
-                        className="validate"
-                        name={text}
-                        value={this.state[text] || ''}
-                        onChange={this.handle}
-                      />
-                      <label className="active">{text}</label>
-                    </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'text-disabled' ?
-                    <div className="input-field col s12">
-                      <input
-                        placeholder="Name"
-                        type="text"
-                        className="validate"
-                        name={text}
-                        defaultValue={this.state[text] || ''}
-                        onChange={this.handle}
-                        disabled
-                      />
-                      <label className="active">{text}</label>
-                    </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'number-disabled' ?
-                    <div className="input-field col s12">
-                      <input
-                        placeholder="Name"
-                        type="number"
-                        className="validate"
-                        name={text}
-                        defaultValue={this.state[text] || ''}
-                        onChange={this.handle}
-                        disabled
-                      />
-                      <label className="active">{text}</label>
-                    </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'textarea' ?
-                    <div className="input-field col s12">
-                      <textarea className="materialize-textarea" name={text} value={this.state[text] || ''} onChange={this.handle}/>
-                      <label className="active">{text}</label>
-                    </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'textareatinymce' ?
-                    <div className="input-field col s12">
-                      <div className="col s12" id="edit-content"/>
-                    </div>
-                  : false
-                }
-                {
-                  this.props.type[key] == 'select' ?
-                    <select name={text} onChange={this.handle} defaultValue="Choose option" className="browser-default">
-                      <option value="Choose your option" disabled>Choose option</option>
-                      <option value="public">Public</option>
-                      <option value="archive">Archives</option>
-                    </select>
-                  : false
+                    )
+                  })
                 }
                 </div>
-                )
-              })
-            }
+              </div>
+              <div className="modal-footer">
+                <button
+                  className={"btn waves-effect waves-light darken-1 " + result.ui.navbar.bg}
+                  onClick={this.updating}>
+                  Submit
+                  <i className="material-icons right">send</i>
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <button
-              className="btn waves-effect waves-light blue"
-              onClick={this.updating}>
-              Submit
-              <i className="material-icons right">send</i>
-            </button>
-          </div>
-        </div>
+          </React.Fragment>
+        )
+      }
+      </ContextDATA.Consumer>
       </React.Fragment>
     )
   }

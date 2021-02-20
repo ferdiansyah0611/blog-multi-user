@@ -20,7 +20,7 @@ class UserUiController extends ResourceController
         }else{
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-                $data = $this->model->select('*')->get()->getRow();
+                $data = $this->model->select('*')->where('user_id', $check->data->id)->get()->getRow();
                 return $this->respond($data);
             }else{
                 return $this->respond(['message' => 'Access Denied'], 401);
@@ -112,8 +112,19 @@ class UserUiController extends ResourceController
                     $files->move(WRITEPATH.'uploads/'. $check->data->id);
                     $data['profil-cover'] = $files->getName();
                 }
-                $this->model->update_data($data, $id);
-                return $this->respond(['message' => 'Successfuly Update The Ui']);
+                $checkui = $this->model->where('user_id', $check->data->id)->get()->getRow();
+                if($checkui->id)
+                {
+                    $this->model->update(['id' => $id], $data);
+                    return $this->respond(['message' => 'Successfuly Update The Ui']);
+                }
+                else{
+                    $data->id = rand();
+                    $data->user_id = $check->data->id;
+                    $data->updated_at = date('Y-m-d H:i:s');
+                    $this->model->insert($data);
+                    return $this->respond(['message' => 'Successfuly Update The Ui']);
+                }
             }else{
                 return $this->respond(['message' => 'Access Denied'], 401);
             }
@@ -123,13 +134,7 @@ class UserUiController extends ResourceController
     }
     public function delete($id = null)
     {
-        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
-        if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-        	$this->model->delete_data($id);
-            return $this->respond(['message' => 'Successfuly delete data']);
-        }else{
-            return $this->respond(['message' => 'Access Denied'], 401);
-        }
+        return $this->respond(['message' => 'Access Denied'], 401);
     }
     public function category($id = null)
     {

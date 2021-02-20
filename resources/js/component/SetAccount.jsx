@@ -163,7 +163,7 @@ class SetAccountCMP extends React.Component {
                       <textarea className="materialize-textarea" name="bio" defaultValue={this.state.users.bio} onChange={this.handle}></textarea>
                       <label className="active">Bio</label>
                     </div>
-                    <input name="avatar" onChange={this.onFileChange} type="file"/>
+                    <input name="avatar" onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
                     <p><button type="submit" onClick={this.updateUser} className="btn waves-effect waves-dark blue">Save Changes</button></p>
                   </div>
                 </div>

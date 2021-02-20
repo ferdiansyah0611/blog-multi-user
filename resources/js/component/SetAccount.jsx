@@ -117,12 +117,12 @@ class SetAccountCMP extends React.Component {
         <form className="row" onSubmit={this.updateUser}>
           <ContextDATA.Consumer>
             {
-              context => (
+              result => (
                 <React.Fragment>
                 <div className="col s12 m6">
                   <h5>My Photo Profile</h5>
                   {
-                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>: <img className="responsive-img" src={context.users.id ? BaseUrl + 'api/usrfile/' + context.users.id + '/' + context.users.avatar: 'https://via.placeholder.com/320x400.png?text=Waiting...'}/>
+                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>: <img className="responsive-img" src={result.users.id ? BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar: 'https://via.placeholder.com/320x400.png?text=Waiting...'}/>
                   }
                 </div>
                 <div className="col s12 m6">
@@ -152,7 +152,7 @@ class SetAccountCMP extends React.Component {
                       <select className="browser-default" name="location" value={this.state.users.location} onChange={this.handle}>
                         <option value="" disabled={true}>Choose your location</option>
                         {
-                          context.locationAPI.map((data, key) => {
+                          result.locationAPI.map((data, key) => {
                             return(<option key={key} value={data.name}>{data.name}</option>)
                           })
                         }
@@ -163,8 +163,18 @@ class SetAccountCMP extends React.Component {
                       <textarea className="materialize-textarea" name="bio" defaultValue={this.state.users.bio} onChange={this.handle}></textarea>
                       <label className="active">Bio</label>
                     </div>
-                    <input name="avatar" onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
-                    <p><button type="submit" onClick={this.updateUser} className="btn waves-effect waves-dark blue">Save Changes</button></p>
+                    <div className="file-field input-field col s12">
+                      <div className="btn">
+                        <span>Profile</span>
+                        <input name="avatar" onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
+                      </div>
+                      <div className="file-path-wrapper">
+                        <input className="file-path validate" type="text" placeholder="Select images"/>
+                      </div>
+                    </div>
+                    <div className="input-field col s12">
+                    <button type="submit" onClick={this.updateUser} className="btn waves-effect waves-dark blue">Save Changes</button>
+                    </div>
                   </div>
                 </div>
                 </React.Fragment>

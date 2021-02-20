@@ -53,7 +53,7 @@ class Navbar extends React.Component{
 					    	  <div className="nav-wrapper">
 					    	  <form className={this.state.search} id="search-data" onSubmit={this.search}>
 						        <div className="input-field">
-						          <input id="search" type="search" onKeyUp={this.handle}/>
+						          <input autoComplete="off" id="search" type="search" onKeyUp={this.handle}/>
 						          <label className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
 						          <i className="material-icons" onClick={this.closeSearch}>close</i>
 						        </div>

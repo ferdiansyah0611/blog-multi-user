@@ -1,6 +1,3 @@
-body{
-  scroll-behavior: scroll;
-}
 #body{
 	padding-left: 300px;
 }
@@ -24,7 +21,7 @@ body{
 .dropdown-content.select-dropdown li{
   padding: 10px;
 }
-#hover-red div.col.s12 .card-panel:hover{
+.hover-red div.col.s12 .card-panel:hover{
   background-color: #F44336 !important;
   color: white !important;
   cursor: pointer;

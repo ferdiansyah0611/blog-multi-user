@@ -30,11 +30,7 @@ class SidenavCMP extends React.Component {
   }
   nextNotification(e){
     e.preventDefault()
-    this.context.setState({
-      name: 'page_notification',
-      value: this.context.page_notification + 1
-    })
-    this.context.getNotification()
+    this.context.getNotification(this.context.page_notification + 1)
   }
   clearNotification(e){
     e.preventDefault()
@@ -134,7 +130,11 @@ class SidenavCMP extends React.Component {
             <div id="slide-in" className="sidenav">
               <div className="header"><p className="center-align">Notification</p></div>
               {
-                result.notification.length === 0 ? <p className="black-text center-align" style={{marginTop: 100}}>Not Have Notification</p>:
+                result.notification.length == 0 ?
+                  <p className="black-text center-align" style={{marginTop: 100}}>Not Have Notification</p>
+                :''
+              }
+              {
                 <React.Fragment>
                 <ul className="collection list-notification">
                 {
@@ -174,13 +174,13 @@ class SidenavCMP extends React.Component {
                 }
                 </ul>
                 <div className="action">
-                  <a href="#" className="btn waves-effect waves-light teal w-100" onClick={this.nextNotification}>
+                  <a disabled={result.notification.length == 0 ? true: false} href="#" className="btn waves-effect waves-light teal w-100" onClick={this.nextNotification}>
                     Next
                   </a>
-                  <a href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
+                  <a disabled={result.notification.length == 0 ? true: false} href="#" className="btn waves-effect waves-light blue w-100" onClick={this.readNotification}>
                     Read All
                   </a>
-                  <a href="#" className="btn waves-effect waves-light red w-100" onClick={this.clearNotification}>
+                  <a disabled={result.notification.length == 0 ? true: false} href="#" className="btn waves-effect waves-light red w-100" onClick={this.clearNotification}>
                     Clear All
                   </a>
                 </div>
@@ -328,7 +328,7 @@ class SidenavCMP extends React.Component {
               <li>
                 <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/premium">
                 <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>shop</i>
-                Buy Premium</Link>
+                {!result.users.type || result.users.type == 0 ? 'Buy Premium': 'My Premium'}</Link>
               </li>
               <li>
                 <Link to="/" className="black-text waves-effect waves-dark">

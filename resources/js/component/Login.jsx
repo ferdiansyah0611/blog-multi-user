@@ -62,7 +62,7 @@ class LoginCMP extends React.Component{
       <React.Fragment>
       <div className="row">
         <div className="col s12 m8 offset-m2 l6 offset-l3">
-          <div className="card" style={this.state.successLogin ? {marginBottom: 220}: {}}>
+          <div className="card" style={this.state.successLogin ? {marginBottom: 240}: {}}>
             <div className="card-content">
             {
               this.state.process ? <div className="progress"><div className="indeterminate"></div></div>:''

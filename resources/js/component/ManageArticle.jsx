@@ -137,8 +137,8 @@ class ManageArticleCMP extends React.Component {
               <div id="tabs-create" className="col s12">
                 <div className="row mt-10px">
                   <div className="input-field col s12">
-                    <input id="last_name" type="text" name="create_title" onChange={this.handle} className="validate"/>
-                    <label htmlFor="last_name">Title</label>
+                    <input type="text" name="create_title" onChange={this.handle} className="validate"/>
+                    <label>Title</label>
                   </div>
                   <div className="col s12 m6">
                   <ContextDATA.Consumer>

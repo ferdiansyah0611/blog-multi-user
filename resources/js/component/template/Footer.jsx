@@ -24,14 +24,13 @@ class FooterCMP extends React.Component {
                   <div className="row">
                     <div className="col l6 s12">
                       <h5 className="white-text">Go Blog by ferdiansyah0611</h5>
-                      <p className="grey-text text-lighten-4">Go Blog is a multi-user blog publishing service with many features. It is free as for the paid version.</p>
+                      <p className="grey-text text-lighten-4">Go Blog is a multi-user blog publishing service with many features.</p>
                     </div>
                     <div className="col l4 offset-l2 s12">
                       <h5 className="white-text">More</h5>
                       <ul>
                         <li><Link className="grey-text text-lighten-3" to="/contact-us">Contact US</Link></li>
                         <li><Link className="grey-text text-lighten-3" to="/premium">Subscribe Premium</Link></li>
-                        <li><a className="grey-text text-lighten-3" href="#!">About</a></li>
                       </ul>
                     </div>
                   </div>
@@ -39,7 +38,7 @@ class FooterCMP extends React.Component {
                 <div className="footer-copyright">
                   <div className="container">
                   © {this.state.year} Copyright
-                  <a className="grey-text text-lighten-4 right" href="#!">Privacy & Policy</a>
+                  <a className="grey-text text-lighten-4 right pointer">Your App Name</a>
                   </div>
                 </div>
               </footer>

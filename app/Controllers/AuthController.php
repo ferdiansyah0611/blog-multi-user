@@ -240,13 +240,12 @@ EOD;
                         $id = base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000));
                         $db->update(['code' => $id, 'verified_at' => null], ['user_id' => $user->id]);
                         $this->sendingmail($user->email, '
-                            <div class="header p-5">
-                                <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
+                            <div class="header" style="background-color: black;padding:2px;color:white;">
+                                <h2 style="font-size: 30px;text-align:center;">Go Blog | Verification Code</h2>
                                 <hr class="divider"/>
-                            </div>
-                            <div style="font-size: 20px;text-align:center;">
-                                <p>Verification Code</p>
-                                <button>'. $id .'</button>
+                                <div style="padding:10px;">
+                                    <button style="padding: 5px;outline:none;background-color: #7e76ff;">'. $id .'</button>
+                                </div>
                             </div>
                         ');
                         return $this->respond(['message' => 'The code has reset. Please check your email']);
@@ -316,13 +315,14 @@ EOD;
     public function sendcontactus()
     {
         $this->sendingmail('ferdif9996@gmail.com', '
-            <div class="header p-5">
-                <h2 style="font-size: 30px;text-align:center;">Go Blog</h2>
+            <div class="header" style="background-color: black;padding:2px;color:white;">
+                <h2 style="font-size: 30px;text-align:center;">Go Blog | Contact US</h2>
                 <hr class="divider"/>
-            </div>
-            <div style="font-size: 20px;text-align:center;">
-                <p>Contact US from '. $this->request->getPost('name'). ', ' . $this->request->getPost('email') .'</p>
-                <p>'. $this->request->getPost('description') .'</p>
+                <div style="padding:10px;">
+                    <p><b>From</b> : '. $this->request->getPost('name').'</p>
+                    <p><b>Email</b> : '. $this->request->getPost('email') .'</p>
+                    <p><b>Description : </b>'. $this->request->getPost('description') .'</p>
+                </div>
             </div>
         ');
         return $this->respond(['message' => 'Send is successfully']);

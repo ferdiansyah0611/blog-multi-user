@@ -63,10 +63,6 @@ class ContactUSCMP extends React.Component {
   }
   render(){
     return(
-      <div className="parallax-container custom">
-        <div className="parallax">
-          <img src="https://images.unsplash.com/photo-1606044466411-207a9a49711f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=600&q=60"/>
-        </div>
         <div className="row">
           <div className="col s12 m6 offset-m3">
             <div className="card-panel">
@@ -76,13 +72,13 @@ class ContactUSCMP extends React.Component {
                 <div className="row">
                   <div className="input-field col s12">
                     <i className="material-icons prefix">account_circle</i>
-                    <input id="icon_prefix" value={this.state.name} onChange={this.handle} name="name" type="text" className="validate"/>
-                    <label className={this.state.className} htmlFor="icon_prefix">Name</label>
+                    <input value={this.state.name} onChange={this.handle} name="name" type="text" className="validate"/>
+                    <label className={this.state.className}>Name</label>
                   </div>
                   <div className="input-field col s12">
                     <i className="material-icons prefix">email</i>
-                    <input id="icon_telephone" value={this.state.email} onChange={this.handle} name="email" type="email" className="validate"/>
-                    <label htmlFor="icon_telephone">Email</label>
+                    <input value={this.state.email} onChange={this.handle} name="email" type="email" className="validate"/>
+                    <label className={this.state.className}>Email</label>
                   </div>
                   <div className="input-field col s12">
                     <i className="material-icons prefix">description</i>
@@ -99,7 +95,6 @@ class ContactUSCMP extends React.Component {
             </div>
           </div>
         </div>
-      </div>
     )
   }
 }

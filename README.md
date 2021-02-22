@@ -6,16 +6,14 @@ Is an application for registered blog users with several great features and temp
 
 1. Cloning Project
 
-```bash
-git clone https://gitlab.com/ferdif9996/project-blog-ci4-react.git
-```
 2. Change file env
 ```bash
-copy copy-env .env
+rename copy-env .env
 ```
 3. Edit file env
 
-Change the database with your database server
+Change the database with your database server, uncomment premium.type, midtrans and email
+
 4. Key generate
 ```bash
 php spark key:generate
@@ -27,7 +25,7 @@ composer install
 6. Migration & Seed Database
 
 ```bash
-php spark migrate && php spark db:seed ArticleSeeder && php spark db:seed UserFakerSeeder
+php spark migrate && php spark db:seed UserAccountDefault && php spark db:seed CategorySeeder && php spark db:seed ArticleSeeder && php spark db:seed UserFakerSeeder
 ```
 
 ## Usage
@@ -40,9 +38,12 @@ php spark serve
 <?php
 $routes->group('api', function($routes)
 {
+	$routes->get('verified-email', 'AuthController::verifiedcode');
+	$routes->get('reset-code', 'AuthController::resetcode');
 	$routes->post('login', 'AuthController::login');
 	$routes->post('register', 'AuthController::register');
-    $routes->add('list', 'Admin\Users::list');
+	$routes->post('contact-us', 'AuthController::sendcontactus');
+	$routes->add('list', 'Admin\Users::list');
 	$routes->resource('article', ['controller' => 'ArticleController']);
 	$routes->resource('article-subscribe', ['controller' => 'ArticleSubscribe']);
 	$routes->resource('article-viewer', ['controller' => 'ArticleViewerController']);
@@ -57,6 +58,7 @@ $routes->group('api', function($routes)
 	$routes->get('dashboard/(:num)', 'UserController::dashboard/$1');
 	$routes->get('usrfile/(:num)/(:any)', 'FileController::index/$1/$2');
 	$routes->post('upload-usrfile', 'FileController::upload');
+	$routes->get('search/article', 'ArticleController::search');
 	$routes->get('search/category', 'CategoryController::search');
 	$routes->get('search/comment', 'CommentController::search');
 	$routes->get('article-category/(:num)', 'ArticleController::category/$1');
@@ -70,6 +72,8 @@ $routes->group('api', function($routes)
 	$routes->get('pay/check/(:num)', 'PaymentController::check/$1');
 	$routes->get('pay', 'PaymentController::pay');
 	$routes->post('pay', 'PaymentController::index');
+	$routes->get('pay/me', 'PaymentController::me');
+	$routes->get('price', 'PaymentController::price');
 	$routes->post('user-ui/update/(:num)', 'UserUiController::update/$1');
 	$routes->post('users/update/(:num)', 'UserController::update/$1');
 });
@@ -83,7 +87,7 @@ npm install
 ```
 Command for development
 ```bash
-npm run dev
+npm run build
 ```
 Command for production
 ```bash

@@ -64,7 +64,7 @@ class CategoryController extends ResourceController
                 	$this->model->insert_data([
                         'name' => $request->name,
                         'description' => $request->description,
-                        'created_by' => 1,
+                        'created_by' => $check->data->id,
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s')
                     ]);
@@ -93,7 +93,7 @@ class CategoryController extends ResourceController
                 	$this->model->update_data([
                         'name' => $request->name,
                         'description' => $request->description,
-                        'created_by' => 1,
+                        'created_by' => $check->data->id,
                         'updated_at' => date('Y-m-d H:i:s')
                     ], $id);
                     return $this->respond(['message' => 'Successfuly update data']);

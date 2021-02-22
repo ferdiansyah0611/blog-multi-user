@@ -18,11 +18,6 @@ class SetAccountCMP extends React.Component {
     super(props)
     this.handle = this.handle.bind(this)
     this.state = {
-      name: '',
-      email: '',
-      gender: '',
-      born: '',
-      location: '',
       headers: {},
       redirect: '',
       preview: '',
@@ -33,7 +28,8 @@ class SetAccountCMP extends React.Component {
         born:'',
         location:'',
         avatar: {}
-      }
+      },
+      finishedUser: false
     }
     this.updateUser = this.updateUser.bind(this)
     this.onFileChange = this.onFileChange.bind(this)
@@ -70,12 +66,15 @@ class SetAccountCMP extends React.Component {
           born: result.data.born,
           bio: result.data.bio,
           location: result.data.location,
-        }
+        },
+        finishedUser: true
       })
+      $('select').formSelect();
     })
     : ''
     $(document).ready(function(){
       $('.collapsible').collapsible();
+      $('select').formSelect();
     });
   }
   updateUser(e){
@@ -129,27 +128,28 @@ class SetAccountCMP extends React.Component {
                   <h5>My Data</h5>
                   <div className="row">
                     <div className="input-field col s6">
-                      <input name="name" defaultValue={this.state.users.name} id="name" type="text" className="validate" onKeyUp={this.handle}/>
+                      <input disabled={this.state.finishedUser ? false: true} name="name" defaultValue={this.state.users.name} id="name" type="text" className="validate" onKeyUp={this.handle}/>
                       <label className="active" htmlFor="name">Name</label>
                     </div>
                     <div className="input-field col s6">
-                      <input name="email" defaultValue={this.state.users.email} id="email" type="email" className="validate" onKeyUp={this.handle}/>
+                      <input disabled={this.state.finishedUser ? false: true} name="email" defaultValue={this.state.users.email} id="email" type="email" className="validate" onKeyUp={this.handle}/>
                       <label className="active" htmlFor="email">Email</label>
                     </div>
                     <div className="input-field col s6">
-                      <select className="browser-default" name="gender" value={this.state.users.gender} onChange={this.handle}>
+                      <label className={this.state.finishedUser ? 'active': ''}>Gender</label>
+                      <select disabled={this.state.finishedUser ? false: true} name="gender" value={this.state.users.gender} onChange={this.handle}>
                         <option value="" disabled={true}>Choose your option</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                       </select>
-                      <label className="active">Gender</label>
                     </div>
                     <div className="input-field col s6">
-                      <input type="date" name="born" defaultValue={this.state.users.born} className="datepicker" onKeyUp={this.handle}/>
+                      <input disabled={this.state.finishedUser ? false: true} type="date" name="born" defaultValue={this.state.users.born} className="datepicker" onKeyUp={this.handle}/>
                       <label className="active">Born</label>
                     </div>
                     <div className="input-field col s12">
-                      <select className="browser-default" name="location" value={this.state.users.location} onChange={this.handle}>
+                      <label className={this.state.finishedUser ? 'active': ''}>Location</label>
+                      <select disabled={this.state.finishedUser ? false: true} name="location" value={this.state.users.location} onChange={this.handle}>
                         <option value="" disabled={true}>Choose your location</option>
                         {
                           result.locationAPI.map((data, key) => {
@@ -157,23 +157,22 @@ class SetAccountCMP extends React.Component {
                           })
                         }
                       </select>
-                      <label className="active">Location</label>
                     </div>
                     <div className="input-field col s12">
-                      <textarea className="materialize-textarea" name="bio" defaultValue={this.state.users.bio} onChange={this.handle}></textarea>
+                      <textarea disabled={this.state.finishedUser ? false: true} className="materialize-textarea" name="bio" defaultValue={this.state.users.bio} onChange={this.handle}></textarea>
                       <label className="active">Bio</label>
                     </div>
                     <div className="file-field input-field col s12">
                       <div className="btn">
                         <span>Profile</span>
-                        <input name="avatar" onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
+                        <input disabled={this.state.finishedUser ? false: true} name="avatar" onChange={this.onFileChange} type="file" accept=".jpg,.png"/>
                       </div>
                       <div className="file-path-wrapper">
-                        <input className="file-path validate" type="text" placeholder="Select images"/>
+                        <input disabled={this.state.finishedUser ? false: true} className="file-path validate" type="text" placeholder="Select images"/>
                       </div>
                     </div>
                     <div className="input-field col s12">
-                    <button type="submit" onClick={this.updateUser} className="btn waves-effect waves-dark blue">Save Changes</button>
+                    <button disabled={this.state.finishedUser ? false: true} type="submit" onClick={this.updateUser} className="btn waves-effect waves-dark blue">Save Changes</button>
                     </div>
                   </div>
                 </div>

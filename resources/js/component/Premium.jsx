@@ -11,43 +11,48 @@ import errorStatusCode from '../tools/errorStatusCode';
 import print from '../tools/print';
 /*context*/
 import ContextDATA from '../ContextDATA';
-const PremiumCMP = (props) => {
-  axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content')
-  const [state, setState] = React.useState({
-    pay: {
-      days: '0 days',
-      storage: '0 mb',
-      price: 0,
-      expired_at: '1990-01-01'
-    },
-    url: BaseUrl + 'api/pay/me',
-    price: {
-      '1': {
-        days: "+0 days",
-        price: "0",
-        storage: "0 Mb Storage",
+
+var account = window.localStorage.getItem('account')
+
+class PremiumCMP extends React.Component{
+  static contextType = ContextDATA;
+  constructor(props){
+    super(props)
+    this.state = {
+      pay: {
+        days: '0 days',
+        storage: '0 mb',
+        price: 0,
+        expired_at: '1990-01-01'
       },
-      '2': {
-        days: "+0 days",
-        price: "0",
-        storage: "0 Mb Storage",
-      },
-      '3': {
-        days: "+0 days",
-        price: "0",
-        storage: "0 Mb Storage",
-      },
-      '4': {
-        days: "+0 days",
-        price: "0",
-        storage: "0 Mb Storage",
+      url: BaseUrl + 'api/pay/me',
+      price: {
+        '1': {
+          days: "+0 days",
+          price: "0",
+          storage: "0 Mb Storage",
+        },
+        '2': {
+          days: "+0 days",
+          price: "0",
+          storage: "0 Mb Storage",
+        },
+        '3': {
+          days: "+0 days",
+          price: "0",
+          storage: "0 Mb Storage",
+        },
+        '4': {
+          days: "+0 days",
+          price: "0",
+          storage: "0 Mb Storage",
+        }
       }
     }
-  })
-  const context = React.useContext(ContextDATA);
-  var account = window.localStorage.getItem('account')
-  const pay = (e) => {
-    if(account && context.users.id){
+    this.pay = this.pay.bind(this)
+  }
+  pay(e){
+    if(account && this.context.users.id){
       axios.get(`${BaseUrl}api/pay?type=${e.target.dataset.type}`, {
         headers: {Authorization: JSON.parse(account).token}
       }).then(result => {
@@ -66,30 +71,26 @@ const PremiumCMP = (props) => {
         });
       })
     }else{
-      setState({redirect: '/login'})
+      this.setState({redirect: '/login'})
     }
   }
-  React.useEffect(() => {
-    document.title = 'Premium Feature | Go Blog'
-  })
-  React.useEffect(() => {
+  componentDidMount(){
     axios.get(BaseUrl + 'api/price').then(result => {
-      setState({price: result.data})
+      this.setState({price: result.data})
     })
-    if(account)
+    if(account && this.context.users.type !== '0')
     {
-      axios.get(state.url, {
+      axios.get(this.state.url, {
         headers: {Authorization: JSON.parse(account).token, 'X-CSRF-TOKEN': document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content')}
       }).then(result => {
-        setState({pay: result.data})
+        this.setState({pay: result.data})
       })
     }
-  }, [state.pay])
-  if(state.redirect){
-    return <Redirect to={state.redirect} />
   }
-  return (
-    <ContextDATA.Consumer>
+  render(){
+    const state = this.state
+    return(
+      <ContextDATA.Consumer>
     {
       result => (
         <>
@@ -158,7 +159,7 @@ const PremiumCMP = (props) => {
                           disabled={result.users.type && result.users.type == 0 ? false: true}
                           className="btn blue waves-effect waves-light w-100"
                           data-type="1"
-                          onClick={pay}
+                          onClick={this.pay}
                         >{state.price[1].price.split('.00')[0]}
                         </button>
                       </div>
@@ -216,7 +217,7 @@ const PremiumCMP = (props) => {
                           disabled={result.users.type && result.users.type == 0 ? false: true}
                           className="btn blue waves-effect waves-light w-100"
                           data-type="2"
-                          onClick={pay}
+                          onClick={this.pay}
                         >{state.price[2].price.split('.00')[0]}
                         </button>
                       </div>
@@ -273,7 +274,7 @@ const PremiumCMP = (props) => {
                           disabled={result.users.type && result.users.type == 0 ? false: true}
                           className="btn blue waves-effect waves-light w-100"
                           data-type="3"
-                          onClick={pay}
+                          onClick={this.pay}
                         >{state.price[3].price.split('.00')[0]}
                         </button>
                       </div>
@@ -330,7 +331,7 @@ const PremiumCMP = (props) => {
                           disabled={result.users.type && result.users.type == 0 ? false: true}
                           className="btn blue waves-effect waves-light w-100"
                           data-type="4"
-                          onClick={pay}
+                          onClick={this.pay}
                         >{state.price[4].price.split('.00')[0]}
                         </button>
                       </div>
@@ -413,6 +414,8 @@ const PremiumCMP = (props) => {
               </div>
             </div>
             :
+            <>
+            <BreadCrumb data={[{url: '/premium', str: 'Premium'}]} />
             <div className="row">
               <div className="col s12">
                 <div className="card">
@@ -455,11 +458,13 @@ const PremiumCMP = (props) => {
                 </div>
               </div>
             </div>
+            </>
         }
         </>
       )
     }
     </ContextDATA.Consumer>
-  )
+    )
+  }
 }
 export default PremiumCMP;

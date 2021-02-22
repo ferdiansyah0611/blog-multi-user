@@ -75,6 +75,7 @@ class PremiumCMP extends React.Component{
     }
   }
   componentDidMount(){
+    document.title = 'Premium | Go Blog'
     axios.get(BaseUrl + 'api/price').then(result => {
       this.setState({price: result.data})
     })

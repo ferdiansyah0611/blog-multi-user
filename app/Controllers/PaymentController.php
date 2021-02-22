@@ -18,6 +18,10 @@ class PaymentController extends ResourceController
 	public function __construct()
     {
         $this->protect = new AuthController();
+        $this->premium1 = getenv('premium.type_1');
+		$this->premium2 = getenv('premium.type_2');
+		$this->premium3 = getenv('premium.type_3');
+		$this->premium4 = getenv('premium.type_4');
     }
     public function index()
     {
@@ -84,8 +88,7 @@ class PaymentController extends ResourceController
 				$price = 1000;
 				$item_details = array();
 				if($this->request->getGet('type') == '1'){
-					$premium = getenv('premium.type_1');
-					$price = explode(', ', $premium)[2];
+					$price = explode(', ', $this->premium1)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a1',
@@ -96,8 +99,7 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '2'){
-					$premium = getenv('premium.type_2');
-					$price = explode(', ', $premium)[2];
+					$price = explode(', ', $this->premium2)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a2',
@@ -108,8 +110,7 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '3'){
-					$premium = getenv('premium.type_3');
-					$price = explode(', ', $premium)[2];
+					$price = explode(', ', $this->premium3)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a3',
@@ -120,8 +121,7 @@ class PaymentController extends ResourceController
 					);
 				}
 				if($this->request->getGet('type') == '4'){
-					$premium = getenv('premium.type_4');
-					$price = explode(', ', $premium)[2];
+					$price = explode(', ', $this->premium4)[2];
 					$item_details = array (
 					    array(
 					      'id' => 'a4',
@@ -171,31 +171,27 @@ class PaymentController extends ResourceController
 				$hasOrderId = $premium->where('order_id', $orderid)->get()->getResultArray();
 				if(empty($hasOrderId))
 				{
-					$premium1 = getenv('premium.type_1');
-					$premium2 = getenv('premium.type_2');
-					$premium3 = getenv('premium.type_3');
-					$premium4 = getenv('premium.type_4');
 					$type = 1;
 					$expired_at = strtotime("+30 days");
-					if($status->gross_amount === explode(', ', $premium1)[2])
+					if($status->gross_amount === explode(', ', $this->premium1)[2])
 					{
 						$type = 1;
-						$expired_at = strtotime(explode(', ', $premium1)[1]);
+						$expired_at = strtotime(explode(', ', $this->premium1)[1]);
 					}
-					if($status->gross_amount === explode(', ', $premium2)[2])
+					if($status->gross_amount === explode(', ', $this->premium2)[2])
 					{
 						$type = 2;
-						$expired_at = strtotime(explode(', ', $premium2)[1]);
+						$expired_at = strtotime(explode(', ', $this->premium2)[1]);
 					}
-					if($status->gross_amount === explode(', ', $premium3)[2])
+					if($status->gross_amount === explode(', ', $this->premium3)[2])
 					{
 						$type = 3;
-						$expired_at = strtotime(explode(', ', $premium3)[1]);
+						$expired_at = strtotime(explode(', ', $this->premium3)[1]);
 					}
-					if($status->gross_amount === explode(', ', $premium4)[2])
+					if($status->gross_amount === explode(', ', $this->premium4)[2])
 					{
 						$type = 4;
-						$expired_at = strtotime(explode(', ', $premium4)[1]);
+						$expired_at = strtotime(explode(', ', $this->premium4)[1]);
 					}
 					$db->table('app_user')->where('id', $check->data->id)->update(['role' => 'premium', 'type' => $type]);
 					$premium->insert([
@@ -242,62 +238,57 @@ class PaymentController extends ResourceController
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
         	$db = \Config\Database::connect();
             $data = $db->table('app_user_premium')->where(['user_id' => $check->data->id])->orderBy('expired_at', 'DESC')->get()->getRow();
-            $status = \Midtrans\Transaction::status($data->order_id);
-            $data->price = $status->gross_amount;
-            $premium1 = getenv('premium.type_1');
-			$premium2 = getenv('premium.type_2');
-			$premium3 = getenv('premium.type_3');
-			$premium4 = getenv('premium.type_4');
-            if($data->price === explode(', ', $premium1)[2])
-			{
-				$data->storage = explode(', ', $premium1)[0] . ' mb';
-				$data->days = explode(', ', $premium1)[1];
-			}
-			if($data->price === explode(', ', $premium2)[2])
-			{
-				$data->storage = explode(', ', $premium2)[0] . ' mb';
-				$data->days = explode(', ', $premium2)[1];
-			}
-			if($data->price === explode(', ', $premium3)[2])
-			{
-				$data->storage = explode(', ', $premium3)[0] . ' mb';
-				$data->days = explode(', ', $premium3)[1];
-			}
-			if($data->price === explode(', ', $premium4)[2])
-			{
-				$data->storage = explode(', ', $premium4)[0] . ' mb';
-				$data->days = explode(', ', $premium4)[1];
-			}
-            return $this->respond($data);
+            if($data)
+            {
+            	$status = \Midtrans\Transaction::status($data->order_id);
+            	$data->price = $status->gross_amount;
+            	if($data->price === explode(', ', $this->premium1)[2])
+				{
+					$data->storage = explode(', ', $this->premium1)[0] . ' mb';
+					$data->days = explode(', ', $this->premium1)[1];
+				}
+				if($data->price === explode(', ', $this->premium2)[2])
+				{
+					$data->storage = explode(', ', $this->premium2)[0] . ' mb';
+					$data->days = explode(', ', $this->premium2)[1];
+				}
+				if($data->price === explode(', ', $this->premium3)[2])
+				{
+					$data->storage = explode(', ', $this->premium3)[0] . ' mb';
+					$data->days = explode(', ', $this->premium3)[1];
+				}
+				if($data->price === explode(', ', $this->premium4)[2])
+				{
+					$data->storage = explode(', ', $this->premium4)[0] . ' mb';
+					$data->days = explode(', ', $this->premium4)[1];
+				}
+            	return $this->respond($data);
+
+            }
         }
     }
     public function price()
     {
-    	$premium1 = getenv('premium.type_1');
-		$premium2 = getenv('premium.type_2');
-		$premium3 = getenv('premium.type_3');
-		$premium4 = getenv('premium.type_4');
-
     	$data = [
     		'1' => [
-    			'storage' => explode(', ', $premium1)[0] . ' MB Storage',
-    			'days' => explode(', ', $premium1)[1],
-    			'price' => 'Rp. ' . explode(', ', $premium1)[2],
+    			'storage' => explode(', ', $this->premium1)[0] . ' MB Storage',
+    			'days' => explode(', ', $this->premium1)[1],
+    			'price' => 'Rp. ' . explode(', ', $this->premium1)[2],
     		],
     		'2' => [
-    			'storage' => explode(', ', $premium2)[0] . ' MB Storage',
-    			'days' => explode(', ', $premium2)[1],
-    			'price' => 'Rp. ' . explode(', ', $premium2)[2],
+    			'storage' => explode(', ', $this->premium2)[0] . ' MB Storage',
+    			'days' => explode(', ', $this->premium2)[1],
+    			'price' => 'Rp. ' . explode(', ', $this->premium2)[2],
     		],
     		'3' => [
-    			'storage' => explode(', ', $premium3)[0] . ' MB Storage',
-    			'days' => explode(', ', $premium3)[1],
-    			'price' => 'Rp. ' . explode(', ', $premium3)[2],
+    			'storage' => explode(', ', $this->premium3)[0] . ' MB Storage',
+    			'days' => explode(', ', $this->premium3)[1],
+    			'price' => 'Rp. ' . explode(', ', $this->premium3)[2],
     		],
     		'4' => [
-    			'storage' => explode(', ', $premium4)[0] . ' MB Storage',
-    			'days' => explode(', ', $premium4)[1],
-    			'price' => 'Rp. ' . explode(', ', $premium4)[2],
+    			'storage' => explode(', ', $this->premium4)[0] . ' MB Storage',
+    			'days' => explode(', ', $this->premium4)[1],
+    			'price' => 'Rp. ' . explode(', ', $this->premium4)[2],
     		],
     	];
     	return $this->respond($data);

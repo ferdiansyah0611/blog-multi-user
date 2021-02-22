@@ -9,7 +9,7 @@ class UserAccountDefault extends Seeder
 	public function run()
 	{
 		$data_admin = [
-			'id' => rand(),
+			'id' => '8624378',
 			'name' => 'Admin',
 			'email' => 'admin@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),

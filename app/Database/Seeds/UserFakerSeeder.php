@@ -18,11 +18,11 @@ class UserFakerSeeder extends Seeder
 			}
 			$data = [
 				'id' => rand(),
-				'name' => $faker->name($gender),
+				'name' => $faker->name($jk),
 				'email' => $faker->email,
 				'password' => password_hash('12345678', PASSWORD_BCRYPT),
 				'born' => $faker->date('Y-m-d', 'now'),
-				'gender' => $jk,
+				'gender' => $gender,
 				'location' => $faker->address,
 				'role' => 'user',
 				'type' => '0',

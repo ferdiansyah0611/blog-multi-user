@@ -95,7 +95,6 @@ class Datatables extends React.Component {
                 if(chooseaction == '2') {
                   iddelete.forEach(d_delete => {
                     axios.delete(this.props.url.deleted + d_delete, {headers: this.state.headers}).then(response => {
-                      M.toast({html: response.data.message, classes: 'green'})
                       var newcategory = this.state.data.filter((datacategory, key) => {
                         if(datacategory.id !== d_delete){
                           return true;
@@ -107,6 +106,7 @@ class Datatables extends React.Component {
                       this.setState({data: newcategory})
                     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
                   })
+                  M.toast({html: 'Successfuly delete the data', classes: 'green'})
                 }
                 if(chooseaction == '3') {
                   Swal.fire(title,success,'success')
@@ -201,55 +201,60 @@ class Datatables extends React.Component {
     }
   }
   componentDidMount() {
-    this.loadData()
-    let _this = this
-    document.querySelectorAll(`#${this.state.table_id} th`).forEach((data, key) => {
-      data.addEventListener('click', async e => {
-        _this.setState({order_by: e.target.dataset.name})
-        let account = window.localStorage.getItem('account'),
-        url = this.props.url.default;
-        if(this.props.paginate){
-          url = url + '?paginate=25&page=' + this.state.paginate;
-        }
-        if(account){
-          this.setState({headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}})
-          await axios.get(url + `&order_by=${e.target.dataset.name}&order_status=${this.state.order_status}`,
-            {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
-            if(this.props.paginate){
-              this.setState({
-                data: result.data.data,
-                finished: true
-              })
-            }else{
-              this.setState({
-                data: result.data,
-                finished: true
-              })
-            }
-          }).catch(e => console.error(e))
-        }else{
-          this.setState({redirect: '/login'})
-        }
+    try{
+      $('select').formSelect();
+      this.loadData()
+      let _this = this
+      document.querySelectorAll(`#${this.state.table_id} th`).forEach((data, key) => {
+        data.addEventListener('click', async e => {
+          _this.setState({order_by: e.target.dataset.name})
+          let account = window.localStorage.getItem('account'),
+          url = this.props.url.default;
+          if(this.props.paginate){
+            url = url + '?paginate=25&page=' + this.state.paginate;
+          }
+          if(account){
+            this.setState({headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}})
+            await axios.get(url + `&order_by=${e.target.dataset.name}&order_status=${this.state.order_status}`,
+              {headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}}).then(result => {
+              if(this.props.paginate){
+                this.setState({
+                  data: result.data.data,
+                  finished: true
+                })
+              }else{
+                this.setState({
+                  data: result.data,
+                  finished: true
+                })
+              }
+            }).catch(e => console.error(e))
+          }else{
+            this.setState({redirect: '/login'})
+          }
+        })
       })
-    })
-    var tiny = new tinymce.Editor('edit-content', {
-      plugins: [
-        'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-        'table emoticons template paste help'
-      ],
-      toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-        'bullist numlist outdent indent | link image | print preview media fullpage | ' +
-        'forecolor backcolor emoticons | help',
-      menu: {
-        favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
-      },
-      menubar: 'favs file edit view insert format tools table help',
-    }, tinymce.EditorManager);
-    tiny.render();
-    $(document).ready(() => {
-      $('.modal').modal();
-    })
+      var tiny = new tinymce.Editor('edit-content', {
+        plugins: [
+          'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+          'table emoticons template paste help'
+        ],
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+          'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+          'forecolor backcolor emoticons | help',
+        menu: {
+          favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+        },
+        menubar: 'favs file edit view insert format tools table help',
+      }, tinymce.EditorManager);
+      tiny.render();
+      $(document).ready(() => {
+        $('.modal').modal();
+      })
+    }catch(e){
+      this.setState({redirect: '/login'})
+    }
   }
   render() {
     if(this.state.redirect) {
@@ -269,7 +274,7 @@ class Datatables extends React.Component {
               {
                 this.props.editable ?
                   <div className="input-field col s12 m6">
-                    <select name="select_action" defaultValue="Choose your option" className="browser-default" onChange={this.removing}>
+                    <select name="select_action" defaultValue="Choose your option" onChange={this.removing}>
                       <option value="Choose your option">Choose your option</option>
                       <option value="2">Remove</option>
                     </select>

@@ -53,6 +53,10 @@ class RegisterCMP extends React.Component {
     document.title = 'Register | Go Blog'
     $('input.len').characterCounter();
     $('.datepicker').datepicker();
+    $('select').formSelect();
+    setTimeout(() => {
+      $('select').formSelect();
+    }, 5000)
   }
   handle(event) {
     const target = event.target;
@@ -97,19 +101,22 @@ class RegisterCMP extends React.Component {
                     <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
                   </div>
                   <div className="input-field col s12">
-                    <select className="browser-default" name="gender" defaultValue={this.state.gender} onChange={this.handle}>
+                    <i className="material-icons prefix">account_circle</i>
+                    <label className="active">Gender</label>
+                    <select name="gender" defaultValue={this.state.gender} onChange={this.handle}>
                       <option value="" disabled={true}>Choose your option</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
-                    <label className="active">Gender</label>
                   </div>
                   <div className="input-field col s12">
                     <ContextDATA.Consumer>
                       {
                         result => (
                           <React.Fragment>
-                            <select className="browser-default" name="location" defaultValue="Choose your option" onChange={this.handle}>
+                            <i className="material-icons prefix">account_circle</i>
+                            <label className="active">Location</label>
+                            <select name="location" defaultValue="Choose your option" onChange={this.handle}>
                               <option value="" disabled={true}>Choose your location</option>
                               {
                                 result.locationAPI.map((data, key) => {
@@ -117,18 +124,18 @@ class RegisterCMP extends React.Component {
                                 })
                               }
                             </select>
-                            <label className="active">Location</label>
                           </React.Fragment>
                         )
                       }
                     </ContextDATA.Consumer>
                   </div>
                   <div className="input-field col s12">
-                    <input type="text" name="born" className="datepicker"/>
+                    <i className="material-icons prefix">event</i>
+                    <input autoComplete="off" type="text" name="born" className="datepicker"/>
                     <label className="active">Born</label>
                   </div>
                   <div className="file-field input-field col s12">
-                    <div className="btn">
+                    <div className="btn blue">
                       <span>Avatar</span>
                       <input name="avatar" onChange={this.onFileChange} type="file"/>
                     </div>
@@ -137,7 +144,7 @@ class RegisterCMP extends React.Component {
                     </div>
                   </div>
                   <div className="col s12">
-                    <button type="submit" className="btn waves-effect waves-light w-100">Register</button>
+                    <button type="submit" className="btn waves-effect waves-light w-100 blue">Register</button>
                     <div className="divider"/>
                     <p style={{marginTop:25}}>Have a account ? <Link to="/login">Login Now</Link></p>
                   </div>

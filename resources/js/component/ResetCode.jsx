@@ -69,7 +69,6 @@ class ResetCodeCMP extends React.Component{
                 </div>
                 <div className="col s12 left-align">
                   <button disabled={this.state.process ? true:false} type="submit" className="btn waves-effect waves-light w-100 blue">Reset</button>
-                  <p style={{marginTop:25}}><Link to="/register">Reset Code</Link></p>
                   <div className="divider"/>
                   <p>Have a account ? <Link to="/login">Login Now</Link></p>
                 </div>

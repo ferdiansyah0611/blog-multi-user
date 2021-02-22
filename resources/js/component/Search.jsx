@@ -30,6 +30,7 @@ class SearchCMP extends React.Component{
         data:[],
         total:''
       },
+      img_girl: 'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
       paginate: 1,
       search: '',
       finishedArticle: false,
@@ -174,7 +175,7 @@ class SearchCMP extends React.Component{
                   <div className="col s12 m4 l3 list-profile" key={key}>
                     <div className="card hoverable">
                       <div className="card-image">
-                        <img src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar}/>
+                        <img src={data.avatar.length == 0 ? data.gender == 'pria' || data.gender == 'male' ? Config.users.avatarDefault: this.state.img_girl: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar}/>
                         <span className="card-title">{data.name}</span>
                       </div>
                       <div className="card-content">

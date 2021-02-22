@@ -144,7 +144,7 @@ class DashboardCMP extends React.Component {
   }
   render() {
     if(this.state.redirect || !window.localStorage.getItem('account')) {
-      return this.state.redirect ? <Redirect to={this.state.redirect} />: <Redirect to="/login?destination=/dashboard" />
+      return <Redirect to={this.state.redirect} />
     }
     return(
       <React.Fragment>

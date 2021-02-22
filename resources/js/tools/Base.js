@@ -1,2 +1,2 @@
-const BaseUrl = 'http://app.blog/';
+const BaseUrl = window.location.origin + '/';
 export default BaseUrl;

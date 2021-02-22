@@ -186,57 +186,10 @@ EOD;
                 else{
                     return $this->respond(['message' => 'The email has not verification'], 400);
                 }
-                /*$secret_key = $this->privateKey();
-                $issuer_claim = "THE_CLAIM";
-                $audience_claim = "THE_AUDIENCE";
-                $issuedat_claim = time();
-                $notbefore_claim = $issuedat_claim + 10;
-                $expire_claim = $issuedat_claim + 7200;
-                $token = array(
-                    "iss" => $issuer_claim,
-                    "aud" => $audience_claim,
-                    "iat" => $issuedat_claim,
-                    "nbf" => $notbefore_claim,
-                    "exp" => $expire_claim,
-                    "data" => array(
-                        'id' => $cek_login['id'],
-                        'name' => $cek_login['name'],
-                        'email' => $cek_login['email'],
-                        'password' => $cek_login['password'],
-                        'born' => $cek_login['born'],
-                        'gender' => $cek_login['gender'],
-                        'location' => $cek_login['location'],
-                        'role' => $cek_login['role'],
-                        'type' => $cek_login['type'],
-                        'bio' => $cek_login['bio'],
-                        'avatar' => $cek_login['avatar'],
-                    )
-                );
-                $token = JWT::encode($token, $secret_key);
-                $output = [
-                    'status' => 200,
-                    'message' => 'Successfully Login',
-                    "token" => $token,
-                    'csrf_name' => csrf_token(),
-                    'csrf_value' => csrf_hash(),
-                    "data" => array(
-                        'id' => $cek_login['id'],
-                        'name' => $cek_login['name'],
-                        'email' => $cek_login['email'],
-                        'born' => $cek_login['born'],
-                        'gender' => $cek_login['gender'],
-                        'location' => $cek_login['location'],
-                        'role' => $cek_login['role'],
-                        'type' => $cek_login['type'],
-                        'avatar' => $cek_login['avatar'],
-                    ),
-                    "expireAt" => $expire_claim
-                ];
-                return $this->respond($output, 200);*/
             } else {
                 $output = [
                     'status' => 401,
-                    'message' => 'Email / Password Wrong',
+                    'message' => 'email or password is wrong',
                     "password" => $data['password']
                 ];
                 return $this->respond($output, 401);

@@ -134,7 +134,7 @@ class UserAccountDefault extends Seeder
 
 		$idfree = rand();
 		$data_free = [
-			'id' => rand()ree,
+			'id' => rand(),
 			'name' => 'Free',
 			'email' => 'free@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),

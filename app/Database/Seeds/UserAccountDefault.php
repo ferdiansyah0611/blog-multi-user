@@ -23,7 +23,7 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
+		$this->db->table('app_verification_code')->insert([
             'id' => rand(),
             'user_id' => '8624378',
             'code' => '1203040340',
@@ -34,7 +34,7 @@ class UserAccountDefault extends Seeder
 
 		$id1 = rand();
 		$data_premium_1 = [
-			'id' => $id1,
+			'id' => rand(),
 			'name' => 'Premium 1',
 			'email' => 'premium1@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -48,10 +48,10 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
-            'id' => $id1,
-            'user_id' => '8624378',
-            'code' => base64_encode(rand().';blog;'),
+		$this->db->table('app_verification_code')->insert([
+            'id' => rand(),
+            'user_id' => $id1,
+            'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -59,7 +59,7 @@ class UserAccountDefault extends Seeder
 
 		$id2 = rand();
 		$data_premium_2 = [
-			'id' => $id2,
+			'id' => rand(),
 			'name' => 'Premium 2',
 			'email' => 'premium2@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -73,10 +73,10 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
-            'id' => $id2,
-            'user_id' => '8624378',
-            'code' => base64_encode(rand().';blog;'),
+		$this->db->table('app_verification_code')->insert([
+            'id' => rand(),
+            'user_id' => $id2,
+            'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -84,7 +84,7 @@ class UserAccountDefault extends Seeder
 
 		$id3 = rand();
 		$data_premium_3 = [
-			'id' => $id3,
+			'id' => rand(),
 			'name' => 'Premium 3',
 			'email' => 'premium3@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -98,10 +98,10 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
-            'id' => $id3,
-            'user_id' => '8624378',
-            'code' => base64_encode(rand().';blog;'),
+		$this->db->table('app_verification_code')->insert([
+            'id' => rand(),
+            'user_id' => $id3,
+            'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -109,7 +109,7 @@ class UserAccountDefault extends Seeder
 
 		$id4 = rand();
 		$data_premium_4 = [
-			'id' => $id4,
+			'id' => rand(),
 			'name' => 'Premium 4',
 			'email' => 'premium4@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -123,10 +123,10 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
-            'id' => $id4,
-            'user_id' => '8624378',
-            'code' => base64_encode(rand().';blog;'),
+		$this->db->table('app_verification_code')->insert([
+            'id' => rand(),
+            'user_id' => $id4,
+            'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -134,7 +134,7 @@ class UserAccountDefault extends Seeder
 
 		$idfree = rand();
 		$data_free = [
-			'id' => $idfree,
+			'id' => rand()ree,
 			'name' => 'Free',
 			'email' => 'free@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -148,10 +148,10 @@ class UserAccountDefault extends Seeder
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s')
 		];
-		$db->table('app_verification_code')->insert([
-            'id' => $idfree,
-            'user_id' => '8624378',
-            'code' => base64_encode(rand().';blog;'),
+		$this->db->table('app_verification_code')->insert([
+            'id' => rand(),
+            'user_id' => $idfree,
+            'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);

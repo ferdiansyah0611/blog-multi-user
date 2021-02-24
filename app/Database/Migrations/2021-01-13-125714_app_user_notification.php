@@ -22,7 +22,7 @@ class AppUserNotification extends Migration
                 'constraint'  => '255',
                 'null' => false,
             ],
-            'type' => [
+            'message' => [
                 'type'         => 'VARCHAR',
                 'constraint'  => '255',
                 'null' => false,

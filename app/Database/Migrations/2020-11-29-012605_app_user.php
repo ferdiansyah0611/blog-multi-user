@@ -17,16 +17,19 @@ class AppUser extends Migration
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
                	'null' => false,
+                  'default' => ''
             ],
             'email' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
                	'null' => false,
+                  'default' => ''
             ],
             'password' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '255',
                	'null' => false,
+                  'default' => ''
             ],
             'born' => [
                	'type'	=> 'DATE',
@@ -35,22 +38,22 @@ class AppUser extends Migration
             'gender' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
-               	'null'			=> false,
+               	'null'			=> true,
             ],
             'location' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
-               	'null' 			=> false,
+               	'null' 			=> true,
             ],
             'role' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
-               	'null' 			=> false,
+               	'null' 			=> true,
             ],
             'type' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
-               	'null' 			=> false,
+               	'null' 			=> true,
             ],
             'bio' => [
                   'type'         => 'VARCHAR',
@@ -60,15 +63,17 @@ class AppUser extends Migration
             'avatar' => [
                	'type'      	=> 'VARCHAR',
                	'constraint'	=> '100',
-               	'null' 			=> false,
+               	'null' 			=> true,
             ],
             'created_at' => [
-            	'type'			=> 'timestamp',
+            	'type'			=> 'TIMESTAMP',
             	'null'			=> true,
+               'default' => '1991-01-01 00:00'
             ],
             'updated_at' => [
-            	'type'			=> 'timestamp',
+            	'type'			=> 'TIMESTAMP',
             	'null'			=> true,
+               'default' => '1991-01-01 00:00'
             ]
 		]);
         $this->forge->addKey('id', true);

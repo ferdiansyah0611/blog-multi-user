@@ -25,10 +25,12 @@ class AppUserPayment extends Migration
             'created_at' => [
             	'type'			=> 'timestamp',
             	'null'			=> true,
+                'default' => '1991-01-01 00:00'
             ],
             'updated_at' => [
             	'type'			=> 'timestamp',
             	'null'			=> true,
+                'default' => '1991-01-01 00:00'
             ]
     	]);
         $this->forge->addKey('id', true);

@@ -20,8 +20,7 @@ class AppVerificationCode extends Migration
             	'null'		=> false
             ],
             'code' => [
-            	'type'		=> 'BIGINT',
-            	'unsigned'	=> true,
+            	'type'		=> 'LONGTEXT',
             	'null'		=> false
             ],
             'verified_at' => [
@@ -31,10 +30,12 @@ class AppVerificationCode extends Migration
             'created_at' => [
             	'type'			=> 'date',
             	'null'			=> true,
+                'default' => '1991-01-01 00:00'
             ],
             'updated_at' => [
             	'type'			=> 'timestamp',
             	'null'			=> true,
+                'default' => '1991-01-01 00:00'
             ]
     	]);
         $this->forge->addKey('id', true);

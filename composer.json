@@ -7,6 +7,7 @@
         }
     ],
     "require": {
-        "fakerphp/faker": "^1.13"
+        "fakerphp/faker": "^1.13",
+        "firebase/php-jwt": "^5.2"
     }
 }

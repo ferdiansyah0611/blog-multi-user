@@ -27,6 +27,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => '8624378',
             'code' => '1203040340',
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -52,6 +53,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => $id1,
             'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -77,6 +79,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => $id2,
             'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -102,6 +105,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => $id3,
             'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -127,6 +131,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => $id4,
             'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
@@ -152,6 +157,7 @@ class UserAccountDefault extends Seeder
             'id' => rand(),
             'user_id' => $idfree,
             'code' => base64_encode(';' . rand() . ';Go_Blog;' . rand(100,10000)),
+            'verified_at' => date('Y-m-d'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);

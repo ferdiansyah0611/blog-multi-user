@@ -46,7 +46,7 @@ class ArticleModel extends Model
     {
         return $this->db->table($this->table)->delete(['id' => $id]);
     }
-    public function onWhere($where = [], $order = [], $paginate)
+    public function onWhere($where = [], $order = [], $paginate = 16)
     {
         $data = [
             'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
@@ -56,7 +56,7 @@ class ArticleModel extends Model
         ];
         return $data;
     }
-    public function onSearch($where = [], $order = [], $search, $paginate, $count = null)
+    public function onSearch($where = [], $order = [], $search = null, $paginate = 16, $count = null)
     {
         if($count)
         {

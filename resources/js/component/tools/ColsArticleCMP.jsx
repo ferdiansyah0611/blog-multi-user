@@ -3,6 +3,8 @@ import {
   Link,
 } from "react-router-dom";
 import LazyImage from './LazyImage.jsx';
+import Config from '../../Config';
+import BaseUrl from '../../tools/Base';
 import functionAction from './FunctionAction';
 
 class ColsArticleCMP extends React.Component {
@@ -48,7 +50,18 @@ class ColsArticleCMP extends React.Component {
               <i className="material-icons">favorite</i>
             </button>
             <button className="btn btn-floating cyan waves-effect waves-light share activator"><i className="material-icons">share</i></button>
-            <button className="btn btn-floating white waves-effect waves-light avatar-user"><img className="responsive-img" src={this.props.data.avatar} alt="avatar"/></button>
+            <button
+              className="btn btn-floating white waves-effect waves-light avatar-user">
+              <img
+                className="responsive-img"
+                src={
+                  this.props.data.avatar.length == 0 ?
+                    this.props.data.gender == 'pria' || this.props.data.gender == 'male' ?
+                      Config.users.avatarDefault
+                    : Config.users.avatarDefaultGirl
+                  : this.props.data.avatar
+                }
+              alt="avatar"/></button>
             <p className="line-auto">{this.props.data.description}</p>
             <p className="row">
               <span className="left"><b>Publish</b></span>

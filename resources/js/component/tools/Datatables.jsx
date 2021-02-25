@@ -292,7 +292,7 @@ class Datatables extends React.Component {
                 </div>
               </div>
             </div>
-            <table className="responsive-table highlight" id={this.state.table_id}>
+            <table className={this.state.finished ? "responsive-table highlight": 'highlight'} id={this.state.table_id}>
               <thead>
                 <tr>
                 {

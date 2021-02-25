@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx';
 import Datatables from './tools/Datatables.jsx';
+import Loader from './tools/Loader.jsx';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -21,7 +22,8 @@ class ManageStorageCMP extends React.Component {
       preview: '',
       link: '',
       file_upload: '',
-      headers: {}
+      headers: {},
+      finished: false
     }
     this.handle = this.handle.bind(this)
     this.upload = this.upload.bind(this)
@@ -133,10 +135,11 @@ class ManageStorageCMP extends React.Component {
     this.fetchAPI()
   }
   fetchAPI(){
+    this.setState({finished: false})
     var account = window.localStorage.getItem('account')
     if(account){
       axios.get(`${BaseUrl}api/storage`, {headers: { Authorization :JSON.parse(account).token}}).then(result => {
-        this.setState({'file': result.data.data})
+        this.setState({'file': result.data.data, finished: true})
       }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
     }
   }
@@ -160,7 +163,7 @@ class ManageStorageCMP extends React.Component {
                   </form>
                 </div>
                 <div className="col s12">
-                  <table className="responsive-table highlight">
+                  <table className={this.state.finished ? "responsive-table highlight": 'highlight'}>
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -188,6 +191,9 @@ class ManageStorageCMP extends React.Component {
                     }
                     </tbody>
                   </table>
+                  {
+                    this.state.finished ? '': <Loader/>
+                  }
                 </div>
               </div>
             </div>

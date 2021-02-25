@@ -7,6 +7,7 @@ import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx';
 import Datatables from './tools/Datatables.jsx';
 import ReportUser from './tools/ReportUser.jsx';
+import Config from '../Config';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -203,12 +204,21 @@ class ViewArticleCMP extends React.Component {
             <ul className="collection" style={{maxHeight: 700,overflow: 'auto'}}>
             {this.state.listuserview.length == 0 ? <p style={{paddingLeft: 10}}>No Viewers</p>: ''}
             {
-              this.state.listuserview.map((text,key) => {
+              this.state.listuserview.map((data,key) => {
                 return(
                   <li key={key} className="collection-item avatar">
-                    <img src={BaseUrl + 'api/usrfile/' + text.user_id + '/' + text.avatar} alt="" className="circle"/>
-                    <Link to={'/profile/' + text.user_id} className="title black-text">{text.name}</Link>
-                    <p>{text.created_at}</p>
+                    <img
+                      src={
+                        data.avatar.length == 0 ?
+                          data.gender == 'pria' || data.gender == 'male' ?
+                            Config.users.avatarDefault
+                          : Config.users.avatarDefaultGirl
+                        : BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar
+                      }
+                      alt="avatar"
+                      className="circle"/>
+                    <Link to={'/profile/' + data.user_id} className="title black-text">{data.name}</Link>
+                    <p>{data.created_at}</p>
                   </li>
                 )
               })
@@ -243,14 +253,42 @@ class ViewArticleCMP extends React.Component {
                     </div>
                     <div className="divider"/>
                     <p>
-                      <button className="btn waves-light waves-effect blue" data-target="modal-userview" className="btn modal-trigger"><i className="material-icons left">visibility</i>{this.state.listuserview.length}</button>
-                      <button className="btn waves-light waves-effect red lighten-1"disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true} onClick={this.addFavorite} style={{marginLeft: 10}} id="add-favorite"><i className="material-icons left">{this.state.nameIconFavorite}</i>{this.state.statusFavorite}</button>
+                      <button
+                        className="btn waves-light waves-effect blue"
+                        data-target="modal-userview"
+                        className="btn modal-trigger"
+                      >
+                        <i className="material-icons left">visibility</i>
+                        {this.state.listuserview.length}
+                      </button>
+                      <button
+                        className="btn waves-light waves-effect red lighten-1"
+                        disabled={result.users.id ? result.users.id !== this.state.article.user_id? false: true: true}
+                        onClick={this.addFavorite}
+                        style={{marginLeft: 10}}
+                        id="add-favorite"
+                      >
+                        <i className="material-icons left">{this.state.nameIconFavorite}</i>
+                        {this.state.statusFavorite}
+                      </button>
                     </p>
                     <div className="divider"/>
                     <div style={{marginTop:10}} className="row">
                       <div className="col s3">
                       {
-                        this.state.article.user_id ? <img src={BaseUrl + 'api/usrfile/' + this.state.article.user_id + '/' + this.state.article.avatar} alt="avatar responsive-img" className="circle" width="100%"/>:''
+                        this.state.article.user_id ?
+                          <img
+                            src={
+                              this.state.article.avatar.length == 0 ?
+                                this.state.article.gender == 'pria' || this.state.article.gender == 'male' ?
+                                  Config.users.avatarDefault
+                                : Config.users.avatarDefaultGirl
+                              : BaseUrl + 'api/usrfile/' + this.state.article.id + '/' + this.state.article.avatar
+                            }
+                            alt="avatar"
+                            className="circle responsive-img"
+                            width="100%"
+                          />:''
                       }
                       </div>
                       <div className="col s9">
@@ -285,15 +323,24 @@ class ViewArticleCMP extends React.Component {
               this.state.finishedComment ?
               <React.Fragment>
                 {
-                  this.state.comment.length == 0 ? <p style={{paddingLeft: 10}}>No Data Comment</p>: ''
+                  this.state.comment.length == 0 ? <p style={{paddingLeft: 10}}>Data Empty</p>: ''
                 }
                 {
-                  this.state.comment.map((text,key) => {
+                  this.state.comment.map((data,key) => {
                     return(
                       <li key={key} className="collection-item avatar">
-                        <img src={`${BaseUrl}api/usrfile/${text.user_id}/${text.avatar}`} alt="avatar" className="circle waves-light waves-light"/>
-                        <Link to={'/profile/' + text.user_id} className="title black-text">{text.name}</Link>
-                        <p style={{lineBreak: 'anywhere'}}>{text.comment}<br/><small>{text.created_at}</small></p>
+                        <img
+                          src={
+                            data.avatar.length == 0 ?
+                              data.gender == 'pria' || data.gender == 'male' ?
+                                Config.users.avatarDefault
+                              : Config.users.avatarDefaultGirl
+                            : BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar
+                          }
+                          alt="avatar"
+                          className="circle waves-light waves-light"/>
+                        <Link to={'/profile/' + data.user_id} className="title black-text">{data.name}</Link>
+                        <p style={{lineBreak: 'anywhere'}}>{data.comment}<br/><small>{data.created_at}</small></p>
                       </li>
                     )
                   })
@@ -304,11 +351,23 @@ class ViewArticleCMP extends React.Component {
             </ul>
             <div className="row">
               <div className="input-field col s12">
-                <textarea disabled={this.state.isAuth} id="textarea-comment" className="materialize-textarea" value={this.state.create_comment} name="create_comment" onChange={this.handle}></textarea>
+                <textarea
+                  disabled={this.state.isAuth}
+                  id="textarea-comment"
+                  className="materialize-textarea"
+                  value={this.state.create_comment}
+                  name="create_comment"
+                  onChange={this.handle}
+                ></textarea>
                 <label htmlFor="textarea-comment">Type Of Comment</label>
               </div>
               <div className="col s12">
-                <button disabled={this.state.isAuth} className="btn waves-light waves-effect blue" onClick={this.addComment}>Submit<i className="material-icons right">send</i></button>
+                <button
+                  disabled={this.state.isAuth}
+                  className="btn waves-light waves-effect blue"
+                  onClick={this.addComment}
+                >Submit<i className="material-icons right">send</i>
+                </button>
               </div>
               <ContextDATA.Consumer>
                 {
@@ -328,7 +387,12 @@ class ViewArticleCMP extends React.Component {
           <div className="col s12">
             <h6>Article Related</h6>
             {
-              this.state.article.category_id ? <ArticleLoadCMP url={BaseUrl + 'api/article-category/' + this.state.article.category_id} query={"article_id=" + this.state.article.id} id_next="next_article_user"/>: ''
+              this.state.article.category_id ?
+                <ArticleLoadCMP
+                  url={BaseUrl + 'api/article-category/' + this.state.article.category_id}
+                  query={"article_id=" + this.state.article.id}
+                  id_next="next_article_user"
+                />: ''
             }
             
           </div>

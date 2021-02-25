@@ -116,7 +116,7 @@ class SetViewCMP extends React.Component {
     form.append('footer-status', this.context.ui.footer.status ? 'true': 'false')
     this.state['sidebar-cover'] ? form.append('sidebar-cover', this.state['sidebar-cover']): false
     this.state['profil-cover'] ? form.append('profil-cover', this.state['profil-cover']): false
-    axios.post(BaseUrl + 'api/user-ui/update/' + this.context.ui.id, form, {headers: this.state.headers}).then(result => {
+    axios.post(BaseUrl + 'api/user-ui/update/' + this.context.users.id, form, {headers: this.state.headers}).then(result => {
       M.toast({html: result.data.message})
     })
   }

@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx';
+import Config from '../Config';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -121,7 +122,17 @@ class SetAccountCMP extends React.Component {
                 <div className="col s12 m6">
                   <h5>My Photo Profile</h5>
                   {
-                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>: <img className="responsive-img" src={result.users.id ? BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar: 'https://via.placeholder.com/320x400.png?text=Waiting...'}/>
+                    this.state.preview ? <img className="responsive-img" src={this.state.preview}/>:
+                      <img
+                        className="responsive-img"
+                        src={
+                          result.users.id || !result.users.avatar ?
+                            result.users.gender == 'pria' || result.users.gender == 'male' ?
+                              Config.users.avatarDefault
+                            : Config.users.avatarDefaultGirl
+                          : BaseUrl + 'api/usrfile/' + result.users.id + '/' + result.users.avatar
+                        }
+                      />
                   }
                 </div>
                 <div className="col s12 m6">

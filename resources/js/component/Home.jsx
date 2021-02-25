@@ -21,7 +21,7 @@ class Home extends React.Component{
       p_users: 1,
       p_users2: 1,
       finishedUser: false,
-      finishedUser2: false
+      finishedUser2: false,
     }
     this.nextRecommend = this.nextRecommend.bind(this)
   }
@@ -122,7 +122,7 @@ class Home extends React.Component{
                           this.state.users.map((data, key) => {
                             return(
                               <li className="collection-item avatar" key={key}>
-                                <img className="circle" src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
+                                <img className="circle" src={data.avatar.length == 0 ? data.gender == 'pria' || data.gender == 'male' ? Config.users.avatarDefault: Config.users.avatarDefaultGirl: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
                                 <span className="title"><Link to={'/profile/' + data.id}>{data.name}</Link></span>
                                 <p>{data.bio ? data.bio: 'Bio is not created by its users'}</p>
                               </li>
@@ -145,7 +145,7 @@ class Home extends React.Component{
                           this.state.users2.map((data, key) => {
                             return(
                               <li className="collection-item avatar" key={key}>
-                                <img className="circle" src={data.avatar.length == 0 ? Config.users.avatarDefault: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
+                                <img className="circle" src={data.avatar.length == 0 ? data.gender == 'pria' || data.gender == 'male' ? Config.users.avatarDefault: Config.users.avatarDefaultGirl: BaseUrl + 'api/usrfile/' + data.id + '/' + data.avatar} />
                                 <span className="title"><Link to={'/profile/' + data.id}>{data.name}</Link></span>
                                 <p>{data.bio ? data.bio: 'Bio is not created by its users'}</p>
                               </li>

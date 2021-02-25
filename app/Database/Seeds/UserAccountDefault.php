@@ -35,7 +35,7 @@ class UserAccountDefault extends Seeder
 
 		$id1 = rand();
 		$data_premium_1 = [
-			'id' => rand(),
+			'id' => $id1,
 			'name' => 'Premium 1',
 			'email' => 'premium1@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -61,7 +61,7 @@ class UserAccountDefault extends Seeder
 
 		$id2 = rand();
 		$data_premium_2 = [
-			'id' => rand(),
+			'id' => $id2,
 			'name' => 'Premium 2',
 			'email' => 'premium2@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -87,7 +87,7 @@ class UserAccountDefault extends Seeder
 
 		$id3 = rand();
 		$data_premium_3 = [
-			'id' => rand(),
+			'id' => $id3,
 			'name' => 'Premium 3',
 			'email' => 'premium3@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -113,7 +113,7 @@ class UserAccountDefault extends Seeder
 
 		$id4 = rand();
 		$data_premium_4 = [
-			'id' => rand(),
+			'id' => $id4,
 			'name' => 'Premium 4',
 			'email' => 'premium4@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -139,7 +139,7 @@ class UserAccountDefault extends Seeder
 
 		$idfree = rand();
 		$data_free = [
-			'id' => rand(),
+			'id' => $idfree,
 			'name' => 'Free',
 			'email' => 'free@gmail.com',
 			'password' => password_hash('12345678', PASSWORD_BCRYPT),

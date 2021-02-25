@@ -28,6 +28,13 @@ composer install
 php spark migrate && php spark db:seed UserAccountDefault && php spark db:seed CategorySeeder && php spark db:seed ArticleSeeder && php spark db:seed UserFakerSeeder
 ```
 
+## Account Faker Login
+- email: admin@gmail.com, pw: 12345678
+- email: premium1@gmail.com, pw: 12345678
+- email: premium2@gmail.com, pw: 12345678
+- email: premium3@gmail.com, pw: 12345678
+- email: free@gmail.com, pw: 12345678
+
 ## Usage
 
 ```bash

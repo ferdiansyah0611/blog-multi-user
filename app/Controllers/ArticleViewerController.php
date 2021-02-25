@@ -16,7 +16,7 @@ class ArticleViewerController extends ResourceController
     {
         if($this->request->getGet('article_id')){
             $data = [
-                'data' => $this->model->select('app_article_viewer.*, app_user.name, app_user.avatar')
+                'data' => $this->model->select('app_article_viewer.*, app_user.name, app_user.gender, app_user.avatar')
                 ->where('app_article_viewer.article_id', $this->request->getGet('article_id'))
                 ->join('app_user', 'app_article_viewer.user_id = app_user.id')
                 ->paginate(50),

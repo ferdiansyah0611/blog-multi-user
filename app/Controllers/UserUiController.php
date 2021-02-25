@@ -21,7 +21,12 @@ class UserUiController extends ResourceController
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
                 $data = $this->model->select('*')->where('user_id', $check->data->id)->get()->getRow();
-                return $this->respond($data);
+                if($data)
+                {
+                    return $this->respond($data);
+                }else{
+                    return $this->respond([], 400);
+                }
             }else{
                 return $this->respond(['message' => 'Access Denied'], 401);
             }
@@ -32,7 +37,12 @@ class UserUiController extends ResourceController
         $data = $this->model->select('app_article.*, app_user.name, app_user.avatar, app_user.bio')
         ->join('app_user', 'app_article.user_id = app_user.id')
         ->where('app_article.id', $id)->get()->getRow();
-        return $this->respond($data);
+        if($data)
+        {
+            return $this->respond($data);
+        }else{
+            return $this->respond([]);
+        }
     }
     public function create()
     {
@@ -113,15 +123,15 @@ class UserUiController extends ResourceController
                     $data['profil-cover'] = $files->getName();
                 }
                 $checkui = $this->model->where('user_id', $check->data->id)->get()->getRow();
-                if($checkui->id)
+                if($checkui)
                 {
-                    $this->model->update(['id' => $id], $data);
+                    $this->model->update(['user_id' => $check->data->id], $data);
                     return $this->respond(['message' => 'Successfuly Update The Ui']);
                 }
                 else{
-                    $data->id = rand();
-                    $data->user_id = $check->data->id;
-                    $data->updated_at = date('Y-m-d H:i:s');
+                    $data['id'] = rand();
+                    $data['user_id'] = $check->data->id;
+                    $data['updated_at'] = date('Y-m-d H:i:s');
                     $this->model->insert($data);
                     return $this->respond(['message' => 'Successfuly Update The Ui']);
                 }

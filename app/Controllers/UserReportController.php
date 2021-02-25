@@ -34,7 +34,13 @@ class UserReportController extends ResourceController
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
                 $data = $this->model->where('user_report_id', $this->request->getGet('user_report_id'))->where('user_id', $check->data->id)->get()->getRow();
-                return $this->respond($data);
+                if($data)
+                {
+                    return $this->respond($data);
+                }
+                else{
+                    return $this->respond([]);
+                }
             }else{
                 return $this->respond(['message' => 'Access Denied'], 200);
             }

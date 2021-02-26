@@ -125,7 +125,8 @@ class UserUiController extends ResourceController
                 $checkui = $this->model->where('user_id', $check->data->id)->get()->getRow();
                 if($checkui)
                 {
-                    $this->model->update(['user_id' => $check->data->id], $data);
+                    $db = \Config\Database::connect();
+                    $db->table('app_user_ui')->update($data, ['user_id' => $check->data->id]);
                     return $this->respond(['message' => 'Successfuly Update The Ui']);
                 }
                 else{

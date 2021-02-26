@@ -144,7 +144,7 @@ class App extends React.Component {
         }
         if(type == '1' || type == '2' || type == '3' || type == '4' && role == 'premium'){
           this.setState({
-            menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
+            menu_manage: ['Article', 'Comment', 'Storage'],
             menu_preferences: [
               {txt:'Account',icon:'account_box',url: '/setting/account'},
               {txt:'View',icon:'preview',url: '/setting/view'}
@@ -161,7 +161,6 @@ class App extends React.Component {
           })
           return true;
         }
-        
       }).catch(e => {
         if(e.response && e.response.status == 401){
           this.setState({

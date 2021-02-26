@@ -98,7 +98,17 @@ class ShowProfileCMP extends React.Component {
                       <div className="row">
                         <div className="col s12">
                           <div className="center-align">
-                            <img style={{maxWidth: '100%', maxHeight: 167}} className="circle waves-effect waves-light" src={this.state.users.avatar.length == 0 ? Config.users.avatarDefault: `${BaseUrl}api/usrfile/${this.props.match.params.id}/${this.state.users.avatar}`}/>
+                            <img
+                              style={{maxWidth: '100%', maxHeight: 167}}
+                              className="circle waves-effect waves-light"
+                              src={
+                                this.state.users.avatar.length == 0 ?
+                                  this.state.users.gender == 'pria' || this.state.users.gender == 'male' ?
+                                    Config.users.avatarDefault
+                                  : Config.users.avatarDefaultGirl
+                                : `${BaseUrl}api/usrfile/${this.props.match.params.id}/${this.state.users.avatar}`
+                              }
+                            />
                           </div>
                         </div>
                       </div>

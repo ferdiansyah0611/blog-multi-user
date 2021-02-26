@@ -61,51 +61,51 @@ class Home extends React.Component{
                 <ArticleLoadCMP url={BaseUrl + 'api/article'} id_next="next_article"/>
                 <div className="row">
                 {
-                  !result.users || result.users.role == 0 ?
+                  !result.users.id || result.users.role == 0 ?
                   <React.Fragment>
                     <div className="col s12 m6">
-                      <div class="carousel carousel-slider center">
-                        <div class="carousel-fixed-item center">
-                          <a class="btn waves-effect white grey-text darken-text-2">button</a>
+                      <div className="carousel carousel-slider center">
+                        <div className="carousel-fixed-item center">
+                          <a className="btn waves-effect white grey-text darken-text-2">button</a>
                         </div>
-                        <div class="carousel-item red white-text" href="#one!">
+                        <div className="carousel-item red white-text" href="#one!">
                           <h2>First Adsense</h2>
-                          <p class="white-text">This is your first Adsense</p>
+                          <p className="white-text">This is your first Adsense</p>
                         </div>
-                        <div class="carousel-item amber white-text" href="#two!">
+                        <div className="carousel-item amber white-text" href="#two!">
                           <h2>Second Adsense</h2>
-                          <p class="white-text">This is your second Adsense</p>
+                          <p className="white-text">This is your second Adsense</p>
                         </div>
-                        <div class="carousel-item green white-text" href="#three!">
+                        <div className="carousel-item green white-text" href="#three!">
                           <h2>Third Adsense</h2>
-                          <p class="white-text">This is your third Adsense</p>
+                          <p className="white-text">This is your third Adsense</p>
                         </div>
-                        <div class="carousel-item blue white-text" href="#four!">
+                        <div className="carousel-item blue white-text" href="#four!">
                           <h2>Fourth Adsense</h2>
-                          <p class="white-text">This is your fourth Adsense</p>
+                          <p className="white-text">This is your fourth Adsense</p>
                         </div>
                       </div>
                     </div>
                     <div className="col s12 m6">
-                      <div class="carousel carousel-slider center">
-                        <div class="carousel-fixed-item center">
-                          <a class="btn waves-effect white grey-text darken-text-2">button</a>
+                      <div className="carousel carousel-slider center">
+                        <div className="carousel-fixed-item center">
+                          <a className="btn waves-effect white grey-text darken-text-2">button</a>
                         </div>
-                        <div class="carousel-item red white-text" href="#one!">
+                        <div className="carousel-item red white-text" href="#one!">
                           <h2>First Adsense</h2>
-                          <p class="white-text">This is your first Adsense</p>
+                          <p className="white-text">This is your first Adsense</p>
                         </div>
-                        <div class="carousel-item amber white-text" href="#two!">
+                        <div className="carousel-item amber white-text" href="#two!">
                           <h2>Second Adsense</h2>
-                          <p class="white-text">This is your second Adsense</p>
+                          <p className="white-text">This is your second Adsense</p>
                         </div>
-                        <div class="carousel-item green white-text" href="#three!">
+                        <div className="carousel-item green white-text" href="#three!">
                           <h2>Third Adsense</h2>
-                          <p class="white-text">This is your third Adsense</p>
+                          <p className="white-text">This is your third Adsense</p>
                         </div>
-                        <div class="carousel-item blue white-text" href="#four!">
+                        <div className="carousel-item blue white-text" href="#four!">
                           <h2>Fourth Adsense</h2>
-                          <p class="white-text">This is your fourth Adsense</p>
+                          <p className="white-text">This is your fourth Adsense</p>
                         </div>
                       </div>
                     </div>

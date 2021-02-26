@@ -86,7 +86,7 @@ class ArticleLoadCMP extends React.Component {
       <ContextDATA.Consumer>
         {
           result => (
-            result.users.role == 0 ?
+            !result.users.id || result.users.role == 0 ?
             <div className="col s12">
               <div className="grey lighten-2 center-align">
                 <h5 style={{padding: 20}}>Ads Here</h5>

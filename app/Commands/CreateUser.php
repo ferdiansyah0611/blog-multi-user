@@ -14,7 +14,7 @@ class CreateUser extends BaseCommand
 	 *
 	 * @var string
 	 */
-	protected $group = 'CodeIgniter';
+	protected $group = 'User';
 
 	/**
 	 * The Command's name

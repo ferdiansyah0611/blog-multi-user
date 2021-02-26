@@ -22,10 +22,10 @@ php spark key:generate
 ```bash
 composer install
 ```
-6. Migration & Seed Database
+6. Install in one action (Include migrate & dbseed)
 
 ```bash
-php spark migrate && php spark db:seed UserAccountDefault && php spark db:seed CategorySeeder && php spark db:seed ArticleSeeder && php spark db:seed UserFakerSeeder
+php spark app:install
 ```
 
 ## Account Faker Login

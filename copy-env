@@ -112,7 +112,7 @@ database.default.DBDriver = MySQLi
 # security.headerName = 'X-CSRF-TOKEN'
 # security.cookieName = 'csrf_cookie_name'
 # security.expires    = 7200
-# security.regenerate = true
+# security.regenerate = false
 # security.redirect   = true
 # security.samesite   = 'Lax'
 

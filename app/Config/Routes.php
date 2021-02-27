@@ -58,6 +58,7 @@ $routes->group('api', function($routes)
 	$routes->get('search/article', 'ArticleController::search');
 	$routes->get('search/category', 'CategoryController::search');
 	$routes->get('search/comment', 'CommentController::search');
+	$routes->get('search/user', 'UserController::search');
 	$routes->get('article-category/(:num)', 'ArticleController::category/$1');
 	$routes->get('storage', 'FileController::storage');
 	$routes->get('storage/usage', 'FileController::usage');

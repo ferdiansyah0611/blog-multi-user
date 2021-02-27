@@ -27,6 +27,31 @@ class UserController extends ResourceController
             ];
             return $this->respond($data);
         }
+        if($this->request->getGet('paginate'))
+        {
+            $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+            if(!empty($check->{'message'}) && $check->message == 'Access Granted')
+            {
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status') && !$this->request->getGet('q'))
+                {
+                    $order_status = 'ASC';
+                    $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                    $data = [
+                        'data' => $this->model->orderBy($this->request->getGet('order_by'), $order_status, $this->request->getGet('manage'))->paginate(25)
+                    ];
+                    return $this->respond($data);
+                }
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status') && $this->request->getGet('q'))
+                {
+                    $order_status = 'ASC';
+                    $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                    $data = [
+                        'data' => $this->model->like('email', $this->request->getGet('q'))->orLike(['name' => $this->request->getGet('q'), 'location' => $this->request->getGet('q'), 'gender' => $this->request->getGet('q'), 'location' => $this->request->getGet('q')])->orderBy($this->request->getGet('order_by'), $order_status, $this->request->getGet('manage'))->paginate(25)
+                    ];
+                    return $this->respond($data);
+                }
+            }
+        }
         if($this->request->getGet('random')){
             $data = [
                 'data' => $this->model->orderBy('id', 'RANDOM')->paginate(8)
@@ -51,7 +76,7 @@ class UserController extends ResourceController
     }
     public function create()
     {
-        $check = $this->protect->check($this->request->getGet('token'));
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
             if($check->data->role == 'admin'){
                 $id = rand(1000000, 10000000);
@@ -67,13 +92,13 @@ class UserController extends ResourceController
                     'location' => $this->request->getPost('location'),
                     'role' => $this->request->getPost('role'),
                     'type' => $this->request->getPost('type'),
-                    'avatar' => $avatar->getName(),
+                    'avatar' => $avatar ? $avatar->getName() : '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ];
                 $register = $this->auth->register($dataRegister);
                 if($register == true){
-                    $avatar->move(WRITEPATH.'uploads/'. $id);
+                    $avatar ? $avatar->move(WRITEPATH.'uploads/'. $id): '';
                     $output = [
                         'message' => 'Successfully Register'
                     ];
@@ -95,29 +120,52 @@ class UserController extends ResourceController
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->{'message'} == 'Access Granted'){
             if($check->data->role == 'admin'){
-                $data = [
-                    'name' => $this->request->getPost('name'),
-                    'email' => $this->request->getPost('email'),
-                    'born' => $this->request->getPost('born'),
-                    'gender' => $this->request->getPost('gender'),
-                    'location' => $this->request->getPost('location'),
-                    'updated_at' => date('Y-m-d H:i:s')
-                ];
-                if(($avatar = $this->request->getFile('avatar'))){
-                    $avatar->move(WRITEPATH.'uploads/'. $id);
-                    $data['avatar'] = $avatar->getName();
+                if($this->request->getJSON(true))
+                {
+                    $data = $this->request->getJSON(true);
+                    if(($avatar = $this->request->getFile('avatar'))){
+                        $avatar->move(WRITEPATH.'uploads/'. $id);
+                        $data['avatar'] = $avatar->getName();
+                    }
+                    if(!empty($this->request->getPost('role'))){
+                        $data['role'] = $this->request->getPost('role');
+                    }
+                    if(!empty($this->request->getPost('type'))){
+                        $data['type'] = $this->request->getPost('type');
+                    }
+                    if(!empty($this->request->getPost('bio'))){
+                        $data['bio'] = $this->request->getPost('bio');
+                    }
+                    $data['updated_at'] = date('Y-m-d H:i:s');
+                   $this->model->update_data($data, $id);
+                   return $this->respond(['message' => 'Successfuly update data']);
                 }
-                if(!empty($this->request->getPost('role'))){
-                    $data['role'] = $this->request->getPost('role');
+                else{
+                    $data = [
+                        'name' => $this->request->getPost('name'),
+                        'email' => $this->request->getPost('email'),
+                        'born' => $this->request->getPost('born'),
+                        'gender' => $this->request->getPost('gender'),
+                        'location' => $this->request->getPost('location'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    if(($avatar = $this->request->getFile('avatar'))){
+                        $avatar->move(WRITEPATH.'uploads/'. $id);
+                        $data['avatar'] = $avatar->getName();
+                    }
+                    if(!empty($this->request->getPost('role'))){
+                        $data['role'] = $this->request->getPost('role');
+                    }
+                    if(!empty($this->request->getPost('type'))){
+                        $data['type'] = $this->request->getPost('type');
+                    }
+                    if(!empty($this->request->getPost('bio'))){
+                        $data['bio'] = $this->request->getPost('bio');
+                    }
+        	       $this->model->update_data($data, $id);
+                   return $this->respond(['message' => 'Successfuly update data']);
+
                 }
-                if(!empty($this->request->getPost('type'))){
-                    $data['type'] = $this->request->getPost('type');
-                }
-                if(!empty($this->request->getPost('bio'))){
-                    $data['bio'] = $this->request->getPost('bio');
-                }
-    	       $this->model->update_data($data, $id);
-               return $this->respond(['message' => 'Successfuly update data']);
             }
             else{
                 $data = [
@@ -190,6 +238,18 @@ class UserController extends ResourceController
         }
         else{
             return $this->respond(['message' => 'Access Denied'], 401);
+        }
+    }
+    public function search()
+    {
+        $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+        if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+            $order_status = 'ASC';
+            $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+            $data = [
+                'data' => $this->model->like('email', $this->request->getGet('q'))->orLike(['name' => $this->request->getGet('q'), 'location' => $this->request->getGet('q'), 'gender' => $this->request->getGet('q'), 'location' => $this->request->getGet('q')])->orderBy($this->request->getGet('order_by'), $order_status, $this->request->getGet('manage'))->paginate(25)
+            ];
+            return $this->respond($data);
         }
     }
 }

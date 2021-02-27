@@ -40,6 +40,7 @@ import LatestCMP from './component/Latest.jsx';
 import ViewArticleCMP from './component/ViewArticle.jsx';
 import DashboardCMP from './component/Dashboard.jsx';
 import ManageArticleCMP from './component/ManageArticle.jsx';
+import ManageUserCMP from './component/ManageUser.jsx';
 import ManageCategoryCMP from './component/ManageCategory.jsx';
 import ManageCommentCMP from './component/ManageComment.jsx';
 import ManageStorageCMP from './component/ManageStorage.jsx';
@@ -134,7 +135,7 @@ class App extends React.Component {
         : ''
         if(type == '5' && role == 'admin'){
           this.setState({
-            menu_manage: ['Article', 'Comment', 'Storage', 'Category'],
+            menu_manage: ['Article', 'Comment', 'Storage', 'Category', 'User'],
             menu_preferences: [
               {txt:'Account',icon:'account_box',url: '/setting/account'},
               {txt:'View',icon:'preview',url: '/setting/view'}
@@ -218,6 +219,7 @@ class App extends React.Component {
 			      	<Route path="/management/article">
 			      	  <ManageArticleCMP/>
 			      	</Route>
+              <Route path="/management/user" component={ManageUserCMP}/>
 			      	<Route path="/management/category">
 			      	  <ManageCategoryCMP/>
 			      	</Route>

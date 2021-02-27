@@ -46,15 +46,31 @@ class ArticleModel extends Model
     {
         return $this->db->table($this->table)->delete(['id' => $id]);
     }
-    public function onWhere($where = [], $order = [], $paginate = 16)
+    public function onWhere($where = [], $order = [], $paginate = 16, $like = null, $orLike = null)
     {
-        $data = [
-            'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
-            ->join('app_user', 'app_article.user_id = app_user.id')
-            ->join('app_category', 'app_article.category_id = app_category.id')
-            ->where($where)->orderBy($order[0], $order[1])->paginate($paginate)
-        ];
-        return $data;
+        if($like)
+        {
+            $data = [
+                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                ->join('app_user', 'app_article.user_id = app_user.id')
+                ->join('app_category', 'app_article.category_id = app_category.id')
+                ->where($where)->orderBy($order[0], $order[1])
+                ->like('app_article.title', $like)
+                ->orLike('app_article.id', $like)
+                ->orLike('app_article.status', $like)
+                ->paginate($paginate)
+            ];
+            return $data;
+        }
+        else{
+            $data = [
+                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                ->join('app_user', 'app_article.user_id = app_user.id')
+                ->join('app_category', 'app_article.category_id = app_category.id')
+                ->where($where)->orderBy($order[0], $order[1])->paginate($paginate)
+            ];
+            return $data;
+        }
     }
     public function onSearch($where = [], $order = [], $search = null, $paginate = 16, $count = null)
     {

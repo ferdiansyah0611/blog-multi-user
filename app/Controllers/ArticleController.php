@@ -24,11 +24,18 @@ class ArticleController extends ResourceController
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->message == 'Access Granted')
             {
-                if($this->request->getGet('order_by') && $this->request->getGet('order_status'))
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status') && !$this->request->getGet('q'))
                 {
                     $order_status = 'ASC';
                     $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
-                    $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], [$this->request->getGet('order_by'), $order_status], $this->request->getGet('manage'));
+                    $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], [$this->request->getGet('order_by'), $order_status], 16, $this->request->getGet('q'));
+                    return $this->respond($data);
+                }
+                if($this->request->getGet('order_by') && $this->request->getGet('order_status') && $this->request->getGet('q'))
+                {
+                    $order_status = 'ASC';
+                    $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+                    $data = $this->model->onWhere(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], [$this->request->getGet('order_by'), $order_status], 16, $this->request->getGet('q'));
                     return $this->respond($data);
                 }
             }

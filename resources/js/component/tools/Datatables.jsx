@@ -33,6 +33,7 @@ class Datatables extends React.Component {
       finished: false,
       order_by: 'id',
       order_status: false,/*false: asc,true: desc*/
+      q: ''
     }
     this.rightClick = this.rightClick.bind(this)
     this.nextData = this.nextData.bind(this)
@@ -47,6 +48,7 @@ class Datatables extends React.Component {
   }
   nextData(e){
     let url = `${this.props.url.default}?paginate=25&page=${this.state.paginate + 1}`;
+    this.state.q.length > 0 ? url = `${url}&q=${this.state.q}`:''
     axios.get(url + `&order_by=${this.state.order_by}&order_status=${this.state.order_status}`,
       {
         headers: this.state.headers
@@ -124,7 +126,7 @@ class Datatables extends React.Component {
     axios.get(url,
       {headers: this.state.headers})
     .then(result => {
-      this.setState({data: result.data.data})
+      this.setState({data: result.data.data, q: event.target.value})
     }).catch(e => errorStatusCode(e, this.setState({redirect: '/login'})))
   }
   editing(event) {
@@ -190,6 +192,7 @@ class Datatables extends React.Component {
             finished: true
           })
         }
+        $('select').formSelect();
       }).catch(e => console.error(e))
       var form = this.props.form.reduce(function(res, item, index, array) {
         res[item] = '';
@@ -213,6 +216,7 @@ class Datatables extends React.Component {
           if(this.props.paginate){
             url = url + '?paginate=25&page=' + this.state.paginate;
           }
+          this.state.q.length > 0 ? url = `${url}&q=${this.state.q}`:''
           if(account){
             this.setState({headers: {Authorization: JSON.parse(window.localStorage.getItem('account')).token}})
             await axios.get(url + `&order_by=${e.target.dataset.name}&order_status=${this.state.order_status}`,
@@ -394,10 +398,38 @@ class Datatables extends React.Component {
                       : false
                     }
                     {
+                      this.props.type[key] == 'email' ?
+                        <div className="input-field col s12">
+                          <input
+                            type="email"
+                            className="validate"
+                            name={text}
+                            value={this.state[text] || ''}
+                            onChange={this.handle}
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
                       this.props.type[key] == 'number' ?
                         <div className="input-field col s12">
                           <input
                             type="number"
+                            className="validate"
+                            name={text}
+                            value={this.state[text] || ''}
+                            onChange={this.handle}
+                          />
+                          <label className="active">{text}</label>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'date' ?
+                        <div className="input-field col s12">
+                          <input
+                            type="date"
                             className="validate"
                             name={text}
                             value={this.state[text] || ''}
@@ -455,12 +487,40 @@ class Datatables extends React.Component {
                       : false
                     }
                     {
-                      this.props.type[key] == 'select' ?
-                        <select name={text} onChange={this.handle} defaultValue="Choose option" className="browser-default">
-                          <option value="Choose your option" disabled>Choose option</option>
-                          <option value="public">Public</option>
-                          <option value="archive">Archives</option>
-                        </select>
+                      this.props.type[key] == 'select|public,private' ?
+                        <div className="input-field col s12">
+                          <select name={text} onChange={this.handle} defaultValue="Choose option">
+                            <option value="Choose your option" disabled>Choose option</option>
+                            <option value="public">Public</option>
+                            <option value="archive">Archives</option>
+                          </select>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'select|gender,female' ?
+                        <div className="input-field col s12">
+                          <select name={text} onChange={this.handle} defaultValue="Choose option">
+                            <option value="Choose your option" disabled>Choose option</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                          </select>
+                        </div>
+                      : false
+                    }
+                    {
+                      this.props.type[key] == 'select|location' ?
+                        <div className="input-field col s12">
+                          <select name={text} onChange={this.handle} defaultValue="Choose option">
+                            <option value="Choose your option" disabled>Choose option</option>
+                            <option value={this.state[text]}>{this.state[text]}</option>
+                            {
+                              result.locationAPI.map((data, key) => {
+                                return(<option key={key} value={data.name}>{data.name}</option>)
+                              })
+                            }
+                          </select>
+                        </div>
                       : false
                     }
                     </div>

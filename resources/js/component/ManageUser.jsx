@@ -105,7 +105,7 @@ class ManageUserCMP extends React.Component {
                     form={
                       ['id', 'name', 'email', 'born', 'gender', 'location', 'updated_at']
                     }
-                    type={[false,'text', 'email', 'text', 'select|gender,female', 'select|location', false]}
+                    type={[false,'text', 'email', 'date', 'select|gender,female', 'select|location', false]}
                     edited={this.e_edited}
                   />
                 </div>
@@ -130,7 +130,7 @@ class ManageUserCMP extends React.Component {
                       <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
                     </div>
                     <div className="input-field col s12 m6">
-                      <i className="material-icons prefix">account_circle</i>
+                      <i className="material-icons prefix">face</i>
                       <label className="active">Gender</label>
                       <select name="gender" defaultValue={this.state.gender} onChange={this.handle}>
                         <option value="" disabled={true}>Choose your option</option>
@@ -143,7 +143,7 @@ class ManageUserCMP extends React.Component {
                         {
                           result => (
                             <React.Fragment>
-                              <i className="material-icons prefix">account_circle</i>
+                              <i className="material-icons prefix">place</i>
                               <label className="active">Location</label>
                               <select name="location" defaultValue="Choose your option" onChange={this.handle}>
                                 <option value="" disabled={true}>Choose your location</option>

@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 import BreadCrumb from './tools/BreadCrumb.jsx'
 import Datatables from './tools/Datatables.jsx';
+import { Editor } from '@tinymce/tinymce-react';
 /*tools*/
 import BaseUrl from '../tools/Base';
 import errorStatusCode from '../tools/errorStatusCode';
@@ -16,6 +17,9 @@ import ContextDATA from '../ContextDATA';
 const Datatable = React.lazy(() => import('./tools/Datatables.jsx'));
 
 class ManageArticleCMP extends React.Component {
+  handleEditorChange = (content, editor) => {
+    this.setState({create_content: content})
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -28,7 +32,25 @@ class ManageArticleCMP extends React.Component {
       create_status: '',
       create_image: '',
       redirect: '',
-      headers: {}
+      headers: {},
+      tinymce: {
+        data: {
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table emoticons template paste help'
+          ],
+          toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+            'forecolor backcolor emoticons | help',
+          menu: {
+            favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+          },
+          contextmenu: 'undo redo paste copy'
+        }
+      }
     }
     this.adding = this.adding.bind(this)
     this.onFileChange = this.onFileChange.bind(this)
@@ -39,7 +61,7 @@ class ManageArticleCMP extends React.Component {
     formData.append('title', this.state.create_title)
     formData.append('category_id', this.state.create_category_id)
     formData.append('description', this.state.create_description)
-    formData.append('content', tinymce.get('content-add').getContent())
+    formData.append('content', this.state.create_content)
     formData.append('status', this.state.create_status)
     formData.append('image', this.state.create_image)
     axios.post(BaseUrl + 'api/article', formData, {headers: this.state.headers}).then(result => {
@@ -69,27 +91,6 @@ class ManageArticleCMP extends React.Component {
       $(document).ready(() => {
         $('.tabs').tabs();$('select').formSelect();
       })
-      var tiny = new tinymce.Editor('content-add', {
-        plugins: [
-          'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-          'table emoticons template paste help'
-        ],
-        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-          'bullist numlist outdent indent | link image | print preview media fullpage | ' +
-          'forecolor backcolor emoticons | help',
-        menu: {
-          favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
-        },
-        contextmenu: 'undo redo paste copy',
-        menubar: 'favs file edit view insert format tools table help',
-        setup: function (editor) {
-          editor.on('init', function (e) {
-            editor.setContent('<p>Type Here...</p>');
-          });
-        }
-      }, tinymce.EditorManager);
-      tiny.render();
     }else{
       this.setState({redirect: '/login'})
     }
@@ -179,8 +180,11 @@ class ManageArticleCMP extends React.Component {
                     </div>
                   </div>
                   <div className="col s12">
-                    <div className='demo-dfree' id="content-add">
-                    </div>
+                    <Editor
+                      initialValue="<p>This is the initial content of the editor</p>"
+                      init={this.state.tinymce.data}
+                      onEditorChange={this.handleEditorChange}
+                    />
                   </div>
                   <div className="col s12">
                     <button className="btn waves-effect waves-light blue mt-10px" onClick={this.adding}>Submit<i className="material-icons right">send</i></button>

@@ -101,7 +101,7 @@ class RegisterCMP extends React.Component {
                     <span className="helper-text" data-error="Invalid Password" data-success="OK">* Required</span>
                   </div>
                   <div className="input-field col s12">
-                    <i className="material-icons prefix">account_circle</i>
+                    <i className="material-icons prefix">face</i>
                     <label className="active">Gender</label>
                     <select name="gender" defaultValue={this.state.gender} onChange={this.handle}>
                       <option value="" disabled={true}>Choose your option</option>
@@ -114,7 +114,7 @@ class RegisterCMP extends React.Component {
                       {
                         result => (
                           <React.Fragment>
-                            <i className="material-icons prefix">account_circle</i>
+                            <i className="material-icons prefix">place</i>
                             <label className="active">Location</label>
                             <select name="location" defaultValue="Choose your option" onChange={this.handle}>
                               <option value="" disabled={true}>Choose your location</option>

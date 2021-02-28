@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import Loader from './Loader.jsx';
+import { Editor } from '@tinymce/tinymce-react';
 /*tools*/
 import BaseUrl from '../../tools/Base';
 import errorStatusCode from '../../tools/errorStatusCode';
@@ -33,7 +34,24 @@ class Datatables extends React.Component {
       finished: false,
       order_by: 'id',
       order_status: false,/*false: asc,true: desc*/
-      q: ''
+      q: '',
+      tinymce: {
+        data: {
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table emoticons template paste help'
+          ],
+          toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+            'forecolor backcolor emoticons | help',
+          menu: {
+            favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+          },
+        }
+      }
     }
     this.rightClick = this.rightClick.bind(this)
     this.nextData = this.nextData.bind(this)
@@ -192,7 +210,6 @@ class Datatables extends React.Component {
             finished: true
           })
         }
-        $('select').formSelect();
       }).catch(e => console.error(e))
       var form = this.props.form.reduce(function(res, item, index, array) {
         res[item] = '';
@@ -238,21 +255,6 @@ class Datatables extends React.Component {
           }
         })
       })
-      var tiny = new tinymce.Editor('edit-content', {
-        plugins: [
-          'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-          'table emoticons template paste help'
-        ],
-        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-          'bullist numlist outdent indent | link image | print preview media fullpage | ' +
-          'forecolor backcolor emoticons | help',
-        menu: {
-          favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
-        },
-        menubar: 'favs file edit view insert format tools table help',
-      }, tinymce.EditorManager);
-      tiny.render();
       $(document).ready(() => {
         $('.modal').modal();
       })
@@ -376,7 +378,9 @@ class Datatables extends React.Component {
             }
             <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
               <div className="modal-content">
+                <button class="btn waves-effect waves-light darken-1 red lighten-1 modal-close" style="float: right;">Close<i class="material-icons right">close</i></button>
                 <h4>Edit Data</h4>
+                <div class="divider"></div>
                 <p>Last Updated : {this.state.updated_at}</p>
                 <div className="row mt-10px">
                 {
@@ -481,9 +485,13 @@ class Datatables extends React.Component {
                     }
                     {
                       this.props.type[key] == 'textareatinymce' ?
-                        <div className="input-field col s12">
-                          <div className="col s12" id="edit-content"/>
-                        </div>
+                        <Editor
+                          id="edit-content"
+                          initialValue={this.state[text]}
+                          init={this.state.tinymce.data}
+                          onEditorChange={this.handleEditorChange}
+                          textareaName="content"
+                        />
                       : false
                     }
                     {
@@ -511,7 +519,7 @@ class Datatables extends React.Component {
                     {
                       this.props.type[key] == 'select|location' ?
                         <div className="input-field col s12">
-                          <select name={text} onChange={this.handle} defaultValue="Choose option">
+                          <select className="browser-default" name={text} onChange={this.handle} defaultValue={this.state[text]}>
                             <option value="Choose your option" disabled>Choose option</option>
                             <option value={this.state[text]}>{this.state[text]}</option>
                             {

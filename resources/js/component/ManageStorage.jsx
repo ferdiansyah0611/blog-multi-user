@@ -59,7 +59,10 @@ class ManageStorageCMP extends React.Component {
     link.focus();link.select(0,  99999999);document.execCommand('copy');M.toast({html: 'Copy Successfuly'})
   }
   downloadFile(e){
-    window.open(this.state.link + '?download=true', '_blank')
+    if(window.localStorage.getItem('account'))
+    {
+      window.open(this.state.link + '?download=true&token=' + JSON.parse(window.localStorage.getItem('account')).token, '_blank')
+    }
   }
   deleteFile(e){
     Swal.fire({

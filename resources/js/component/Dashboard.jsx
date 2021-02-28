@@ -274,17 +274,14 @@ class DashboardCMP extends React.Component {
                       />
                       :''
                     }
-                    <p className="col s12">
-                      <span className="left">Name</span>
-                      <span className="right">{result.users.name}</span>
+                    <p>
+                      {result.users.name}
                     </p>
-                    <p className="col s12">
-                      <span className="left">Email</span>
-                      <span className="right">{result.users.email}</span>
+                    <p>
+                      {result.users.email}
                     </p>
-                    <p className="col s12">
-                      <span className="left">Location</span>
-                      <span className="right">{result.users.location}</span>
+                    <p>
+                      {result.users.location}
                     </p>
                     <Link
                       to={"/profile/" + result.users.id}

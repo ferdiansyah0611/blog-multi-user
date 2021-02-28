@@ -59,6 +59,9 @@ class AppInstall extends BaseCommand
 	public function run(array $params)
 	{
 		CLI::write('Start Install...', 'light_blue');
+		$db = getenv('database.default.database');
+		$forge = \Config\Database::forge();
+		$forge->createDatabase($db, TRUE);
 		command('migrate');
 		command('db:seed UserAccountDefault');
 		command('db:seed CategorySeeder');

@@ -23,9 +23,10 @@ class UserUiController extends ResourceController
                 $data = $this->model->select('*')->where('user_id', $check->data->id)->get()->getRow();
                 if($data)
                 {
+                    $data->status = 200;
                     return $this->respond($data);
                 }else{
-                    return $this->respond([], 400);
+                    return $this->respond(['status' => 400]);
                 }
             }else{
                 return $this->respond(['message' => 'Access Denied'], 401);

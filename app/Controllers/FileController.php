@@ -19,7 +19,7 @@ class FileController extends ResourceController
 			return $this->respond(['message' => 'Failed Load File'], 400);
 		}else{
 			if($this->request->getGet('download')){
-				$check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
+				$check = $this->protect->check($this->request->getGet('token'));
 				if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
 					if($check->data->id === $user){
 						return $this->response->download($path, null);

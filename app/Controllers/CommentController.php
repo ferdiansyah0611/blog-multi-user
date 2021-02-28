@@ -31,7 +31,7 @@ class CommentController extends ResourceController
                 {
                     $order_status = 'ASC';
                     $data = [
-                        'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar')
+                        'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar, app_user.gender')
                         ->join('app_user', 'app_comment.user_id = app_user.id')->orderBy('app_comment.'.$this->request->getGet('order_by'), $order_status)
                         ->where('user_id', $check->data->id)->paginate(20),
                     ];
@@ -43,7 +43,7 @@ class CommentController extends ResourceController
     public function show($id = null)
     {
         $data = [
-            'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar')
+            'data' => $this->model->select('app_comment.*, app_user.name, app_user.avatar, app_user.gender')
             ->join('app_user', 'app_comment.user_id = app_user.id')->where('app_comment.article_id', $id)->orderBy('app_comment.created_at', 'DESC')->paginate(20),
             'pager' => $this->model->pager->links()
         ];
@@ -128,11 +128,21 @@ class CommentController extends ResourceController
         {
             $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
             if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
+                $order_status = 'ASC';
                 $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
-                $data = [
-                    'data' => $this->model->like('comment', $this->request->getGet('q'))->orLike('article_id', $this->request->getGet('q'))->orderBy($this->request->getGet('order_by'), $order_status)->paginate(25)
-                ];
-                return $this->respond($data);
+                if($check->data->type == '5')
+                {
+                    $data = [
+                        'data' => $this->model->like('comment', $this->request->getGet('q'))->orderBy($this->request->getGet('order_by'), $order_status)->paginate(25)
+                    ];
+                    return $this->respond($data);
+                }
+                else{
+                    $data = [
+                        'data' => $this->model->where('user_id', $check->data->id)->like('comment', $this->request->getGet('q'))->orderBy($this->request->getGet('order_by'), $order_status)->paginate(25)
+                    ];
+                    return $this->respond($data);
+                }
             }
         }
     }

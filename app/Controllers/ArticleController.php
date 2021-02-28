@@ -92,7 +92,7 @@ class ArticleController extends ResourceController
     }
     public function show($id = null)
     {
-        $data = $this->model->select('app_article.*, app_user.name, app_user.avatar, app_user.bio')
+        $data = $this->model->select('app_article.*, app_user.name, app_user.avatar, app_user.bio, app_user.gender')
         ->join('app_user', 'app_article.user_id = app_user.id')
         ->where('app_article.id', $id)->get()->getRow();
         return $this->respond($data);
@@ -186,8 +186,17 @@ class ArticleController extends ResourceController
     {
         $check = $this->protect->check($this->request->getServer('HTTP_AUTHORIZATION'));
         if(!empty($check->{'message'}) && $check->message == 'Access Granted'){
-            $data = $this->model->onSearch(['app_article.status' => 'public', 'app_article.user_id' => $check->data->id], ['app_article.created_at', 'DESC'], $this->request->getGet('q'), 25, true);
-            return $this->respond($data);
+            $order_status = 'ASC';
+            $this->request->getGet('order_status') == 'true' ? $order_status = 'DESC': false;
+            if($check->data->type == '5')
+            {
+                $data = $this->model->onSearch(['app_article.status' => 'public'], [$this->request->getGet('order_by'), $order_status], $this->request->getGet('q'), 25, true);
+                return $this->respond($data);
+            }
+            else{
+                $data = $this->model->onSearch(['app_article.user_id' => $check->data->id], [$this->request->getGet('order_by'), $order_status], $this->request->getGet('q'), 25, true);
+                return $this->respond($data);
+            }
         }
     }
 }

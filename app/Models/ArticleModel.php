@@ -77,10 +77,11 @@ class ArticleModel extends Model
         if($count)
         {
             $data = [
-                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
-                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                'data' => $this->table($this->table)->where($where)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                    ->orderBy($order[0], $order[1])
+                    ->join('app_user', 'app_article.user_id = app_user.id')
                     ->join('app_category', 'app_article.category_id = app_category.id')
-                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->like('app_article.title', $search)
                     ->paginate($paginate)
             ];
             return $data;
@@ -89,15 +90,16 @@ class ArticleModel extends Model
             $db = \Config\Database::connect();
             $build = $db->table('app_article');
             $data = [
-                'data' => $this->table($this->table)->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
-                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                'data' => $this->table($this->table)->where($where)
+                    ->select('app_article.*, app_user.name, app_user.avatar, app_user.location, app_user.gender, app_category.name as category_name')
+                    ->join('app_user', 'app_article.user_id = app_user.id')->orderBy($order[0], $order[1])
                     ->join('app_category', 'app_article.category_id = app_category.id')
-                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->like('app_article.title', $search)
                     ->paginate($paginate),
                 'total' => $build->where($where)
-                    ->join('app_user', 'app_article.user_id = app_user.id')->where($where)->orderBy($order[0], $order[1])
+                    ->join('app_user', 'app_article.user_id = app_user.id')->orderBy($order[0], $order[1])
                     ->join('app_category', 'app_article.category_id = app_category.id')
-                    ->like('app_article.title', $search)->orLike(['app_article.id' => $search, 'app_article.status' => $search, 'app_category.name' => $search])
+                    ->like('app_article.title', $search)
                     ->countAllResults()
             ];
             return $data;

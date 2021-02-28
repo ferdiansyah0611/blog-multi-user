@@ -113,24 +113,26 @@ class App extends React.Component {
         $('#slide-in').sidenav('close');
         type == '1' || type == '2' || type == '3' || type == '4' || type == '5' ?
           axios.get(BaseUrl + 'api/user-ui', {headers: {Authorization: JSON.parse(account).token}}).then(result => {
-            this.setState({
-              ui: {
-                id: result.data.id,
-                navbar: {
-                  bg: result.data['navbar-bg'],
-                  txt: result.data['navbar-txt']
-                },
-                sidebar: {
-                  bg: result.data['sidebar-bg'],
-                  txt: result.data['sidebar-txt'],
-                  cover: result.data['sidebar-cover'] !== 'null' ? BaseUrl + 'api/usrfile/' + result.data.user_id + '/' + result.data['sidebar-cover']: this.state.ui.sidebar.cover
-                },
-                footer: {
-                  bg: result.data['footer-bg'],
-                  status: result.data['footer-status'] == 'true' ? true: false
+            if(result.data['status'] == 200){
+              this.setState({
+                ui: {
+                  id: result.data.id,
+                  navbar: {
+                    bg: result.data['navbar-bg'],
+                    txt: result.data['navbar-txt']
+                  },
+                  sidebar: {
+                    bg: result.data['sidebar-bg'],
+                    txt: result.data['sidebar-txt'],
+                    cover: result.data['sidebar-cover'] !== 'null' ? BaseUrl + 'api/usrfile/' + result.data.user_id + '/' + result.data['sidebar-cover']: this.state.ui.sidebar.cover
+                  },
+                  footer: {
+                    bg: result.data['footer-bg'],
+                    status: result.data['footer-status'] == 'true' ? true: false
+                  }
                 }
-              }
-            })
+              })
+            }
           })
         : ''
         if(type == '5' && role == 'admin'){

@@ -378,9 +378,9 @@ class Datatables extends React.Component {
             }
             <div id="modal_edit" className={this.props.hasArticle ? "modal modal-fixed-footer edit-article": 'modal modal-fixed-footer'}>
               <div className="modal-content">
-                <button class="btn waves-effect waves-light darken-1 red lighten-1 modal-close" style="float: right;">Close<i class="material-icons right">close</i></button>
+                <button className="btn waves-effect waves-light darken-1 red lighten-1 modal-close" style={{float: 'right'}}>Close<i className="material-icons right">close</i></button>
                 <h4>Edit Data</h4>
-                <div class="divider"></div>
+                <div className="divider"></div>
                 <p>Last Updated : {this.state.updated_at}</p>
                 <div className="row mt-10px">
                 {

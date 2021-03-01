@@ -326,6 +326,18 @@ class SidenavCMP extends React.Component {
               <li><div className="divider"></div></li>
               <li><a className={result.ui.sidebar.txt ? "subheader " + result.ui.sidebar.txt: "subheader"}>More</a></li>
               <li>
+                <Link to="/popular" className="black-text waves-effect waves-dark">
+                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>view_quilt</i>
+                  <span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>Popular</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/latest" className="black-text waves-effect waves-dark">
+                  <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>sort_by_alpha</i>
+                  <span className={result.ui.sidebar.txt ? result.ui.sidebar.txt: ''}>Latest</span>
+                </Link>
+              </li>
+              <li>
                 <Link className={result.ui.sidebar.txt ? "waves-effect waves-dark " + result.ui.sidebar.txt: "waves-effect waves-dark"} to="/premium">
                 <i className={result.ui.sidebar.txt ? "material-icons " + result.ui.sidebar.txt: "material-icons"}>shop</i>
                 {!result.users.type || result.users.type == 0 ? 'Buy Premium': 'My Premium'}</Link>

@@ -42,15 +42,6 @@ class ViewArticleCMP extends React.Component {
     this.handle = this.handle.bind(this)
   }
   componentDidMount(){
-    /*facebook sdk*/
-    (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    
     window.scrollTo(0,0)
     $('#modal-report').modal();
     this.fetchAPI()
@@ -249,7 +240,6 @@ class ViewArticleCMP extends React.Component {
                         <p><small>{this.state.article.created_at}</small></p>
                       </div>
                       <div className="col s12" id="show-article" autoComplete="off" dangerouslySetInnerHTML={{ __html: this.state.article.content }}/>
-                      <div className="fb-share-button" data-href={window.location.href} data-layout="button_count"></div>
                     </div>
                     <div className="divider"/>
                     <p>
@@ -350,25 +340,33 @@ class ViewArticleCMP extends React.Component {
             }
             </ul>
             <div className="row">
-              <div className="input-field col s12">
-                <textarea
-                  disabled={this.state.isAuth}
-                  id="textarea-comment"
-                  className="materialize-textarea"
-                  value={this.state.create_comment}
-                  name="create_comment"
-                  onChange={this.handle}
-                ></textarea>
-                <label htmlFor="textarea-comment">Type Of Comment</label>
-              </div>
-              <div className="col s12">
-                <button
-                  disabled={this.state.isAuth}
-                  className="btn waves-light waves-effect blue"
-                  onClick={this.addComment}
-                >Submit<i className="material-icons right">send</i>
-                </button>
-              </div>
+                <ContextDATA.Consumer>
+                {
+                  result => (
+                    <React.Fragment>
+                    <div className="input-field col s12">
+                      <textarea
+                        disabled={result.users.id ? false: true}
+                        id="textarea-comment"
+                        className="materialize-textarea"
+                        value={this.state.create_comment}
+                        name="create_comment"
+                        onChange={this.handle}
+                      ></textarea>
+                      <label htmlFor="textarea-comment">Type Of Comment</label>
+                    </div>
+                    <div className="col s12">
+                      <button
+                        disabled={result.users.id ? false: true}
+                        className="btn waves-light waves-effect blue"
+                        onClick={this.addComment}
+                      >Submit<i className="material-icons right">send</i>
+                      </button>
+                    </div>
+                    </React.Fragment>
+                  )
+                }
+                </ContextDATA.Consumer>
               <ContextDATA.Consumer>
                 {
                   result => (
